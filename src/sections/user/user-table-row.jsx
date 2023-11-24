@@ -11,19 +11,21 @@ import TableCell from '@mui/material/TableCell';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 
-import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
 
 export default function UserTableRow({
   selected,
+  id,
   name,
   avatarUrl,
-  company,
-  role,
-  isVerified,
-  status,
+  cpf,
+  phone,
+  pixType,
+  pixKey,
+  partner,
+  documents,
   handleClick,
 }) {
   const [open, setOpen] = useState(null);
@@ -43,6 +45,8 @@ export default function UserTableRow({
           <Checkbox disableRipple checked={selected} onChange={handleClick} />
         </TableCell>
 
+        <TableCell>{id}</TableCell>
+
         <TableCell component="th" scope="row" padding="none">
           <Stack direction="row" alignItems="center" spacing={2}>
             <Avatar alt={name} src={avatarUrl} />
@@ -52,15 +56,17 @@ export default function UserTableRow({
           </Stack>
         </TableCell>
 
-        <TableCell>{company}</TableCell>
+        <TableCell>{phone}</TableCell>
 
-        <TableCell>{role}</TableCell>
+        <TableCell>{cpf}</TableCell>
 
-        <TableCell align="center">{isVerified ? 'Yes' : 'No'}</TableCell>
+        <TableCell>{pixType}</TableCell>
 
-        <TableCell>
-          <Label color={(status === 'banned' && 'error') || 'success'}>{status}</Label>
-        </TableCell>
+        <TableCell>{pixKey}</TableCell>
+
+        <TableCell>{partner}</TableCell>
+
+        <TableCell>{documents}</TableCell>
 
         <TableCell align="right">
           <IconButton onClick={handleOpenMenu}>
@@ -95,11 +101,14 @@ export default function UserTableRow({
 
 UserTableRow.propTypes = {
   avatarUrl: PropTypes.any,
-  company: PropTypes.any,
+  id: PropTypes.any,
+  cpf: PropTypes.any,
+  phone: PropTypes.any,
   handleClick: PropTypes.func,
-  isVerified: PropTypes.any,
   name: PropTypes.any,
-  role: PropTypes.any,
+  pixType: PropTypes.any,
+  pixKey: PropTypes.any,
+  partner: PropTypes.any,
+  documents: PropTypes.any,
   selected: PropTypes.any,
-  status: PropTypes.string,
 };

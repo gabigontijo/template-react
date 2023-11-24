@@ -1,11 +1,14 @@
 import { useState } from 'react';
 
 import Card from '@mui/material/Card';
+import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
+import Snackbar from '@mui/material/Snackbar';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
+import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
@@ -16,6 +19,7 @@ import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 
 import TableNoData from '../table-no-data';
+import FormNewUser from '../form-new-user';
 import UserTableRow from '../user-table-row';
 import UserTableHead from '../user-table-head';
 import TableEmptyRows from '../table-empty-rows';
@@ -36,6 +40,12 @@ export default function UserPage() {
   const [filterName, setFilterName] = useState('');
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const [newUser, setNewUser] = useState(false);
+
+  const [closeAdd, setCloseAdd] = useState(false);
+
+  const [sendAlert, setSendAlert] = useState(false);
 
   const handleSort = (event, id) => {
     const isAsc = orderBy === id && order === 'asc';
@@ -86,6 +96,16 @@ export default function UserPage() {
     setFilterName(event.target.value);
   };
 
+  const handleAddUser = () => {
+    setNewUser(true);
+    setCloseAdd(true);
+  };
+
+  const handleCloseAdd = () => {
+    setNewUser(false);
+    setCloseAdd(false);
+  };
+
   const dataFiltered = applyFilter({
     inputData: users,
     comparator: getComparator(order, orderBy),
@@ -97,12 +117,64 @@ export default function UserPage() {
   return (
     <Container>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-        <Typography variant="h4">Users</Typography>
-
-        <Button variant="contained" color="inherit" startIcon={<Iconify icon="eva:plus-fill" />}>
-          New User
-        </Button>
+        <Typography variant="h4">Clientes</Typography>
+        <Stack
+          direction="row"
+          alignItems="center"
+          justifyContent="space-between"
+          mb={5}
+          spacing={2}
+        >
+          <Button
+            variant="contained"
+            color="inherit"
+            startIcon={<Iconify icon="eva:plus-fill" />}
+            onClick={handleAddUser}
+          >
+            Novo Cliente
+          </Button>
+          {closeAdd && (
+            <Button color="inherit" onClick={handleCloseAdd}>
+              <CloseIcon />
+            </Button>
+          )}
+        </Stack>
       </Stack>
+      {newUser && (
+        <FormNewUser
+          setNewUser={setNewUser}
+          setCloseAdd={setCloseAdd}
+          setSendAlert={setSendAlert}
+        />
+      )}
+      {
+        sendAlert && (
+          <Snackbar
+            open={sendAlert}
+            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+            autoHideDuration={6000}
+            onClose={() => {
+              setSendAlert(false);
+            }}
+          >
+            <Alert
+              onClose={() => {
+                setSendAlert(false);
+              }}
+              severity="success"
+              sx={{ width: '100%' }}
+            >
+              Cliente cadastrado com sucesso!
+            </Alert>
+          </Snackbar>
+        )
+        // // <Stack sx={{ width: '100%' }} spacing={2}>
+        //   {/* <Alert severity="error">This is an error alert — check it out!</Alert> */}
+        //   {/* <Alert severity="warning">This is a warning alert — check it out!</Alert> */}
+        //   {/* <Alert severity="info">This is an info alert — check it out!</Alert> */}
+        //   // <Alert severity="success" onClose={() => {setSendAlert('')}}>Cliente cadastrado com sucesso!</Alert>
+        // // </Stack>
+      }
 
       <Card>
         <UserTableToolbar
@@ -122,11 +194,14 @@ export default function UserPage() {
                 onRequestSort={handleSort}
                 onSelectAllClick={handleSelectAllClick}
                 headLabel={[
-                  { id: 'name', label: 'Name' },
-                  { id: 'company', label: 'Company' },
-                  { id: 'role', label: 'Role' },
-                  { id: 'isVerified', label: 'Verified', align: 'center' },
-                  { id: 'status', label: 'Status' },
+                  { id: 'id', label: 'Id' },
+                  { id: 'name', label: 'Nome' },
+                  { id: 'phone', label: 'Telefone' },
+                  { id: 'cpf', label: 'CPF' },
+                  { id: 'pixType', label: 'Tipo Pix' },
+                  { id: 'pixKey', label: 'Chave Pix' },
+                  { id: 'partner', label: 'Parceiro' },
+                  { id: 'documents', label: 'Documentos' },
                   { id: '' },
                 ]}
               />
@@ -136,12 +211,15 @@ export default function UserPage() {
                   .map((row) => (
                     <UserTableRow
                       key={row.id}
+                      id={row.id}
                       name={row.name}
-                      role={row.role}
-                      status={row.status}
-                      company={row.company}
+                      phone={row.phone}
+                      cpf={row.cpf}
+                      pixType={row.pixType}
+                      pixKey={row.pixKey}
+                      partner={row.partner}
+                      documents={row.documents}
                       avatarUrl={row.avatarUrl}
-                      isVerified={row.isVerified}
                       selected={selected.indexOf(row.name) !== -1}
                       handleClick={(event) => handleClick(event, row.name)}
                     />
