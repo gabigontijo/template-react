@@ -13,22 +13,22 @@ import Typography from '@mui/material/Typography';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 
-import { users } from 'src/_mock/user';
+import { partners } from 'src/_mock/partner';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 
-import TableNoData from '../table-no-data';
-import FormNewUser from '../form-new-user';
-import UserTableRow from '../user-table-row';
-import UserTableHead from '../user-table-head';
-import TableEmptyRows from '../table-empty-rows';
-import UserTableToolbar from '../user-table-toolbar';
+import FormNewPartner from '../form-new-partner';
+import TableNoData from '../../user/table-no-data';
+import PartnerTableRow from '../partner-table-row';
+import UserTableHead from '../../user/user-table-head';
+import TableEmptyRows from '../../user/table-empty-rows';
+import PartnerTableToolbar from '../partner-table-toolbar';
 import { emptyRows, applyFilter, getComparator } from '../../utils';
 
 // ----------------------------------------------------------------------
 
-export default function UserPage() {
+export default function PartnerPage() {
   const [page, setPage] = useState(0);
 
   const [order, setOrder] = useState('asc');
@@ -57,7 +57,7 @@ export default function UserPage() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = users.map((n) => n.name);
+      const newSelecteds = partners.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -107,7 +107,7 @@ export default function UserPage() {
   };
 
   const dataFiltered = applyFilter({
-    inputData: users,
+    inputData: partners,
     comparator: getComparator(order, orderBy),
     filterName,
   });
@@ -115,9 +115,9 @@ export default function UserPage() {
   const notFound = !dataFiltered.length && !!filterName;
 
   return (
-    <Container>
+    <Container >
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-        <Typography variant="h4">Clientes</Typography>
+        <Typography variant="h4">Parceiros</Typography>
         <Stack
           direction="row"
           alignItems="center"
@@ -131,7 +131,7 @@ export default function UserPage() {
             startIcon={<Iconify icon="eva:plus-fill" />}
             onClick={handleAddUser}
           >
-            Novo Cliente
+            Novo Parceiro
           </Button>
           {closeAdd && (
             <Button color="inherit" onClick={handleCloseAdd}>
@@ -141,7 +141,7 @@ export default function UserPage() {
         </Stack>
       </Stack>
       {newUser && (
-        <FormNewUser
+        <FormNewPartner
           setNewUser={setNewUser}
           setCloseAdd={setCloseAdd}
           setSendAlert={setSendAlert}
@@ -164,7 +164,7 @@ export default function UserPage() {
               severity="success"
               sx={{ width: '100%' }}
             >
-              Cliente cadastrado com sucesso!
+              Parceiro cadastrado com sucesso!
             </Alert>
           </Snackbar>
         )
@@ -177,7 +177,7 @@ export default function UserPage() {
       }
 
       <Card>
-        <UserTableToolbar
+        <PartnerTableToolbar
           numSelected={selected.length}
           filterName={filterName}
           onFilterName={handleFilterByName}
@@ -185,23 +185,22 @@ export default function UserPage() {
 
         <Scrollbar>
           <TableContainer sx={{ overflow: 'unset' }}>
-            <Table sx={{ minWidth: 800 }}>
+            <Table sx={{ minWidth:800 }}>
               <UserTableHead
                 order={order}
                 orderBy={orderBy}
-                rowCount={users.length}
+                rowCount={partners.length}
                 numSelected={selected.length}
                 onRequestSort={handleSort}
                 onSelectAllClick={handleSelectAllClick}
                 headLabel={[
-                  { id: 'id', label: 'Id' },
                   { id: 'name', label: 'Nome' },
+                  { id: 'email', label: 'Email' },
                   { id: 'phone', label: 'Telefone' },
                   { id: 'cpf', label: 'CPF' },
                   { id: 'pixType', label: 'Tipo Pix' },
                   { id: 'pixKey', label: 'Chave Pix' },
-                  { id: 'partner', label: 'Parceiro' },
-                  { id: 'documents', label: 'Documentos' },
+                  { id: 'adress', label: 'Endereço' },
                   { id: '' },
                 ]}
               />
@@ -209,16 +208,15 @@ export default function UserPage() {
                 {dataFiltered
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row) => (
-                    <UserTableRow
+                    <PartnerTableRow
                       key={row.id}
-                      id={row.id}
                       name={row.name}
+                      email={row.email}
                       phone={row.phone}
                       cpf={row.cpf}
                       pixType={row.pixType}
                       pixKey={row.pixKey}
-                      partner={row.partner}
-                      documents={row.documents}
+                      adress={row.adress}
                       avatarUrl={row.avatarUrl}
                       selected={selected.indexOf(row.name) !== -1}
                       handleClick={(event) => handleClick(event, row.name)}
@@ -227,7 +225,7 @@ export default function UserPage() {
 
                 <TableEmptyRows
                   height={77}
-                  emptyRows={emptyRows(page, rowsPerPage, users.length)}
+                  emptyRows={emptyRows(page, rowsPerPage, partners.length)}
                 />
 
                 {notFound && <TableNoData query={filterName} />}
@@ -239,7 +237,7 @@ export default function UserPage() {
         <TablePagination
           page={page}
           component="div"
-          count={users.length}
+          count={partners.length}
           rowsPerPage={rowsPerPage}
           onPageChange={handleChangePage}
           rowsPerPageOptions={[5, 10, 25]}
