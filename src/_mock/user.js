@@ -4,10 +4,15 @@ import { faker } from '@faker-js/faker';
 // ----------------------------------------------------------------------
 
 export const users = [...Array(24)].map((_, index) => ({
-  id: faker.string.uuid(),
+  id: faker.number.int(),
   avatarUrl: `/assets/images/avatars/avatar_${index + 1}.jpg`,
   name: faker.person.fullName(),
-  company: faker.company.name(),
+  phone: faker.phone.number(),
+  cpf: faker.finance.accountNumber(),
+  pixType: faker.finance.transactionType(),
+  pixKey: faker.finance.iban(),
+  partner: faker.person.firstName(),
+  documents: faker.system.fileExt(),
   isVerified: faker.datatype.boolean(),
   status: sample(['active', 'banned']),
   role: sample([

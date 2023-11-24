@@ -1,7 +1,7 @@
 // ----------------------------------------------------------------------
 
 export const account = {
-  displayName: 'Jaydon Frankie',
-  email: 'demo@minimals.cc',
+  displayName: 'Cash By Card ADM',
+  email: 'cashbycard@outlook.com',
   photoURL: '/assets/images/avatars/avatar_25.jpg',
 };
