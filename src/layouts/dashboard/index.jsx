@@ -5,6 +5,7 @@ import Box from '@mui/material/Box';
 
 import Nav from './nav';
 import Main from './main';
+import Header from './header';
 
 // ----------------------------------------------------------------------
 
@@ -12,6 +13,9 @@ export default function DashboardLayout({ children }) {
   const [openNav, setOpenNav] = useState(false);
 
   return (
+    <>
+
+    <Header onOpenNav={() => setOpenNav(true)} />
     <Box
       sx={{
         minHeight: 1,
@@ -23,6 +27,7 @@ export default function DashboardLayout({ children }) {
 
       <Main>{children}</Main>
     </Box>
+  </>
   );
 }
 

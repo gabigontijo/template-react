@@ -23,8 +23,8 @@ const Logo = forwardRef(({ disabledLink = false, sx, ...other }, ref) => {
    const logo = (
     <Box
        component="img"
-       src="src/logo/logo-cash.png" 
-       sx={{ width: 40, height: 40, cursor: 'pointer', ...sx }}
+       src="src/logo/CashByCardLogo.fw.png" 
+       sx={{ width: 180, height: 50, cursor: 'pointer', ...sx }}
      />
    );
 
