@@ -1,17 +1,17 @@
 import { Helmet } from 'react-helmet-async';
 
-import { ProductsView } from 'src/sections/products/view';
+import { LoanView } from 'src/sections/loan/view';
 
 // ----------------------------------------------------------------------
 
-export default function ProductsPage() {
+export default function LoanPage() {
   return (
     <>
       <Helmet>
-        <title> Products | Cash By Card </title>
+        <title> Empréstimos | Cash By Card</title>
       </Helmet>
 
-      <ProductsView />
+      <LoanView />
     </>
   );
 }

@@ -17,7 +17,8 @@
     "re:build-npm": "npm run rm:all && npm install && npm run build",
     "dev:host": "vite --host",
     "vite:start": "vite",
-    "vite:build": "vite build"
+    "vite:build": "vite build",
+    "re:dev-npm": "npm run rm:all && npm install && vite --host"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
