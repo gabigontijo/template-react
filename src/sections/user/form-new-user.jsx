@@ -10,12 +10,11 @@ import InputFileUpload from './input-upload-file';
 
 // ----------------------------------------------------------------------
 
-export default function FormNewUser({ setNewUser, setCloseAdd, setSendAlert }) {
+export default function FormNewUser({ setNewUser, setSendAlert }) {
 
   const handleSubmit = () => {
     setNewUser(false);
     setSendAlert(true);
-    setCloseAdd(false);
   };
 
   return (
@@ -68,6 +67,5 @@ export default function FormNewUser({ setNewUser, setCloseAdd, setSendAlert }) {
 
 FormNewUser.propTypes = {
   setNewUser: PropTypes.func,
-  setCloseAdd: PropTypes.func,
   setSendAlert: PropTypes.func,
 };

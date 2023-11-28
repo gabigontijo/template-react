@@ -9,11 +9,10 @@ import SelectPixFields from '../user/input-select-pix';
 
 // ----------------------------------------------------------------------
 
-export default function FormNewPartner({ setNewPartner, setCloseAdd, setSendAlert }) {
+export default function FormNewPartner({ setNewPartner, setSendAlert }) {
   const handleSubmit = () => {
     setNewPartner(false);
     setSendAlert(true);
-    setCloseAdd(false);
   };
   return (
     <>
@@ -68,5 +67,4 @@ export default function FormNewPartner({ setNewPartner, setCloseAdd, setSendAler
 FormNewPartner.propTypes = {
   setNewPartner: PropTypes.func,
   setSendAlert: PropTypes.func,
-  setCloseAdd: PropTypes.func,
 };

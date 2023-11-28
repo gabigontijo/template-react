@@ -44,8 +44,6 @@ export default function UserPage() {
 
   const [newUser, setNewUser] = useState(false);
 
-  const [closeAdd, setCloseAdd] = useState(false);
-
   const [sendAlert, setSendAlert] = useState(false);
 
   const handleSort = (event, id) => {
@@ -99,12 +97,10 @@ export default function UserPage() {
 
   const handleAddUser = () => {
     setNewUser(true);
-    setCloseAdd(true);
   };
 
   const handleCloseAdd = () => {
     setNewUser(false);
-    setCloseAdd(false);
   };
 
   const dataFiltered = applyFilter({
@@ -126,7 +122,7 @@ export default function UserPage() {
           mb={5}
           spacing={2}
         >
-          {!closeAdd && (
+          {!newUser && (
             <Button
               variant="contained"
               color="inherit"
@@ -136,7 +132,7 @@ export default function UserPage() {
               Novo Cliente
             </Button>
           )}
-          {closeAdd && (
+          {newUser && (
             <Button color="inherit" onClick={handleCloseAdd}>
               <CloseIcon />
             </Button>
@@ -146,7 +142,6 @@ export default function UserPage() {
       {newUser && (
         <FormNewUser
           setNewUser={setNewUser}
-          setCloseAdd={setCloseAdd}
           setSendAlert={setSendAlert}
         />
       )}

@@ -43,8 +43,6 @@ export default function PartnerPage() {
 
   const [newPartner, setNewPartner] = useState(false);
 
-  const [closeAdd, setCloseAdd] = useState(false);
-
   const [sendAlert, setSendAlert] = useState(false);
 
   const handleSort = (event, id) => {
@@ -98,12 +96,10 @@ export default function PartnerPage() {
 
   const handleAddUser = () => {
     setNewPartner(true);
-    setCloseAdd(true);
   };
 
   const handleCloseAdd = () => {
     setNewPartner(false);
-    setCloseAdd(false);
   };
 
   const dataFiltered = applyFilter({
@@ -125,7 +121,7 @@ export default function PartnerPage() {
           mb={5}
           spacing={2}
         >
-          {!closeAdd && (
+          {!newPartner && (
           <Button
             variant="contained"
             color="inherit"
@@ -135,7 +131,7 @@ export default function PartnerPage() {
             Novo Parceiro
           </Button>
           )}
-          {closeAdd && (
+          {newPartner && (
             <Button color="inherit" onClick={handleCloseAdd}>
               <CloseIcon />
             </Button>
@@ -145,7 +141,6 @@ export default function PartnerPage() {
       {newPartner && (
         <FormNewPartner
           setNewPartner={setNewPartner}
-          setCloseAdd={setCloseAdd}
           setSendAlert={setSendAlert}
          
         />

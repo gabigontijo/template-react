@@ -26,16 +26,13 @@ export default function FormStepThree({
   // setCloseAdd,
 }) {
   const [checked, setChecked] = useState(false);
-  const [closeNew, setCloseNew] = useState(false);
 
   const handleNewPartner = () => {
     setIsNewPartner(true);
-    // setCloseAdd(true);
   };
 
   const handleClosePartner = () => {
     setIsNewPartner(false);
-    // setCloseAdd(true);
   };
 
   const handleChecked = ({ target }) => {
@@ -94,7 +91,7 @@ export default function FormStepThree({
           </Stack>
           {isNewPartner && (
             <Box sx={{ margin: 3 }}>
-              <FormNewPartner setNewPartner={setIsNewPartner} setCloseAdd={setCloseNew} setSendAlert={setSendAlert}/>
+              <FormNewPartner setNewPartner={setIsNewPartner} setSendAlert={setSendAlert}/>
             </Box>
           )}
         </>
@@ -109,5 +106,4 @@ FormStepThree.propTypes = {
   setIsNewPartner: PropTypes.func,
   filterName: PropTypes.string,
   onFilterName: PropTypes.func,
-  // setCloseAdd: PropTypes.func,
 };

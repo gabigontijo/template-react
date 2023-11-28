@@ -39,11 +39,7 @@ export default function PartnerPage() {
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  const [newUser, setNewUser] = useState(false);
-
-  const [closeAdd, setCloseAdd] = useState(false);
-
-  const [, setSendAlert] = useState(false);
+  const [newLoan, setNewLoan] = useState(false);
 
   const handleSort = (event, id) => {
     const isAsc = orderBy === id && order === 'asc';
@@ -95,13 +91,11 @@ export default function PartnerPage() {
   };
 
   const handleAddUser = () => {
-    setNewUser(true);
-    setCloseAdd(true);
+    setNewLoan(true);
   };
 
   const handleCloseAdd = () => {
-    setNewUser(false);
-    setCloseAdd(false);
+    setNewLoan(false);
   };
 
   const dataFiltered = applyFilter({
@@ -113,7 +107,7 @@ export default function PartnerPage() {
   const notFound = !dataFiltered.length && !!filterName;
 
   return (
-    <Container >
+    <Container>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
         <Typography variant="h4">Empréstimos</Typography>
         <Stack
@@ -123,31 +117,26 @@ export default function PartnerPage() {
           mb={5}
           spacing={2}
         >
-         {!closeAdd && ( <Button
-            variant="contained"
-            color="inherit"
-            startIcon={<Iconify icon="eva:plus-fill" />}
-            onClick={handleAddUser}
-          >
-            Novo Empréstimo
-          </Button>
-         )}
-          {closeAdd && (
+          {!newLoan && (
+            <Button
+              variant="contained"
+              color="inherit"
+              startIcon={<Iconify icon="eva:plus-fill" />}
+              onClick={handleAddUser}
+            >
+              Novo Empréstimo
+            </Button>
+          )}
+          {newLoan && (
             <Button color="inherit" onClick={handleCloseAdd}>
               <CloseIcon />
             </Button>
           )}
         </Stack>
       </Stack>
-      {newUser && (
-        <FormNewLoan
-          setNewUser={setNewUser}
-          setCloseAdd={setCloseAdd}
-          setSendAlert={setSendAlert}
-        />
-      )}
-      
-       <Card>
+      {newLoan && <FormNewLoan />}
+
+      <Card>
         <LoanTableToolbar
           numSelected={selected.length}
           filterName={filterName}
@@ -156,7 +145,7 @@ export default function PartnerPage() {
 
         <Scrollbar>
           <TableContainer sx={{ overflow: 'unset' }}>
-            <Table sx={{ minWidth:800 }}>
+            <Table sx={{ minWidth: 800 }}>
               <UserTableHead
                 order={order}
                 orderBy={orderBy}
