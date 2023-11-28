@@ -126,14 +126,16 @@ export default function UserPage() {
           mb={5}
           spacing={2}
         >
-          <Button
-            variant="contained"
-            color="inherit"
-            startIcon={<Iconify icon="eva:plus-fill" />}
-            onClick={handleAddUser}
-          >
-            Novo Cliente
-          </Button>
+          {!closeAdd && (
+            <Button
+              variant="contained"
+              color="inherit"
+              startIcon={<Iconify icon="eva:plus-fill" />}
+              onClick={handleAddUser}
+            >
+              Novo Cliente
+            </Button>
+          )}
           {closeAdd && (
             <Button color="inherit" onClick={handleCloseAdd}>
               <CloseIcon />
@@ -150,7 +152,11 @@ export default function UserPage() {
       )}
 
       {sendAlert && (
-        <AlertNotifications sendAlert={sendAlert} setSendAlert={setSendAlert} message="Cliente cadastrado com sucesso" />
+        <AlertNotifications
+          sendAlert={sendAlert}
+          setSendAlert={setSendAlert}
+          message="Cliente cadastrado com sucesso"
+        />
       )}
 
       <Card>

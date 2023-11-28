@@ -125,6 +125,7 @@ export default function PartnerPage() {
           mb={5}
           spacing={2}
         >
+          {!closeAdd && (
           <Button
             variant="contained"
             color="inherit"
@@ -133,6 +134,7 @@ export default function PartnerPage() {
           >
             Novo Parceiro
           </Button>
+          )}
           {closeAdd && (
             <Button color="inherit" onClick={handleCloseAdd}>
               <CloseIcon />
