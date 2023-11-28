@@ -11,11 +11,13 @@ import InputFileUpload from './input-upload-file';
 // ----------------------------------------------------------------------
 
 export default function FormNewUser({ setNewUser, setCloseAdd, setSendAlert }) {
+
   const handleSubmit = () => {
     setNewUser(false);
     setSendAlert(true);
     setCloseAdd(false);
   };
+
   return (
     <>
       <Stack spacing={2}>
@@ -48,7 +50,6 @@ export default function FormNewUser({ setNewUser, setCloseAdd, setSendAlert }) {
           </Box>
         </Stack>
       </Stack>
-
       <Stack direction="row" alignItems="center" justifyContent="flex-end" sx={{ my: 2 }}>
         <LoadingButton
           fullWidth
@@ -67,6 +68,6 @@ export default function FormNewUser({ setNewUser, setCloseAdd, setSendAlert }) {
 
 FormNewUser.propTypes = {
   setNewUser: PropTypes.func,
-  setSendAlert: PropTypes.func,
   setCloseAdd: PropTypes.func,
+  setSendAlert: PropTypes.func,
 };

@@ -1,11 +1,11 @@
 import { useState } from 'react';
 
 import Card from '@mui/material/Card';
-import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
+// import Alert from '@mui/material/Alert';
 import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
-import Snackbar from '@mui/material/Snackbar';
+// import Snackbar from '@mui/material/Snackbar';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import CloseIcon from '@mui/icons-material/Close';
@@ -14,6 +14,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 
 import { users } from 'src/_mock/user';
+import AlertNotifications from 'src/layouts/dashboard/common/alert-notifications';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
@@ -147,34 +148,10 @@ export default function UserPage() {
           setSendAlert={setSendAlert}
         />
       )}
-      {
-        sendAlert && (
-          <Snackbar
-            open={sendAlert}
-            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-            autoHideDuration={6000}
-            onClose={() => {
-              setSendAlert(false);
-            }}
-          >
-            <Alert
-              onClose={() => {
-                setSendAlert(false);
-              }}
-              severity="success"
-              sx={{ width: '100%' }}
-            >
-              Cliente cadastrado com sucesso!
-            </Alert>
-          </Snackbar>
-        )
-        // // <Stack sx={{ width: '100%' }} spacing={2}>
-        //   {/* <Alert severity="error">This is an error alert — check it out!</Alert> */}
-        //   {/* <Alert severity="warning">This is a warning alert — check it out!</Alert> */}
-        //   {/* <Alert severity="info">This is an info alert — check it out!</Alert> */}
-        //   // <Alert severity="success" onClose={() => {setSendAlert('')}}>Cliente cadastrado com sucesso!</Alert>
-        // // </Stack>
-      }
+
+      {sendAlert && (
+        <AlertNotifications sendAlert={sendAlert} setSendAlert={setSendAlert} message="Cliente cadastrado com sucesso" />
+      )}
 
       <Card>
         <UserTableToolbar
