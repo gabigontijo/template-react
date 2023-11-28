@@ -1,11 +1,9 @@
 import { useState } from 'react';
 
 import Card from '@mui/material/Card';
-import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
-import Snackbar from '@mui/material/Snackbar';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import CloseIcon from '@mui/icons-material/Close';
@@ -14,6 +12,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 
 import { partners } from 'src/_mock/partner';
+import AlertNotifications from 'src/layouts/dashboard/common/alert-notifications';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
@@ -25,6 +24,7 @@ import UserTableHead from '../../user/user-table-head';
 import TableEmptyRows from '../../user/table-empty-rows';
 import PartnerTableToolbar from '../partner-table-toolbar';
 import { emptyRows, applyFilter, getComparator } from '../../utils';
+
 
 // ----------------------------------------------------------------------
 
@@ -41,7 +41,7 @@ export default function PartnerPage() {
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  const [newUser, setNewUser] = useState(false);
+  const [newPartner, setNewPartner] = useState(false);
 
   const [closeAdd, setCloseAdd] = useState(false);
 
@@ -97,12 +97,12 @@ export default function PartnerPage() {
   };
 
   const handleAddUser = () => {
-    setNewUser(true);
+    setNewPartner(true);
     setCloseAdd(true);
   };
 
   const handleCloseAdd = () => {
-    setNewUser(false);
+    setNewPartner(false);
     setCloseAdd(false);
   };
 
@@ -140,41 +140,21 @@ export default function PartnerPage() {
           )}
         </Stack>
       </Stack>
-      {newUser && (
+      {newPartner && (
         <FormNewPartner
-          setNewUser={setNewUser}
+          setNewPartner={setNewPartner}
           setCloseAdd={setCloseAdd}
           setSendAlert={setSendAlert}
+         
         />
       )}
-      {
-        sendAlert && (
-          <Snackbar
-            open={sendAlert}
-            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-            autoHideDuration={6000}
-            onClose={() => {
-              setSendAlert(false);
-            }}
-          >
-            <Alert
-              onClose={() => {
-                setSendAlert(false);
-              }}
-              severity="success"
-              sx={{ width: '100%' }}
-            >
-              Parceiro cadastrado com sucesso!
-            </Alert>
-          </Snackbar>
-        )
-        // // <Stack sx={{ width: '100%' }} spacing={2}>
-        //   {/* <Alert severity="error">This is an error alert — check it out!</Alert> */}
-        //   {/* <Alert severity="warning">This is a warning alert — check it out!</Alert> */}
-        //   {/* <Alert severity="info">This is an info alert — check it out!</Alert> */}
-        //   // <Alert severity="success" onClose={() => {setSendAlert('')}}>Cliente cadastrado com sucesso!</Alert>
-        // // </Stack>
-      }
+      {sendAlert && (
+        <AlertNotifications
+          sendAlert={sendAlert}
+          setSendAlert={setSendAlert}
+          message="Parceiro cadastrado com sucesso!"
+        />
+      )}
 
       <Card>
         <PartnerTableToolbar

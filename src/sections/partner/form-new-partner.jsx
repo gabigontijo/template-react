@@ -9,9 +9,9 @@ import SelectPixFields from '../user/input-select-pix';
 
 // ----------------------------------------------------------------------
 
-export default function FormNewPartner({ setNewUser, setCloseAdd, setSendAlert }) {
+export default function FormNewPartner({ setNewPartner, setCloseAdd, setSendAlert }) {
   const handleSubmit = () => {
-    setNewUser(false);
+    setNewPartner(false);
     setSendAlert(true);
     setCloseAdd(false);
   };
@@ -60,12 +60,13 @@ export default function FormNewPartner({ setNewUser, setCloseAdd, setSendAlert }
           Cadastrar
         </LoadingButton>
       </Stack>
+      
     </>
   );
 }
 
 FormNewPartner.propTypes = {
-  setNewUser: PropTypes.func,
+  setNewPartner: PropTypes.func,
   setSendAlert: PropTypes.func,
   setCloseAdd: PropTypes.func,
 };
