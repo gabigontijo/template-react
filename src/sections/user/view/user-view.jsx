@@ -46,6 +46,8 @@ export default function UserPage() {
 
   const [sendAlert, setSendAlert] = useState(false);
 
+  const [sendAlertError,  setSendAlertError] = useState(false);
+
   const handleSort = (event, id) => {
     const isAsc = orderBy === id && order === 'asc';
     if (id !== '') {
@@ -143,6 +145,7 @@ export default function UserPage() {
         <FormNewUser
           setNewUser={setNewUser}
           setSendAlert={setSendAlert}
+          setSendAlertError={setSendAlertError}
         />
       )}
 
@@ -151,6 +154,13 @@ export default function UserPage() {
           sendAlert={sendAlert}
           setSendAlert={setSendAlert}
           message="Cliente cadastrado com sucesso"
+        />
+      )}
+      {sendAlertError && (
+        <AlertNotifications
+          sendAlertError={sendAlertError}
+          setSendAlertError={setSendAlertError}
+          message="Erro ao cadastrar o cliente"
         />
       )}
 
@@ -172,7 +182,6 @@ export default function UserPage() {
                 onRequestSort={handleSort}
                 onSelectAllClick={handleSelectAllClick}
                 headLabel={[
-                  { id: 'id', label: 'Id' },
                   { id: 'name', label: 'Nome' },
                   { id: 'phone', label: 'Telefone' },
                   { id: 'cpf', label: 'CPF' },
@@ -189,7 +198,6 @@ export default function UserPage() {
                   .map((row) => (
                     <UserTableRow
                       key={row.id}
-                      id={row.id}
                       name={row.name}
                       phone={row.phone}
                       cpf={row.cpf}

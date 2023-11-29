@@ -1,4 +1,4 @@
-import * as React from 'react';
+import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
 import MenuItem from '@mui/material/MenuItem';
@@ -23,17 +23,20 @@ const currencies = [
   },
 ];
 
-export default function SelectPixFields() {
+export default function SelectPixFields({ pixType, handleChange }) {
   return (
-    <Box component="form" noValidate autoComplete="off" >
+    <Box component="form" noValidate autoComplete="off">
       <div>
         <TextField
           fullWidth
           id="outlined-select-currency"
           select
           label="Tipo Pix"
-          defaultValue="cpf"
+          defaultValue=""
           helperText="Selecione o Tipo do Pix"
+          name="pixType"
+          value={pixType}
+          onChange={handleChange}
         >
           {currencies.map((option) => (
             <MenuItem key={option.value} value={option.value}>
@@ -45,3 +48,8 @@ export default function SelectPixFields() {
     </Box>
   );
 }
+
+SelectPixFields.propTypes = {
+  pixType: PropTypes.string,
+  handleChange: PropTypes.func,
+};

@@ -17,7 +17,6 @@ import Iconify from 'src/components/iconify';
 
 export default function UserTableRow({
   selected,
-  id,
   name,
   avatarUrl,
   cpf,
@@ -44,8 +43,6 @@ export default function UserTableRow({
         <TableCell padding="checkbox">
           <Checkbox disableRipple checked={selected} onChange={handleClick} />
         </TableCell>
-
-        <TableCell>{id}</TableCell>
 
         <TableCell component="th" scope="row" padding="none">
           <Stack direction="row" alignItems="center" spacing={2}>
@@ -101,7 +98,6 @@ export default function UserTableRow({
 
 UserTableRow.propTypes = {
   avatarUrl: PropTypes.any,
-  id: PropTypes.any,
   cpf: PropTypes.any,
   phone: PropTypes.any,
   handleClick: PropTypes.func,
