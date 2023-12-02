@@ -7,7 +7,7 @@ import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import LoadingButton from '@mui/lab/LoadingButton';
 
-import { createClient } from 'src/apis/client';
+import { createClient, updateClient } from 'src/apis/client';
 
 import { clientInterface } from './view/type';
 import SelectPixFields from './input-select-pix';
@@ -15,20 +15,32 @@ import InputFileUpload from './input-upload-file';
 
 // ----------------------------------------------------------------------
 
-export default function FormNewUser({ setNewUser, setSendAlert, setSendAlertError }) {
-  const [state, setState] = useState(clientInterface);
+export default function FormNewUser({ setNewUser, setAlert, setAlertError, clientToEdit, setAlertEdit }) {
+  const [state, setState] = useState(clientToEdit || clientInterface);
 
   const handleSubmit = async () => {
     try {
       const response = await createClient(state);
       console.log('Resposta da API:', response);
       setNewUser(false);
-      setSendAlert(true);
+      setAlert(true);
     } catch (error) {
-      setSendAlertError(true);
+      setAlertError(true);
       console.log('Erro ao Cadastrar o cliente:', error);
     }
   };
+
+  const handleSubmitEdit = async () => {
+    try {
+      const response = await updateClient(clientToEdit);
+      console.log('Resposta da API:', response);
+      setNewUser(false);
+    } catch (error) {
+      setAlertEdit(true);
+      // setAlertError(true);
+      console.log('Erro ao Editar o cliente:', error);
+    }
+  };  
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -113,16 +125,30 @@ export default function FormNewUser({ setNewUser, setSendAlert, setSendAlertErro
         </Stack>
       </Stack>
       <Stack direction="row" alignItems="center" justifyContent="flex-end" sx={{ my: 2 }}>
-        <LoadingButton
-          fullWidth
-          size="large"
-          type="submit"
-          variant="contained"
-          color="success"
-          onClick={handleSubmit}
-        >
-          Cadastrar
-        </LoadingButton>
+        {clientToEdit.id == null && (
+          <LoadingButton
+            fullWidth
+            size="large"
+            type="submit"
+            variant="contained"
+            color="success"
+            onClick={handleSubmit}
+          >
+            Cadastrar
+          </LoadingButton>
+        )}
+        {clientToEdit.id != null && (
+          <LoadingButton
+            fullWidth
+            size="large"
+            type="submit"
+            variant="contained"
+            color="inherit"
+            onClick={handleSubmitEdit}
+          >
+            Editar
+          </LoadingButton>
+        )}
       </Stack>
     </>
   );
@@ -130,6 +156,8 @@ export default function FormNewUser({ setNewUser, setSendAlert, setSendAlertErro
 
 FormNewUser.propTypes = {
   setNewUser: PropTypes.func,
-  setSendAlert: PropTypes.func,
-  setSendAlertError: PropTypes.func,
+  setAlert: PropTypes.func,
+  setAlertError: PropTypes.func,
+  clientToEdit: PropTypes.any,
+  setAlertEdit:  PropTypes.func,
 };

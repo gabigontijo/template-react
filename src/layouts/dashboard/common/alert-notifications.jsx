@@ -6,21 +6,21 @@ import Snackbar from '@mui/material/Snackbar';
 
 // ----------------------------------------------------------------------
 
-export default function AlertNotifications({ sendAlert, setSendAlert, message, setSendAlertError, sendAlertError }) {
+export default function AlertNotifications({ alert, setAlert, message, setAlertError, alertError }) {
   return (
     <>
-      {sendAlert && (
+      {alert && (
         <Snackbar
-          open={sendAlert}
+          open={alert}
           anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
           autoHideDuration={6000}
           onClose={() => {
-            setSendAlert(false);
+            setAlert(false);
           }}
         >
           <Alert
             onClose={() => {
-              setSendAlert(false);
+              setAlert(false);
             }}
             severity="success"
             sx={{ width: '100%' }}
@@ -29,18 +29,18 @@ export default function AlertNotifications({ sendAlert, setSendAlert, message, s
           </Alert>
         </Snackbar>
       )}
-      {sendAlertError && (
+      {alertError && (
         <Snackbar
-          open={sendAlertError}
+          open={alertError}
           anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
           autoHideDuration={6000}
           onClose={() => {
-            setSendAlertError(false);
+            setAlertError(false);
           }}
         >
           <Alert
             onClose={() => {
-              setSendAlertError(false);
+              setAlertError(false);
             }}
             severity="error"
             sx={{ width: '100%' }}
@@ -54,9 +54,9 @@ export default function AlertNotifications({ sendAlert, setSendAlert, message, s
 }
 
 AlertNotifications.propTypes = {
-  setSendAlert: PropTypes.func,
-  sendAlert: PropTypes.bool,
+  setAlert: PropTypes.func,
+  alert: PropTypes.bool,
   message: PropTypes.string,
-  setSendAlertError: PropTypes.func,
-  sendAlertError: PropTypes.bool,
+  setAlertError: PropTypes.func,
+  alertError: PropTypes.bool,
 };

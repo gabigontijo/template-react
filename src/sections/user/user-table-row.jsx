@@ -11,12 +11,17 @@ import TableCell from '@mui/material/TableCell';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 
+import { clientById, deleteClient } from 'src/apis/client';
+
 import Iconify from 'src/components/iconify';
+
+import DialogDelete from './dialog-delete';
 
 // ----------------------------------------------------------------------
 
 export default function UserTableRow({
   selected,
+  id,
   name,
   avatarUrl,
   cpf,
@@ -26,14 +31,64 @@ export default function UserTableRow({
   partner,
   documents,
   handleClick,
+  setEditClient,
+  setClientId,
+  setClientToEdit,
+  setAlertEditError,
+  setNewUser,
+  setAlertDelete,
+  setAlertDeleteError,
+
 }) {
   const [open, setOpen] = useState(null);
 
+  const [openDialog, setOpenDialog] = useState(false);
+
   const handleOpenMenu = (event) => {
     setOpen(event.currentTarget);
+    console.log(event.target);
+  };
+
+  const handleEdit = async () => {
+    try {
+      const response = await clientById(id);
+      setEditClient(true)
+      setNewUser(true)
+      setClientId(id)
+      setClientToEdit(response)
+      setOpen(null);
+      console.log(id)
+    } catch (error) {
+      setAlertEditError(true);
+      // eslint-disable-next-line
+      setNewUser(true) //somente para ver o resultado depois remover
+      setEditClient(true)
+      setClientId(id)
+      setOpen(null);
+      console.log('Erro ao editar o cliente:', error);
+    }
+  };
+
+    
+  const handleDelete = async () => {
+    try {
+      const response = await deleteClient(id);
+      console.log('Resposta da API:', response);
+      setOpenDialog(false);
+      setAlertDelete(true);
+    } catch (error) {
+      setOpenDialog(false);
+      setAlertDeleteError(true);
+      console.log('Erro ao Deletar o cliente:', error);
+    }
   };
 
   const handleCloseMenu = () => {
+    setOpen(null);
+  };
+
+  const handleDialog = () => {
+    setOpenDialog(true);
     setOpen(null);
   };
 
@@ -82,16 +137,27 @@ export default function UserTableRow({
           sx: { width: 140 },
         }}
       >
-        <MenuItem onClick={handleCloseMenu}>
-          <Iconify icon="eva:edit-fill" sx={{ mr: 2 }} />
-          Edit
+        <MenuItem onClick={handleEdit} type="button">
+          <IconButton sx={{ p: 0, '&:hover': { backgroundColor: 'transparent' } }}>
+            <Iconify icon="eva:edit-fill" sx={{ mr: 2 }} />
+            <Typography variant="subtitle2" noWrap>
+              Edit
+            </Typography>
+          </IconButton>
         </MenuItem>
 
-        <MenuItem onClick={handleCloseMenu} sx={{ color: 'error.main' }}>
-          <Iconify icon="eva:trash-2-outline" sx={{ mr: 2 }} />
-          Delete
+        <MenuItem onClick={handleDialog}>
+          <IconButton
+            sx={{ p: 0, '&:hover': { backgroundColor: 'transparent' }, color: 'error.main' }}
+          >
+            <Iconify icon="eva:trash-2-outline" sx={{ mr: 2 }} />
+            <Typography variant="subtitle2" noWrap>
+              Delete
+            </Typography>
+          </IconButton>
         </MenuItem>
       </Popover>
+      <DialogDelete open={openDialog} setOpen={setOpenDialog} handleDelete={handleDelete} name={name} />
     </>
   );
 }
@@ -107,4 +173,12 @@ UserTableRow.propTypes = {
   partner: PropTypes.any,
   documents: PropTypes.any,
   selected: PropTypes.any,
+  id: PropTypes.any,
+  setEditClient: PropTypes.func,
+  setClientId: PropTypes.func,
+  setClientToEdit: PropTypes.func,
+  setAlertEditError: PropTypes.func,
+  setNewUser: PropTypes.func,
+  setAlertDeleteError: PropTypes.func,
+  setAlertDelete: PropTypes.func,
 };

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
@@ -44,9 +44,27 @@ export default function UserPage() {
 
   const [newUser, setNewUser] = useState(false);
 
-  const [sendAlert, setSendAlert] = useState(false);
+  const [alert, setAlert] = useState(false);
 
-  const [sendAlertError,  setSendAlertError] = useState(false);
+  const [alertError, setAlertError] = useState(false);
+
+  const [alertEdit, setAlertEdit] = useState(false);
+
+  const [alertDelete, setAlertDelete] = useState(false);
+
+  const [alertDeleteError, setAlertDeleteError] = useState(false);
+
+  const [editClient, setEditClient] = useState(false);
+
+  const [clientId, setClientId] = useState('');
+
+  const [clientToEdit, setClientToEdit] = useState({});
+
+  const [alertEditError, setAlertEditError] = useState(false);
+
+  useEffect(() => {
+    console.log(alertDeleteError);
+  }, [alertDeleteError]);
 
   const handleSort = (event, id) => {
     const isAsc = orderBy === id && order === 'asc';
@@ -103,6 +121,7 @@ export default function UserPage() {
 
   const handleCloseAdd = () => {
     setNewUser(false);
+    setEditClient(false);
   };
 
   const dataFiltered = applyFilter({
@@ -134,33 +153,63 @@ export default function UserPage() {
               Novo Cliente
             </Button>
           )}
-          {newUser && (
+          {(newUser || editClient) && (
             <Button color="inherit" onClick={handleCloseAdd}>
               <CloseIcon />
             </Button>
           )}
         </Stack>
       </Stack>
-      {newUser && (
+      {(newUser || editClient) && (
         <FormNewUser
           setNewUser={setNewUser}
-          setSendAlert={setSendAlert}
-          setSendAlertError={setSendAlertError}
+          setAlert={setAlert}
+          setAlertError={setAlertError}
+          clientToEdit={clientToEdit}
+          setAlertEdit={setAlertEdit}
         />
       )}
 
-      {sendAlert && (
+      {alert && (
         <AlertNotifications
-          sendAlert={sendAlert}
-          setSendAlert={setSendAlert}
+          alert={alert}
+          setAlert={setAlert}
           message="Cliente cadastrado com sucesso"
         />
       )}
-      {sendAlertError && (
+      {alertEdit && (
         <AlertNotifications
-          sendAlertError={sendAlertError}
-          setSendAlertError={setSendAlertError}
+          alert={alertEdit}
+          setAlert={setAlertEdit}
+          message="Cliente editado com sucesso"
+        />
+      )}
+      {alertError && (
+        <AlertNotifications
+          alertError={alertError}
+          setAlertError={setAlertError}
           message="Erro ao cadastrar o cliente"
+        />
+      )}
+      {alertEditError && (
+        <AlertNotifications
+          alertError={alertEditError}
+          setAlertError={setAlertEditError}
+          message="Erro ao editar o cliente"
+        />
+      )}
+      {alertDelete && (
+        <AlertNotifications
+          alert={alertDelete}
+          setAlert={setAlertDelete}
+          message="Cliente Deletado com sucesso"
+        />
+      )}
+      {alertDeleteError && (
+        <AlertNotifications
+          alertError={alertDeleteError}
+          setAlertError={setAlertDeleteError}
+          message="Erro ao deletar o cliente"
         />
       )}
 
@@ -198,6 +247,7 @@ export default function UserPage() {
                   .map((row) => (
                     <UserTableRow
                       key={row.id}
+                      id={row.id}
                       name={row.name}
                       phone={row.phone}
                       cpf={row.cpf}
@@ -208,6 +258,13 @@ export default function UserPage() {
                       avatarUrl={row.avatarUrl}
                       selected={selected.indexOf(row.name) !== -1}
                       handleClick={(event) => handleClick(event, row.name)}
+                      setEditClient={setEditClient}
+                      setClientId={setClientId}
+                      setClientToEdit={setClientToEdit}
+                      setAlertEditError={setAlertEditError}
+                      setNewUser={setNewUser}
+                      setAlertDelete={setAlertDelete}
+                      setAlertDeleteError={setAlertDeleteError}
                     />
                   ))}
 

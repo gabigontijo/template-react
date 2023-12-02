@@ -1,4 +1,5 @@
 export const clientInterface = {
+    id: '',
     name: '',
     phone: '',
     cpf: '',
