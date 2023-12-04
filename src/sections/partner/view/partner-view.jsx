@@ -18,11 +18,11 @@ import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 
 import FormNewPartner from '../form-new-partner';
-import TableNoData from '../../user/table-no-data';
 import PartnerTableRow from '../partner-table-row';
-import TableEmptyRows from '../../user/table-empty-rows';
-import ClientTableHead from '../../user/client-table-head';
+import TableNoData from '../../client/table-no-data';
+import TableEmptyRows from '../../client/table-empty-rows';
 import PartnerTableToolbar from '../partner-table-toolbar';
+import ClientTableHead from '../../client/client-table-head';
 import { emptyRows, applyFilter, getComparator } from '../../utils';
 
 

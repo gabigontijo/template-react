@@ -18,10 +18,10 @@ import Scrollbar from 'src/components/scrollbar';
 
 import FormNewLoan from '../form-new-loan';
 import LoanTableRow from '../loan-table-row';
-import TableNoData from '../../user/table-no-data';
+import TableNoData from '../../client/table-no-data';
 import LoanTableToolbar from '../loan-table-toolbar';
-import TableEmptyRows from '../../user/table-empty-rows';
-import ClientTableHead from '../../user/client-table-head';
+import TableEmptyRows from '../../client/table-empty-rows';
+import ClientTableHead from '../../client/client-table-head';
 import { emptyRows, applyFilter, getComparator } from '../../utils';
 
 // ----------------------------------------------------------------------

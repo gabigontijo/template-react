@@ -11,7 +11,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 
 import Iconify from 'src/components/iconify';
 
-import FormNewClient from '../user/form-new-client';
+import FormNewClient from '../client/form-new-client';
 
 // ----------------------------------------------------------------------
 

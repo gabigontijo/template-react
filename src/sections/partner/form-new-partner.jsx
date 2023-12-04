@@ -5,7 +5,7 @@ import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import LoadingButton from '@mui/lab/LoadingButton';
 
-import SelectPixFields from '../user/input-select-pix';
+import SelectPixFields from '../client/input-select-pix';
 
 // ----------------------------------------------------------------------
 
