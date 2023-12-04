@@ -8,39 +8,49 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 // import Slide from '@mui/material/Slide';
 
-export default function DialogDelete({ setOpen, open, handleDelete, name}) {
-
+export default function DialogDelete({ setOpen, open, handleDelete, name }) {
   const handleClose = () => {
     setOpen(false);
   };
 
+  const getContentText = () => {
+    if (typeof name === 'string') {
+      return `Tem certeza que deseja deletar ${name} ?`;
+    }
+
+    if (Array.isArray(name)) {
+      if (name.length === 1) {
+        return `Tem certeza que deseja deletar ${name[0].name} ?`;
+      }
+      return `Tem certeza que deseja deletar ${name.length} clientes ?`;
+    }
+    return ''
+  };
+
   return (
-        <Dialog
-        open={open}
-        keepMounted
-        onClose={handleClose}
-        aria-describedby="alert-dialog-delete-description"
-      >
-        <DialogTitle>Deletar cliente?</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-delite-description">
-            Tem certeza que deseja deletar {name} ?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleDelete}>Sim</Button>
-          <Button onClick={handleClose}>Não</Button>
-        </DialogActions>
-      </Dialog>
+    <Dialog
+      open={open}
+      keepMounted
+      onClose={handleClose}
+      aria-describedby="alert-dialog-delete-description"
+    >
+      <DialogTitle>Deletar cliente?</DialogTitle>
+      <DialogContent>
+        <DialogContentText id="alert-dialog-delite-description">
+          {getContentText(name)}
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleDelete}>Sim</Button>
+        <Button onClick={handleClose}>Não</Button>
+      </DialogActions>
+    </Dialog>
   );
 }
 
-
 DialogDelete.propTypes = {
-    setOpen: PropTypes.func,
-    open: PropTypes.bool,
-    handleDelete: PropTypes.func,
-    name: PropTypes.string,
-    
-  };
-  
+  setOpen: PropTypes.func,
+  open: PropTypes.bool,
+  handleDelete: PropTypes.func,
+  name: PropTypes.any,
+};

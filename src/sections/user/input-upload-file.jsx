@@ -1,5 +1,3 @@
-import * as React from 'react';
-
 import List from '@mui/material/List';
 import Button from '@mui/material/Button';
 import ListItem from '@mui/material/ListItem';
@@ -24,8 +22,6 @@ export default function InputFileUpload() {
     <List sx={{padding: 0}}>
       <ListItem alignItems="flex-start">
         <ListItemText primary="Documentos" />
-      {/* </ListItem>
-      <ListItem> */}
         <Button component="label" variant="contained" startIcon={<CloudUploadIcon />}>
           Carregar arquivos
           <VisuallyHiddenInput type="file" />

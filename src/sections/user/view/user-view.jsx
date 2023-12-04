@@ -14,6 +14,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 
 import { users } from 'src/_mock/user';
+import { deleteClient } from 'src/apis/client';
 import AlertNotifications from 'src/layouts/dashboard/common/alert-notifications';
 
 import Iconify from 'src/components/iconify';
@@ -62,9 +63,12 @@ export default function UserPage() {
 
   const [alertEditError, setAlertEditError] = useState(false);
 
+  const [openDialog, setOpenDialog] = useState(false);
+
   useEffect(() => {
-    console.log(alertDeleteError);
-  }, [alertDeleteError]);
+    console.log(selected);
+    console.log(clientId);
+  }, [selected, clientId]);
 
   const handleSort = (event, id) => {
     const isAsc = orderBy === id && order === 'asc';
@@ -76,28 +80,27 @@ export default function UserPage() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = users.map((n) => n.name);
+      const newSelecteds = users.map((n) => ({
+        name: n.name,
+        id: n.id,
+      }));
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = (event, name, id) => {
+    const selectedIndex = selected.findIndex((item) => item.name === name);
+
     let newSelected = [];
+
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      );
+      newSelected = [...selected, { name, id }];
+    } else {
+      newSelected = selected.filter((item) => item.name !== name);
     }
+
     setSelected(newSelected);
   };
 
@@ -129,6 +132,25 @@ export default function UserPage() {
     comparator: getComparator(order, orderBy),
     filterName,
   });
+
+  const handleDelete = async () => {
+    try {
+       const results = await Promise.all(selected.map( async (client) => {
+        const result = await deleteClient(client.id);
+        return result;
+       }));
+       console.log(results);
+       setAlertDelete(true)
+       setOpenDialog(false);
+       setSelected([]);
+       
+      } catch (error) {
+        console.error('Erro ao excluir clientes:', error)
+        setAlertDeleteError(true);
+        setOpenDialog(false);
+        setSelected([]);
+    }
+}
 
   const notFound = !dataFiltered.length && !!filterName;
 
@@ -218,6 +240,11 @@ export default function UserPage() {
           numSelected={selected.length}
           filterName={filterName}
           onFilterName={handleFilterByName}
+          handleDelete={handleDelete}
+          selected={selected}
+          openDialog = { openDialog }
+          setOpenDialog = {setOpenDialog}
+          
         />
 
         <Scrollbar>
@@ -256,8 +283,8 @@ export default function UserPage() {
                       partner={row.partner}
                       documents={row.documents}
                       avatarUrl={row.avatarUrl}
-                      selected={selected.indexOf(row.name) !== -1}
-                      handleClick={(event) => handleClick(event, row.name)}
+                      selected={selected.some((item) => item.name === row.name)}
+                      handleClick={(event) => handleClick(event, row.name, row.id)}
                       setEditClient={setEditClient}
                       setClientId={setClientId}
                       setClientToEdit={setClientToEdit}

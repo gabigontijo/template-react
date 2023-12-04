@@ -9,9 +9,16 @@ import InputAdornment from '@mui/material/InputAdornment';
 
 import Iconify from 'src/components/iconify';
 
+import DialogDelete from './dialog-delete';
+
 // ----------------------------------------------------------------------
 
-export default function UserTableToolbar({ numSelected, filterName, onFilterName }) {
+export default function UserTableToolbar({ numSelected, filterName, onFilterName, handleDelete, selected, openDialog, setOpenDialog }) {
+
+  const handleDialog = () => {
+    setOpenDialog(true);
+  };
+
   return (
     <Toolbar
       sx={{
@@ -47,11 +54,12 @@ export default function UserTableToolbar({ numSelected, filterName, onFilterName
 
       {numSelected > 0 && (
         <Tooltip title="Delete">
-          <IconButton>
+          <IconButton onClick={handleDialog}>
             <Iconify icon="eva:trash-2-fill" />
           </IconButton>
         </Tooltip>
       )}
+       <DialogDelete open={openDialog} setOpen={setOpenDialog} handleDelete={handleDelete} name={selected} />
     </Toolbar>
   );
 }
@@ -60,4 +68,8 @@ UserTableToolbar.propTypes = {
   numSelected: PropTypes.number,
   filterName: PropTypes.string,
   onFilterName: PropTypes.func,
+  handleDelete: PropTypes.func,
+  selected: PropTypes.any,
+  openDialog: PropTypes.bool,
+  setOpenDialog: PropTypes.func,
 };
