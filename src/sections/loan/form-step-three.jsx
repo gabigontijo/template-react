@@ -91,7 +91,7 @@ export default function FormStepThree({
           </Stack>
           {isNewPartner && (
             <Box sx={{ margin: 3 }}>
-              <FormNewPartner setNewPartner={setIsNewPartner} setSendAlert={setSendAlert}/>
+              <FormNewPartner setNewPartner={setIsNewPartner} setAlert={setSendAlert}/>
             </Box>
           )}
         </>

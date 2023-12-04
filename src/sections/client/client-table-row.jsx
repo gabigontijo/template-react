@@ -38,7 +38,6 @@ export default function ClientTableRow({
   setNewUser,
   setAlertDelete,
   setAlertDeleteError,
-
 }) {
   const [open, setOpen] = useState(null);
 
@@ -49,27 +48,30 @@ export default function ClientTableRow({
     console.log(event.target);
   };
 
+  const handleCloseMenu = () => {
+    setOpen(null);
+  };
+
   const handleEdit = async () => {
     try {
       const response = await clientById(id);
-      setEditClient(true)
-      setNewUser(true)
-      setClientId(id)
-      setClientToEdit(response)
+      setEditClient(true);
+      setNewUser(true);
+      setClientId(id);
+      setClientToEdit(response);
       setOpen(null);
-      console.log(id)
+      console.log(id);
     } catch (error) {
       setAlertEditError(true);
       // eslint-disable-next-line
-      setNewUser(true) //somente para ver o resultado depois remover
-      setEditClient(true)
-      setClientId(id)
+      setNewUser(true); //somente para ver o resultado depois remover
+      setEditClient(true);
+      setClientId(id);
       setOpen(null);
       console.log('Erro ao editar o cliente:', error);
     }
   };
 
-    
   const handleDelete = async () => {
     try {
       const response = await deleteClient(id);
@@ -81,10 +83,6 @@ export default function ClientTableRow({
       setAlertDeleteError(true);
       console.log('Erro ao Deletar o cliente:', error);
     }
-  };
-
-  const handleCloseMenu = () => {
-    setOpen(null);
   };
 
   const handleDialog = () => {
@@ -157,7 +155,12 @@ export default function ClientTableRow({
           </IconButton>
         </MenuItem>
       </Popover>
-      <DialogDelete open={openDialog} setOpen={setOpenDialog} handleDelete={handleDelete} name={name} />
+      <DialogDelete
+        open={openDialog}
+        setOpen={setOpenDialog}
+        handleDelete={handleDelete}
+        name={name}
+      />
     </>
   );
 }

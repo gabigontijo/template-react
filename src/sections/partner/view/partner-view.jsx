@@ -12,6 +12,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 
 import { partners } from 'src/_mock/partner';
+import { deletePartner } from 'src/apis/partner';
 import AlertNotifications from 'src/layouts/dashboard/common/alert-notifications';
 
 import Iconify from 'src/components/iconify';
@@ -43,7 +44,25 @@ export default function PartnerPage() {
 
   const [newPartner, setNewPartner] = useState(false);
 
-  const [sendAlert, setSendAlert] = useState(false);
+  const [alert, setAlert] = useState(false);
+
+  const [alertError, setAlertError] = useState(false);
+
+  const [alertEdit, setAlertEdit] = useState(false);
+
+  const [alertDelete, setAlertDelete] = useState(false);
+
+  const [alertDeleteError, setAlertDeleteError] = useState(false);
+
+  const [editPartner, setEditPartner] = useState(false);
+
+  const [partnerId, setPartnerId] = useState('');
+
+  const [partnerToEdit, setPartnerToEdit] = useState({});
+
+  const [alertEditError, setAlertEditError] = useState(false);
+
+  const [openDialog, setOpenDialog] = useState(false);
 
   const handleSort = (event, id) => {
     const isAsc = orderBy === id && order === 'asc';
@@ -55,28 +74,27 @@ export default function PartnerPage() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = partners.map((n) => n.name);
+      const newSelecteds = partners.map((n) => ({
+        name: n.name,
+        id: n.id,
+      }));
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = (event, name, id) => {
+    const selectedIndex = selected.findIndex((item) => item.name === name);
+
     let newSelected = [];
+
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      );
+      newSelected = [...selected, { name, id }];
+    } else {
+      newSelected = selected.filter((item) => item.name !== name);
     }
+
     setSelected(newSelected);
   };
 
@@ -100,6 +118,7 @@ export default function PartnerPage() {
 
   const handleCloseAdd = () => {
     setNewPartner(false);
+    setEditPartner(false);
   };
 
   const dataFiltered = applyFilter({
@@ -107,6 +126,25 @@ export default function PartnerPage() {
     comparator: getComparator(order, orderBy),
     filterName,
   });
+
+  const handleDelete = async () => {
+    try {
+       const results = await Promise.all(selected.map( async (client) => {
+        const result = await deletePartner(client.id);
+        return result;
+       }));
+       console.log(results);
+       setAlertDelete(true)
+       setOpenDialog(false);
+       setSelected([]);
+       
+      } catch (error) {
+        console.error('Erro ao excluir parceiros:', error)
+        setAlertDeleteError(true);
+        setOpenDialog(false);
+        setSelected([]);
+    }
+}
 
   const notFound = !dataFiltered.length && !!filterName;
 
@@ -131,25 +169,63 @@ export default function PartnerPage() {
             Novo Parceiro
           </Button>
           )}
-          {newPartner && (
+          {(newPartner || editPartner) && (
             <Button color="inherit" onClick={handleCloseAdd}>
               <CloseIcon />
             </Button>
           )}
         </Stack>
       </Stack>
-      {newPartner && (
+      {(newPartner || editPartner) && (
         <FormNewPartner
           setNewPartner={setNewPartner}
-          setSendAlert={setSendAlert}
+          setAlert={setAlert}
+          setAlertError={setAlertError}
+          partnerToEdit={partnerToEdit}
+          setAlertEdit={setAlertEdit}
          
         />
       )}
-      {sendAlert && (
+      {alert && (
         <AlertNotifications
-          sendAlert={sendAlert}
-          setSendAlert={setSendAlert}
+          sendAlert={alert}
+          setSendAlert={setAlert}
           message="Parceiro cadastrado com sucesso!"
+        />
+      )}
+      {alertEdit && (
+        <AlertNotifications
+          alert={alertEdit}
+          setAlert={setAlertEdit}
+          message="parceiro editado com sucesso"
+        />
+      )}
+      {alertError && (
+        <AlertNotifications
+          alertError={alertError}
+          setAlertError={setAlertError}
+          message="Erro ao cadastrar o parceiro"
+        />
+      )}
+      {alertEditError && (
+        <AlertNotifications
+          alertError={alertEditError}
+          setAlertError={setAlertEditError}
+          message="Erro ao editar o parceiro"
+        />
+      )}
+      {alertDelete && (
+        <AlertNotifications
+          alert={alertDelete}
+          setAlert={setAlertDelete}
+          message="parceiro Deletado com sucesso"
+        />
+      )}
+      {alertDeleteError && (
+        <AlertNotifications
+          alertError={alertDeleteError}
+          setAlertError={setAlertDeleteError}
+          message="Erro ao deletar o parceiro"
         />
       )}
 
@@ -158,6 +234,10 @@ export default function PartnerPage() {
           numSelected={selected.length}
           filterName={filterName}
           onFilterName={handleFilterByName}
+          handleDelete={handleDelete}
+          selected={selected}
+          openDialog = { openDialog }
+          setOpenDialog = {setOpenDialog}
         />
 
         <Scrollbar>
@@ -195,8 +275,15 @@ export default function PartnerPage() {
                       pixKey={row.pixKey}
                       adress={row.adress}
                       avatarUrl={row.avatarUrl}
-                      selected={selected.indexOf(row.name) !== -1}
-                      handleClick={(event) => handleClick(event, row.name)}
+                      selected={selected.some((item) => item.name === row.name)}
+                      handleClick={(event) => handleClick(event, row.name, row.id)}
+                      setEditClient={setEditPartner}
+                      setClientId={setPartnerId}
+                      setClientToEdit={setPartnerToEdit}
+                      setAlertEditError={setAlertEditError}
+                      setNewUser={setNewPartner}
+                      setAlertDelete={setAlertDelete}
+                      setAlertDeleteError={setAlertDeleteError}
                     />
                   ))}
 

@@ -6,7 +6,6 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
-// import Slide from '@mui/material/Slide';
 
 export default function DialogDelete({ setOpen, open, handleDelete, name }) {
   const handleClose = () => {
@@ -22,7 +21,7 @@ export default function DialogDelete({ setOpen, open, handleDelete, name }) {
       if (name.length === 1) {
         return `Tem certeza que deseja deletar ${name[0].name} ?`;
       }
-      return `Tem certeza que deseja deletar ${name.length} clientes ?`;
+      return `Tem certeza que deseja deletar ${name.length} parceiros ?`;
     }
     return ''
   };
@@ -34,7 +33,7 @@ export default function DialogDelete({ setOpen, open, handleDelete, name }) {
       onClose={handleClose}
       aria-describedby="alert-dialog-delete-description"
     >
-      <DialogTitle>Deletar cliente?</DialogTitle>
+      <DialogTitle>Deletar parceiro?</DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-delete-description">
           {getContentText(name)}
