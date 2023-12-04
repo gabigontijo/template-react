@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-import { UserView } from 'src/sections/user/view';
+import { ClientView } from 'src/sections/user/view';
 
 // ----------------------------------------------------------------------
 
@@ -11,7 +11,7 @@ export default function UserPage() {
         <title> User | Cash By Card </title>
       </Helmet>
 
-      <UserView />
+      <ClientView />
     </>
   );
 }

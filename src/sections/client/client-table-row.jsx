@@ -19,7 +19,7 @@ import DialogDelete from './dialog-delete';
 
 // ----------------------------------------------------------------------
 
-export default function UserTableRow({
+export default function ClientTableRow({
   selected,
   id,
   name,
@@ -162,7 +162,7 @@ export default function UserTableRow({
   );
 }
 
-UserTableRow.propTypes = {
+ClientTableRow.propTypes = {
   avatarUrl: PropTypes.any,
   cpf: PropTypes.any,
   phone: PropTypes.any,

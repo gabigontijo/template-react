@@ -11,7 +11,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 
 import Iconify from 'src/components/iconify';
 
-import FormNewUser from '../user/form-new-user';
+import FormNewClient from '../user/form-new-client';
 
 // ----------------------------------------------------------------------
 
@@ -69,7 +69,7 @@ export default function FormStepOne({ setSendAlert, filterName, onFilterName, is
     </Stack>
     {isNewClient && (
       <Box sx={{ margin: 3 }}>
-        <FormNewUser setNewUser={setIsNewClient} setSendAlert={setSendAlert} />
+        <FormNewClient setNewUser={setIsNewClient} setSendAlert={setSendAlert} />
       </Box>
     )}
   </Card>

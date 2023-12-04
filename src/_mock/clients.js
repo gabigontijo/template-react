@@ -3,7 +3,7 @@ import { faker } from '@faker-js/faker';
 
 // ----------------------------------------------------------------------
 
-export const users = [...Array(24)].map((_, index) => ({
+export const clients = [...Array(24)].map((_, index) => ({
   id: faker.number.int(),
   avatarUrl: `/assets/images/avatars/avatar_${index + 1}.jpg`,
   name: faker.person.fullName(),

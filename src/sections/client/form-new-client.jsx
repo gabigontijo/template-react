@@ -15,7 +15,7 @@ import InputFileUpload from './input-upload-file';
 
 // ----------------------------------------------------------------------
 
-export default function FormNewUser({ setNewUser, setAlert, setAlertError, clientToEdit, setAlertEdit }) {
+export default function FormNewClient({ setNewUser, setAlert, setAlertError, clientToEdit, setAlertEdit }) {
   const [state, setState] = useState(clientToEdit || clientInterface);
 
   const handleSubmit = async () => {
@@ -154,7 +154,7 @@ export default function FormNewUser({ setNewUser, setAlert, setAlertError, clien
   );
 }
 
-FormNewUser.propTypes = {
+FormNewClient.propTypes = {
   setNewUser: PropTypes.func,
   setAlert: PropTypes.func,
   setAlertError: PropTypes.func,

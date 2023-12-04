@@ -13,7 +13,7 @@ import DialogDelete from './dialog-delete';
 
 // ----------------------------------------------------------------------
 
-export default function UserTableToolbar({ numSelected, filterName, onFilterName, handleDelete, selected, openDialog, setOpenDialog }) {
+export default function ClientTableToolbar({ numSelected, filterName, onFilterName, handleDelete, selected, openDialog, setOpenDialog }) {
 
   const handleDialog = () => {
     setOpenDialog(true);
@@ -64,7 +64,7 @@ export default function UserTableToolbar({ numSelected, filterName, onFilterName
   );
 }
 
-UserTableToolbar.propTypes = {
+ClientTableToolbar.propTypes = {
   numSelected: PropTypes.number,
   filterName: PropTypes.string,
   onFilterName: PropTypes.func,

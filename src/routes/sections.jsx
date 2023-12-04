@@ -5,7 +5,7 @@ import DashboardLayout from 'src/layouts/dashboard';
 
 export const IndexPage = lazy(() => import('src/pages/app'));
 export const LoanPage = lazy(() => import('src/pages/loan'));
-export const UserPage = lazy(() => import('src/pages/user'));
+export const UserPage = lazy(() => import('src/pages/client'));
 export const LoginPage = lazy(() => import('src/pages/login'));
 export const PartnerPage = lazy(() => import('src/pages/partner'));
 export const Page404 = lazy(() => import('src/pages/page-not-found'));

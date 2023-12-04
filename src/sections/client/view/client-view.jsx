@@ -2,10 +2,8 @@ import { useState, useEffect } from 'react';
 
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
-// import Alert from '@mui/material/Alert';
 import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
-// import Snackbar from '@mui/material/Snackbar';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import CloseIcon from '@mui/icons-material/Close';
@@ -13,7 +11,7 @@ import Typography from '@mui/material/Typography';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 
-import { users } from 'src/_mock/user';
+import { clients } from 'src/_mock/clients';
 import { deleteClient } from 'src/apis/client';
 import AlertNotifications from 'src/layouts/dashboard/common/alert-notifications';
 
@@ -21,16 +19,16 @@ import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 
 import TableNoData from '../table-no-data';
-import FormNewUser from '../form-new-user';
-import UserTableRow from '../user-table-row';
-import UserTableHead from '../user-table-head';
+import FormNewClient from '../form-new-client';
 import TableEmptyRows from '../table-empty-rows';
-import UserTableToolbar from '../user-table-toolbar';
+import ClientTableRow from '../client-table-row';
+import ClientTableHead from '../client-table-head';
+import ClientTableToolbar from '../client-table-toolbar';
 import { emptyRows, applyFilter, getComparator } from '../../utils';
 
 // ----------------------------------------------------------------------
 
-export default function UserPage() {
+export default function ClientPage() {
   const [page, setPage] = useState(0);
 
   const [order, setOrder] = useState('asc');
@@ -80,7 +78,7 @@ export default function UserPage() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = users.map((n) => ({
+      const newSelecteds = clients.map((n) => ({
         name: n.name,
         id: n.id,
       }));
@@ -128,7 +126,7 @@ export default function UserPage() {
   };
 
   const dataFiltered = applyFilter({
-    inputData: users,
+    inputData: clients,
     comparator: getComparator(order, orderBy),
     filterName,
   });
@@ -183,7 +181,7 @@ export default function UserPage() {
         </Stack>
       </Stack>
       {(newUser || editClient) && (
-        <FormNewUser
+        <FormNewClient
           setNewUser={setNewUser}
           setAlert={setAlert}
           setAlertError={setAlertError}
@@ -236,7 +234,7 @@ export default function UserPage() {
       )}
 
       <Card>
-        <UserTableToolbar
+        <ClientTableToolbar
           numSelected={selected.length}
           filterName={filterName}
           onFilterName={handleFilterByName}
@@ -250,10 +248,10 @@ export default function UserPage() {
         <Scrollbar>
           <TableContainer sx={{ overflow: 'unset' }}>
             <Table sx={{ minWidth: 800 }}>
-              <UserTableHead
+              <ClientTableHead
                 order={order}
                 orderBy={orderBy}
-                rowCount={users.length}
+                rowCount={clients.length}
                 numSelected={selected.length}
                 onRequestSort={handleSort}
                 onSelectAllClick={handleSelectAllClick}
@@ -272,7 +270,7 @@ export default function UserPage() {
                 {dataFiltered
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row) => (
-                    <UserTableRow
+                    <ClientTableRow
                       key={row.id}
                       id={row.id}
                       name={row.name}
@@ -297,7 +295,7 @@ export default function UserPage() {
 
                 <TableEmptyRows
                   height={77}
-                  emptyRows={emptyRows(page, rowsPerPage, users.length)}
+                  emptyRows={emptyRows(page, rowsPerPage, clients.length)}
                 />
 
                 {notFound && <TableNoData query={filterName} />}
@@ -309,7 +307,7 @@ export default function UserPage() {
         <TablePagination
           page={page}
           component="div"
-          count={users.length}
+          count={clients.length}
           rowsPerPage={rowsPerPage}
           onPageChange={handleChangePage}
           rowsPerPageOptions={[5, 10, 25]}

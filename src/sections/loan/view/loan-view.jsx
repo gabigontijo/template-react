@@ -20,8 +20,8 @@ import FormNewLoan from '../form-new-loan';
 import LoanTableRow from '../loan-table-row';
 import TableNoData from '../../user/table-no-data';
 import LoanTableToolbar from '../loan-table-toolbar';
-import UserTableHead from '../../user/user-table-head';
 import TableEmptyRows from '../../user/table-empty-rows';
+import ClientTableHead from '../../user/client-table-head';
 import { emptyRows, applyFilter, getComparator } from '../../utils';
 
 // ----------------------------------------------------------------------
@@ -146,7 +146,7 @@ export default function PartnerPage() {
         <Scrollbar>
           <TableContainer sx={{ overflow: 'unset' }}>
             <Table sx={{ minWidth: 800 }}>
-              <UserTableHead
+              <ClientTableHead
                 order={order}
                 orderBy={orderBy}
                 rowCount={partners.length}
