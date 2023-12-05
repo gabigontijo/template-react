@@ -6,11 +6,11 @@ import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
-import SelectMachin from './input-select-machin';
-import SelectCardFlag from './input-select-card-flag';
-import SelectPaymentType from './input-select-payment-type';
-import SelectInstallments from './input-select-installments';
-import SelectNumberOfCardsFields from './input-select-number-of-cards';
+import SelectMachin from '../common/input-select-machin';
+import SelectCardFlag from '../common/input-select-card-flag';
+import SelectPaymentType from '../common/input-select-payment-type';
+import SelectInstallments from '../common/input-select-installments';
+import SelectNumberOfCardsFields from '../common/input-select-number-of-cards';
 
 // ----------------------------------------------------------------------
 

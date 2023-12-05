@@ -1,49 +1,49 @@
 import { apiFetch, getHeaders } from "..";
 
-export const createClient = async (client) => {
+export const createLoan = async (loan) => {
   const apiOpts = {
     method: 'post',
-    body: JSON.stringify(client),
+    body: JSON.stringify(loan),
     headers: getHeaders({ 'Content-Type': 'application/json' }),
   };
-  const res = await apiFetch('/clients', apiOpts);
+  const res = await apiFetch('/loans', apiOpts);
   return res.json();
 };
 
-export const allClients = async () => {
+export const allLoans = async () => {
   const apiOpts = {
     method: 'get',
     headers: getHeaders({ 'Content-Type': 'application/json' }),
   };
-  const res = await apiFetch('/clients', apiOpts);
+  const res = await apiFetch('/loans', apiOpts);
   return res.json();
 };
 
-export const clientById = async (clientId) => {
+export const loanById = async (loanId) => {
   const apiOpts = {
     method: 'get',
     headers: getHeaders({ 'Content-Type': 'application/json' }),
   };
-  const res = await apiFetch(`/clients/${clientId}`, apiOpts);
+  const res = await apiFetch(`/loans/${loanId}`, apiOpts);
   return res.json();
 };
 
-export const updateClient = async (client) => {
+export const updateLoan = async (loan) => {
   const apiOpts = {
     method: 'put',
-    body: JSON.stringify(client),
+    body: JSON.stringify(loan),
     headers: getHeaders({ 'Content-Type': 'application/json' }),
   };
-  const res = await apiFetch(`/clients`, apiOpts);
+  const res = await apiFetch(`/loans`, apiOpts);
   return res.json();
 };
 
-export const deleteClient = async (clientId) => {
+export const deleteLoan = async (loanId) => {
   const apiOpts = {
     method: 'delete',
     headers: getHeaders({ 'Content-Type': 'application/json' }),
   };
-  const res = await apiFetch(`/clients/${clientId}`, apiOpts);
+  const res = await apiFetch(`/loans/${loanId}`, apiOpts);
   return res.json();
 };
 
