@@ -69,7 +69,7 @@ export default function FormStepOne({ setSendAlert, filterName, onFilterName, is
     </Stack>
     {isNewClient && (
       <Box sx={{ margin: 3 }}>
-        <FormNewClient setNewUser={setIsNewClient} setSendAlert={setSendAlert} />
+        <FormNewClient setNewUser={setIsNewClient} setAlert={setSendAlert} />
       </Box>
     )}
   </Card>

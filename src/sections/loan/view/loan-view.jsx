@@ -18,10 +18,10 @@ import Scrollbar from 'src/components/scrollbar';
 
 import FormNewLoan from '../form-new-loan';
 import LoanTableRow from '../loan-table-row';
-import TableNoData from '../../client/table-no-data';
-import LoanTableToolbar from '../loan-table-toolbar';
-import TableEmptyRows from '../../client/table-empty-rows';
-import ClientTableHead from '../../client/client-table-head';
+import TableNoData from '../../common/table-no-data';
+import ComoonTableHead from '../../common/table-head';
+import TableToolbar from '../../common/table-toolbar';
+import TableEmptyRows from '../../common/table-empty-rows';
 import { emptyRows, applyFilter, getComparator } from '../../utils';
 
 // ----------------------------------------------------------------------
@@ -137,16 +137,17 @@ export default function PartnerPage() {
       {newLoan && <FormNewLoan />}
 
       <Card>
-        <LoanTableToolbar
+        <TableToolbar
           numSelected={selected.length}
           filterName={filterName}
           onFilterName={handleFilterByName}
+          placeholder="Procurar empréstimo..."
         />
 
         <Scrollbar>
           <TableContainer sx={{ overflow: 'unset' }}>
             <Table sx={{ minWidth: 800 }}>
-              <ClientTableHead
+              <ComoonTableHead
                 order={order}
                 orderBy={orderBy}
                 rowCount={partners.length}

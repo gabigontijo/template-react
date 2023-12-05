@@ -11,7 +11,7 @@ import { visuallyHidden } from '../utils';
 
 // ----------------------------------------------------------------------
 
-export default function ClientTableHead({
+export default function ComoonTableHead({
   order,
   orderBy,
   rowCount,
@@ -62,7 +62,7 @@ export default function ClientTableHead({
   );
 }
 
-ClientTableHead.propTypes = {
+ComoonTableHead.propTypes = {
   order: PropTypes.oneOf(['asc', 'desc']),
   orderBy: PropTypes.string,
   rowCount: PropTypes.number,

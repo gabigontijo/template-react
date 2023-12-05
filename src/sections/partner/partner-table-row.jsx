@@ -15,7 +15,7 @@ import { partnerById, deletePartner } from 'src/apis/partner';
 
 import Iconify from 'src/components/iconify';
 
-import DialogDelete from './dialog-delete';
+import DialogDelete from '../common/dialog-delete';
 
 // ----------------------------------------------------------------------
 
@@ -155,6 +155,7 @@ export default function PartnerTableRow({
         setOpen={setOpenDialog}
         handleDelete={handleDelete}
         name={name}
+        message="parceiro"
       />
     </>
   );

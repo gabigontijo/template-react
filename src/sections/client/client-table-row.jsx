@@ -15,7 +15,7 @@ import { clientById, deleteClient } from 'src/apis/client';
 
 import Iconify from 'src/components/iconify';
 
-import DialogDelete from './dialog-delete';
+import DialogDelete from '../common/dialog-delete';
 
 // ----------------------------------------------------------------------
 
@@ -160,6 +160,7 @@ export default function ClientTableRow({
         setOpen={setOpenDialog}
         handleDelete={handleDelete}
         name={name}
+        message='cliente'
       />
     </>
   );

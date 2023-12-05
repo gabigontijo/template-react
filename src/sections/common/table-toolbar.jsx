@@ -13,12 +13,12 @@ import DialogDelete from './dialog-delete';
 
 // ----------------------------------------------------------------------
 
-export default function PartnerTableToolbar({ numSelected, filterName, onFilterName, handleDelete, selected, openDialog, setOpenDialog }) {
-  
+export default function TableToolbar({ numSelected, filterName, onFilterName, handleDelete, selected, openDialog, setOpenDialog, placeholder, message }) {
+
   const handleDialog = () => {
     setOpenDialog(true);
   };
-  
+
   return (
     <Toolbar
       sx={{
@@ -40,7 +40,7 @@ export default function PartnerTableToolbar({ numSelected, filterName, onFilterN
         <OutlinedInput
           value={filterName}
           onChange={onFilterName}
-          placeholder="Procurar parceiro..."
+          placeholder={placeholder}
           startAdornment={
             <InputAdornment position="start">
               <Iconify
@@ -59,12 +59,12 @@ export default function PartnerTableToolbar({ numSelected, filterName, onFilterN
           </IconButton>
         </Tooltip>
       )}
-       <DialogDelete open={openDialog} setOpen={setOpenDialog} handleDelete={handleDelete} name={selected} />
+       <DialogDelete open={openDialog} setOpen={setOpenDialog} handleDelete={handleDelete} name={selected} message={message} />
     </Toolbar>
   );
 }
 
-PartnerTableToolbar.propTypes = {
+TableToolbar.propTypes = {
   numSelected: PropTypes.number,
   filterName: PropTypes.string,
   onFilterName: PropTypes.func,
@@ -72,4 +72,6 @@ PartnerTableToolbar.propTypes = {
   selected: PropTypes.any,
   openDialog: PropTypes.bool,
   setOpenDialog: PropTypes.func,
+  placeholder: PropTypes.string,
+  message: PropTypes.string,
 };

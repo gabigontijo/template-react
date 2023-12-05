@@ -21,6 +21,7 @@ export default function FormNewLoan({ filterName, onFilterName }) {
   const [activeStep, setActiveStep] = useState(0);
   const [skipped, setSkipped] = useState(new Set());
   const [isNewPartner, setIsNewPartner] = useState(false);
+  const [isNewClient, setIsNewClient] = useState(false);
   const [sendAlertClient, setSendAlertClient] = useState(false);
   const [sendAlertPartner, setSendAlertPartner] = useState(false);
 
@@ -73,8 +74,8 @@ export default function FormNewLoan({ filterName, onFilterName }) {
         <FormStepOne
           filterName={filterName}
           onFilterName={onFilterName}
-          isNewClient={isNewPartner}
-          setIsNewClient={setIsNewPartner}
+          isNewClient={isNewClient}
+          setIsNewClient={setIsNewClient}
           setSendAlert={setSendAlertClient}
         />
       )}

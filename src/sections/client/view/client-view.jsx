@@ -18,12 +18,12 @@ import AlertNotifications from 'src/layouts/dashboard/common/alert-notifications
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 
-import TableNoData from '../table-no-data';
 import FormNewClient from '../form-new-client';
-import TableEmptyRows from '../table-empty-rows';
 import ClientTableRow from '../client-table-row';
-import ClientTableHead from '../client-table-head';
-import ClientTableToolbar from '../client-table-toolbar';
+import TableNoData from '../../common/table-no-data';
+import ComoonTableHead from '../../common/table-head';
+import TableToolbar from '../../common/table-toolbar';
+import TableEmptyRows from '../../common/table-empty-rows';
 import { emptyRows, applyFilter, getComparator } from '../../utils';
 
 // ----------------------------------------------------------------------
@@ -234,7 +234,7 @@ export default function ClientPage() {
       )}
 
       <Card>
-        <ClientTableToolbar
+        <TableToolbar
           numSelected={selected.length}
           filterName={filterName}
           onFilterName={handleFilterByName}
@@ -242,13 +242,15 @@ export default function ClientPage() {
           selected={selected}
           openDialog = { openDialog }
           setOpenDialog = {setOpenDialog}
+          placeholder='Procurar clientes...'
+          message='cliente'
           
         />
 
         <Scrollbar>
           <TableContainer sx={{ overflow: 'unset' }}>
             <Table sx={{ minWidth: 800 }}>
-              <ClientTableHead
+              <ComoonTableHead
                 order={order}
                 orderBy={orderBy}
                 rowCount={clients.length}

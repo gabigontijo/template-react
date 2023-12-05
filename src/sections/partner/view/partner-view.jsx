@@ -20,10 +20,10 @@ import Scrollbar from 'src/components/scrollbar';
 
 import FormNewPartner from '../form-new-partner';
 import PartnerTableRow from '../partner-table-row';
-import TableNoData from '../../client/table-no-data';
-import TableEmptyRows from '../../client/table-empty-rows';
-import PartnerTableToolbar from '../partner-table-toolbar';
-import ClientTableHead from '../../client/client-table-head';
+import TableNoData from '../../common/table-no-data';
+import ComoonTableHead from '../../common/table-head';
+import TableToolbar from '../../common/table-toolbar';
+import TableEmptyRows from '../../common/table-empty-rows';
 import { emptyRows, applyFilter, getComparator } from '../../utils';
 
 
@@ -230,20 +230,20 @@ export default function PartnerPage() {
       )}
 
       <Card>
-        <PartnerTableToolbar
-          numSelected={selected.length}
+        <TableToolbar numSelected={selected.length}
           filterName={filterName}
           onFilterName={handleFilterByName}
           handleDelete={handleDelete}
           selected={selected}
           openDialog = { openDialog }
           setOpenDialog = {setOpenDialog}
-        />
+          placeholder='Procurar parceiros...'
+          message='parceiro'/>
 
         <Scrollbar>
           <TableContainer sx={{ overflow: 'unset' }}>
             <Table sx={{ minWidth:800 }}>
-              <ClientTableHead
+              <ComoonTableHead
                 order={order}
                 orderBy={orderBy}
                 rowCount={partners.length}

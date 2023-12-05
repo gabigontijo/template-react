@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import InputMask from 'react-input-mask';
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
@@ -9,8 +8,9 @@ import LoadingButton from '@mui/lab/LoadingButton';
 
 import { createPartner, updatePartner } from 'src/apis/partner';
 
+import MaskFields from '../common/mask-field';
 import { partnerInterface } from './view/type';
-import SelectPixFields from '../client/input-select-pix';
+import SelectPixFields from '../common/input-select-pix';
 
 // ----------------------------------------------------------------------
 
@@ -83,30 +83,24 @@ export default function FormNewPartner({
             />
           </Box>
           <Box width="33%">
-            <InputMask
+            <MaskFields
               mask="(99) 99999-9999"
               value={state.phone}
-              onChange={(event) =>
-                handleChange({ target: { name: 'phone', value: event.target.value } })
-              }
-            >
-              {(inputProps) => (
-                <TextField {...inputProps} name="phone" label="Telefone" type="text" fullWidth />
-              )}
-            </InputMask>
+              handleChange={handleChange}
+              name="phone"
+              label="Telefone"
+              type="text"
+            />
           </Box>
           <Box width="33%">
-            <InputMask
+            <MaskFields
               mask="999.999.999-99"
+              name="cpf"
+              label="CPF"
+              type="text"
               value={state.cpf}
-              onChange={(event) =>
-                handleChange({ target: { name: 'cpf', value: event.target.value } })
-              }
-            >
-              {(inputProps) => (
-                <TextField {...inputProps} name="cpf" label="CPF" type="text" fullWidth />
-              )}
-            </InputMask>
+              handleChange={handleChange}
+            />
           </Box>
         </Stack>
 
@@ -138,7 +132,7 @@ export default function FormNewPartner({
       </Stack>
 
       <Stack direction="row" alignItems="center" justifyContent="flex-end" sx={{ my: 2 }}>
-        {partnerToEdit.id == null && (
+        {state.id === '' && (
           <LoadingButton
             fullWidth
             size="large"
@@ -150,7 +144,7 @@ export default function FormNewPartner({
             Cadastrar
           </LoadingButton>
         )}
-        {partnerToEdit.id != null && (
+        {(state.id !== '' || state.id !== null) && (
           <LoadingButton
             fullWidth
             size="large"

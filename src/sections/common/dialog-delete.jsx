@@ -6,8 +6,9 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
+// import Slide from '@mui/material/Slide';
 
-export default function DialogDelete({ setOpen, open, handleDelete, name }) {
+export default function DialogDelete({ setOpen, open, handleDelete, name, message }) {
   const handleClose = () => {
     setOpen(false);
   };
@@ -21,7 +22,7 @@ export default function DialogDelete({ setOpen, open, handleDelete, name }) {
       if (name.length === 1) {
         return `Tem certeza que deseja deletar ${name[0].name} ?`;
       }
-      return `Tem certeza que deseja deletar ${name.length} parceiros ?`;
+      return `Tem certeza que deseja deletar ${name.length} ${message}s ?`;
     }
     return ''
   };
@@ -33,7 +34,7 @@ export default function DialogDelete({ setOpen, open, handleDelete, name }) {
       onClose={handleClose}
       aria-describedby="alert-dialog-delete-description"
     >
-      <DialogTitle>Deletar parceiro?</DialogTitle>
+      <DialogTitle>Deletar {message}?</DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-delete-description">
           {getContentText(name)}
@@ -52,4 +53,5 @@ DialogDelete.propTypes = {
   open: PropTypes.bool,
   handleDelete: PropTypes.func,
   name: PropTypes.any,
+  message: PropTypes.string,
 };
