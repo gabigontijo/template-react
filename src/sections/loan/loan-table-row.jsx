@@ -23,6 +23,7 @@ export default function LoanTableRow({
   valueMachine,
   installments,
   grossProfit,
+  partner,
   partnerProfit,
   netProfit,
   handleClick,
@@ -44,11 +45,10 @@ export default function LoanTableRow({
           <Checkbox disableRipple checked={selected} onChange={handleClick} />
         </TableCell>
 
-        <TableCell >
-          
-        <Typography variant="subtitle2" noWrap>
-              {client}
-            </Typography>
+        <TableCell component="th" scope="row" padding="none">
+          <Typography variant="subtitle2" noWrap>
+            {client}
+          </Typography>
         </TableCell>
 
         <TableCell>{value}</TableCell>
@@ -60,6 +60,8 @@ export default function LoanTableRow({
         <TableCell>{installments}</TableCell>
 
         <TableCell>{grossProfit}</TableCell>
+
+        <TableCell>{partner}</TableCell>
 
         <TableCell>{partnerProfit}</TableCell>
 
@@ -103,8 +105,9 @@ LoanTableRow.propTypes = {
   valueMachine: PropTypes.any,
   installments: PropTypes.any,
   grossProfit: PropTypes.any,
+  partner: PropTypes.any,
   partnerProfit: PropTypes.any,
   netProfit: PropTypes.any,
   selected: PropTypes.any,
-  handleClick:PropTypes.func,
+  handleClick: PropTypes.func,
 };

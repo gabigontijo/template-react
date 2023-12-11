@@ -47,19 +47,15 @@ export default function ClientPage() {
 
   const [alertError, setAlertError] = useState(false);
 
-  const [alertEdit, setAlertEdit] = useState(false);
+  const [messageError, setMessageError] = useState('');
 
-  const [alertDelete, setAlertDelete] = useState(false);
-
-  const [alertDeleteError, setAlertDeleteError] = useState(false);
+  const [messageAlert, setMessageAlert] = useState('');
 
   const [editClient, setEditClient] = useState(false);
 
   const [clientId, setClientId] = useState('');
 
   const [clientToEdit, setClientToEdit] = useState({});
-
-  const [alertEditError, setAlertEditError] = useState(false);
 
   const [openDialog, setOpenDialog] = useState(false);
 
@@ -133,22 +129,25 @@ export default function ClientPage() {
 
   const handleDelete = async () => {
     try {
-       const results = await Promise.all(selected.map( async (client) => {
-        const result = await deleteClient(client.id);
-        return result;
-       }));
-       console.log(results);
-       setAlertDelete(true)
-       setOpenDialog(false);
-       setSelected([]);
-       
-      } catch (error) {
-        console.error('Erro ao excluir clientes:', error)
-        setAlertDeleteError(true);
-        setOpenDialog(false);
-        setSelected([]);
+      const results = await Promise.all(
+        selected.map(async (client) => {
+          const result = await deleteClient(client.id);
+          return result;
+        })
+      );
+      console.log(results);
+      setAlert(true);
+      setMessageAlert('Cliente deletado com sucesso');
+      setOpenDialog(false);
+      setSelected([]);
+    } catch (error) {
+      console.error('Erro ao excluir clientes:', error);
+      setAlertError(true);
+      setMessageError('Erro ao excluir clientes');
+      setOpenDialog(false);
+      setSelected([]);
     }
-}
+  };
 
   const notFound = !dataFiltered.length && !!filterName;
 
@@ -186,50 +185,17 @@ export default function ClientPage() {
           setAlert={setAlert}
           setAlertError={setAlertError}
           clientToEdit={clientToEdit}
-          setAlertEdit={setAlertEdit}
+          setMessageAlert={setMessageAlert}
+          setMessageError={setMessageError}
         />
       )}
 
-      {alert && (
-        <AlertNotifications
-          alert={alert}
-          setAlert={setAlert}
-          message="Cliente cadastrado com sucesso"
-        />
-      )}
-      {alertEdit && (
-        <AlertNotifications
-          alert={alertEdit}
-          setAlert={setAlertEdit}
-          message="Cliente editado com sucesso"
-        />
-      )}
+      {alert && <AlertNotifications alert={alert} setAlert={setAlert} message={messageAlert} />}
       {alertError && (
         <AlertNotifications
           alertError={alertError}
           setAlertError={setAlertError}
-          message="Erro ao cadastrar o cliente"
-        />
-      )}
-      {alertEditError && (
-        <AlertNotifications
-          alertError={alertEditError}
-          setAlertError={setAlertEditError}
-          message="Erro ao editar o cliente"
-        />
-      )}
-      {alertDelete && (
-        <AlertNotifications
-          alert={alertDelete}
-          setAlert={setAlertDelete}
-          message="Cliente Deletado com sucesso"
-        />
-      )}
-      {alertDeleteError && (
-        <AlertNotifications
-          alertError={alertDeleteError}
-          setAlertError={setAlertDeleteError}
-          message="Erro ao deletar o cliente"
+          message={messageError}
         />
       )}
 
@@ -240,11 +206,10 @@ export default function ClientPage() {
           onFilterName={handleFilterByName}
           handleDelete={handleDelete}
           selected={selected}
-          openDialog = { openDialog }
-          setOpenDialog = {setOpenDialog}
-          placeholder='Procurar clientes...'
-          message='cliente'
-          
+          openDialog={openDialog}
+          setOpenDialog={setOpenDialog}
+          placeholder="Procurar clientes..."
+          message="cliente"
         />
 
         <Scrollbar>
@@ -288,10 +253,11 @@ export default function ClientPage() {
                       setEditClient={setEditClient}
                       setClientId={setClientId}
                       setClientToEdit={setClientToEdit}
-                      setAlertEditError={setAlertEditError}
                       setNewUser={setNewUser}
-                      setAlertDelete={setAlertDelete}
-                      setAlertDeleteError={setAlertDeleteError}
+                      setAlert={setAlert}
+                      setAlertError={setAlertError}
+                      setMessageError={setMessageError}
+                      setMessageAlert={setMessageAlert}
                     />
                   ))}
 

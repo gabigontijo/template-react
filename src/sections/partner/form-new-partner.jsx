@@ -19,7 +19,9 @@ export default function FormNewPartner({
   setAlert,
   setAlertError,
   partnerToEdit,
-  setAlertEdit,
+  setMessageError,
+  setMessageAlert,
+                     
 }) {
   const [state, setState] = useState(partnerToEdit || partnerInterface);
 
@@ -29,8 +31,10 @@ export default function FormNewPartner({
       console.log('Resposta da API:', response);
       setNewPartner(false);
       setAlert(true);
+      setMessageAlert('Parceiro cadastrado com sucesso')
     } catch (error) {
       setAlertError(true);
+      setMessageError('Erro ao Cadastrar o parceiro')
       console.log('Erro ao Cadastrar o parceiro:', error);
     }
   };
@@ -40,9 +44,11 @@ export default function FormNewPartner({
       const response = await updatePartner(partnerToEdit);
       console.log('Resposta da API:', response);
       setNewPartner(false);
+      setAlert(true);
+      setMessageAlert('Parceiro editado com sucesso')
     } catch (error) {
-      setAlertEdit(true);
-      // setAlertError(true);
+      setAlertError(true);
+      setMessageError('Erro ao Editar o parceiro')
       console.log('Erro ao Editar o parceiro:', error);
     }
   };
@@ -166,5 +172,6 @@ FormNewPartner.propTypes = {
   setAlert: PropTypes.func,
   setAlertError: PropTypes.func,
   partnerToEdit: PropTypes.any,
-  setAlertEdit: PropTypes.func,
+  setMessageError: PropTypes.any,
+  setMessageAlert: PropTypes.any,
 };

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
+import { useLocation } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
@@ -20,18 +21,29 @@ export default function FormNewClient({
   setAlert,
   setAlertError,
   clientToEdit,
-  setAlertEdit,
+  setClientName,
+  setNextStep,
+  setMessageError,
+  setMessageAlert,
 }) {
   const [state, setState] = useState(clientToEdit || clientInterface);
+
+  const location = useLocation();
 
   const handleSubmit = async () => {
     try {
       const response = await createClient(state);
       console.log('Resposta da API:', response);
+      if (location.pathname === '/emprestimo') {
+        setClientName(response.name);
+        setNextStep(true)
+      }
       setNewUser(false);
       setAlert(true);
+      setMessageAlert('cliente cadastrado com sucesso')
     } catch (error) {
       setAlertError(true);
+      setMessageError('Erro ao Cadastrar o cliente')
       console.log('Erro ao Cadastrar o cliente:', error);
     }
   };
@@ -42,7 +54,8 @@ export default function FormNewClient({
       console.log('Resposta da API:', response);
       setNewUser(false);
     } catch (error) {
-      setAlertEdit(true);
+      setAlertError(true);
+      setMessageError('Erro ao Editar o cliente')
       // setAlertError(true);
       console.log('Erro ao Editar o cliente:', error);
     }
@@ -125,7 +138,7 @@ export default function FormNewClient({
         </Stack>
       </Stack>
       <Stack direction="row" alignItems="center" justifyContent="flex-end" sx={{ my: 2 }}>
-        {state.id === '' && (
+        {state.id == null && (
           <LoadingButton
             fullWidth
             size="large"
@@ -137,7 +150,7 @@ export default function FormNewClient({
             Cadastrar
           </LoadingButton>
         )}
-        {state.id !== '' && (
+        {state.id == '' && (
           <LoadingButton
             fullWidth
             size="large"
@@ -159,5 +172,8 @@ FormNewClient.propTypes = {
   setAlert: PropTypes.func,
   setAlertError: PropTypes.func,
   clientToEdit: PropTypes.any,
-  setAlertEdit: PropTypes.func,
+  setNextStep: PropTypes.func,
+  setClientName: PropTypes.func,
+  setMessageError: PropTypes.func,
+  setMessageAlert: PropTypes.func,
 };

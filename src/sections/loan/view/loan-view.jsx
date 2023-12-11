@@ -11,7 +11,8 @@ import Typography from '@mui/material/Typography';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 
-import { partners } from 'src/_mock/partner';
+import { loans } from 'src/_mock/loan';
+import AlertNotifications from 'src/layouts/dashboard/common/alert-notifications';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
@@ -23,10 +24,11 @@ import ComoonTableHead from '../../common/table-head';
 import TableToolbar from '../../common/table-toolbar';
 import TableEmptyRows from '../../common/table-empty-rows';
 import { emptyRows, applyFilter, getComparator } from '../../utils';
+import { deleteLoan } from 'src/apis/loan';
 
 // ----------------------------------------------------------------------
 
-export default function PartnerPage() {
+export default function LoanPage() {
   const [page, setPage] = useState(0);
 
   const [order, setOrder] = useState('asc');
@@ -41,6 +43,34 @@ export default function PartnerPage() {
 
   const [newLoan, setNewLoan] = useState(false);
 
+  const [alert, setAlert] = useState(false);
+
+  const [alertClient, setAlertClient] = useState(false);
+
+  const [alertPartner, setAlertPartner] = useState(false);
+
+  const [alertError, setAlertError] = useState(false);
+
+  const [alertClientErr, setAlertClientErr] = useState(false);
+
+  const [alertPartnerErr, setAlertPartnerErr] = useState(false);
+
+  const [alertEdit, setAlertEdit] = useState(false);
+
+  const [alertDelete, setAlertDelete] = useState(false);
+
+  const [alertDeleteError, setAlertDeleteError] = useState(false);
+
+  const [editLoan, setEditLoan] = useState(false);
+
+  const [loanId, setLoanId] = useState('');
+
+  const [loanToEdit, setLoanToEdit] = useState({});
+
+  const [alertEditError, setAlertEditError] = useState(false);
+
+  const [openDialog, setOpenDialog] = useState(false);
+
   const handleSort = (event, id) => {
     const isAsc = orderBy === id && order === 'asc';
     if (id !== '') {
@@ -51,28 +81,27 @@ export default function PartnerPage() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = partners.map((n) => n.name);
+      const newSelecteds = loans.map((n) => ({
+        name: n.client,
+        id: n.id,
+      }));
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = (event, name, id) => {
+    const selectedIndex = selected.findIndex((item) => item.name === name);
+
     let newSelected = [];
+
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      );
+      newSelected = [...selected, { name, id }];
+    } else {
+      newSelected = selected.filter((item) => item.name !== name);
     }
+
     setSelected(newSelected);
   };
 
@@ -99,10 +128,30 @@ export default function PartnerPage() {
   };
 
   const dataFiltered = applyFilter({
-    inputData: partners,
+    inputData: loans,
     comparator: getComparator(order, orderBy),
     filterName,
   });
+
+  const handleDelete = async () => {
+    try {
+      const results = await Promise.all(
+        selected.map(async (loan) => {
+          const result = await deleteLoan(loan.id);
+          return result;
+        })
+      );
+      console.log(results);
+      setAlertDelete(true);
+      setOpenDialog(false);
+      setSelected([]);
+    } catch (error) {
+      console.error('Erro ao excluir empréstimos:', error);
+      setAlertDeleteError(true);
+      setOpenDialog(false);
+      setSelected([]);
+    }
+  };
 
   const notFound = !dataFiltered.length && !!filterName;
 
@@ -127,21 +176,104 @@ export default function PartnerPage() {
               Novo Empréstimo
             </Button>
           )}
-          {newLoan && (
+          {(newLoan || editLoan) && (
             <Button color="inherit" onClick={handleCloseAdd}>
               <CloseIcon />
             </Button>
           )}
         </Stack>
       </Stack>
-      {newLoan && <FormNewLoan />}
+      {(newLoan || editLoan) && (
+        <FormNewLoan
+          filterName={filterName}
+          onFilterName={handleFilterByName}
+          setAlertClient={setAlertClient}
+          setAlertClientErr={setAlertClientErr}
+        />
+      )}
 
+      {alert && (
+        <AlertNotifications
+          alert={alert}
+          setAlert={setAlert}
+          message="Empréstimo cadastrado com sucesso"
+        />
+      )}
+      {alertEdit && (
+        <AlertNotifications
+          alert={alertEdit}
+          setAlert={setAlertEdit}
+          message="Empréstimo editado com sucesso"
+        />
+      )}
+      {alertError && (
+        <AlertNotifications
+          alertError={alertError}
+          setAlertError={setAlertError}
+          message="Erro ao cadastrar o empréstimo"
+        />
+      )}
+      {alertEditError && (
+        <AlertNotifications
+          alertError={alertEditError}
+          setAlertError={setAlertEditError}
+          message="Erro ao editar o empréstimo"
+        />
+      )}
+      {alertDelete && (
+        <AlertNotifications
+          alert={alertDelete}
+          setAlert={setAlertDelete}
+          message="Empréstimo Deletado com sucesso"
+        />
+      )}
+      {alertDeleteError && (
+        <AlertNotifications
+          alertError={alertDeleteError}
+          setAlertError={setAlertDeleteError}
+          message="Erro ao deletar o empréstimo"
+        />
+      )}
+
+      {alertClient && (
+        <AlertNotifications
+          alert={alertClient}
+          setAlert={setAlertClient}
+          message="Client Deletado com sucesso"
+        />
+      )}
+      {alertClientErr && (
+        <AlertNotifications
+          alertError={alertClientErr}
+          setAlertError={setAlertClientErr}
+          message="Erro ao deletar o client"
+        />
+      )}
+      {alertPartner && (
+        <AlertNotifications
+          sendAlert={alertPartner}
+          setSendAlert={setAlertPartner}
+          message="Parceiro cadastrado com sucesso!"
+        />
+      )}
+
+      {alertPartnerErr && (
+        <AlertNotifications
+          alertError={alertPartnerErr}
+          setAlertError={setAlertPartnerErr}
+          message="Erro ao deletar o parceiro"
+        />
+      )}
       <Card>
         <TableToolbar
           numSelected={selected.length}
           filterName={filterName}
           onFilterName={handleFilterByName}
           placeholder="Procurar empréstimo..."
+          handleDelete={handleDelete}
+          selected={selected}
+          openDialog={openDialog}
+          setOpenDialog={setOpenDialog}
         />
 
         <Scrollbar>
@@ -150,7 +282,7 @@ export default function PartnerPage() {
               <ComoonTableHead
                 order={order}
                 orderBy={orderBy}
-                rowCount={partners.length}
+                rowCount={loans.length}
                 numSelected={selected.length}
                 onRequestSort={handleSort}
                 onSelectAllClick={handleSelectAllClick}
@@ -161,6 +293,7 @@ export default function PartnerPage() {
                   { id: 'valueMachine', label: 'Valor Máquina' },
                   { id: 'installments', label: 'Parcelas' },
                   { id: 'grossProfit', label: 'Lucro Bruto' },
+                  { id: 'partner', label: 'Parceiro' },
                   { id: 'partnerProfit', label: 'Lucro Parceiro' },
                   { id: 'netProfit', label: 'Lucro Líquido' },
                   { id: '' },
@@ -178,16 +311,17 @@ export default function PartnerPage() {
                       valueMachine={row.valueMachine}
                       installments={row.installments}
                       grossProfit={row.grossProfit}
+                      partner={row.partner}
                       partnerProfit={row.partnerProfit}
                       netProfit={row.netProfit}
-                      selected={selected.indexOf(row.name) !== -1}
-                      handleClick={(event) => handleClick(event, row.name)}
+                      selected={selected.some((item) => item.name === row.client)}
+                      handleClick={(event) => handleClick(event, row.client, row.id)}
                     />
                   ))}
 
                 <TableEmptyRows
                   height={77}
-                  emptyRows={emptyRows(page, rowsPerPage, partners.length)}
+                  emptyRows={emptyRows(page, rowsPerPage, loans.length)}
                 />
 
                 {notFound && <TableNoData query={filterName} />}
@@ -199,7 +333,7 @@ export default function PartnerPage() {
         <TablePagination
           page={page}
           component="div"
-          count={partners.length}
+          count={loans.length}
           rowsPerPage={rowsPerPage}
           onPageChange={handleChangePage}
           rowsPerPageOptions={[5, 10, 25]}

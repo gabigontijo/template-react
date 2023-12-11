@@ -26,7 +26,6 @@ import TableToolbar from '../../common/table-toolbar';
 import TableEmptyRows from '../../common/table-empty-rows';
 import { emptyRows, applyFilter, getComparator } from '../../utils';
 
-
 // ----------------------------------------------------------------------
 
 export default function PartnerPage() {
@@ -48,19 +47,15 @@ export default function PartnerPage() {
 
   const [alertError, setAlertError] = useState(false);
 
-  const [alertEdit, setAlertEdit] = useState(false);
+  const [messageError, setMessageError] = useState('');
 
-  const [alertDelete, setAlertDelete] = useState(false);
-
-  const [alertDeleteError, setAlertDeleteError] = useState(false);
+  const [messageAlert, setMessageAlert] = useState('');
 
   const [editPartner, setEditPartner] = useState(false);
 
   const [partnerId, setPartnerId] = useState('');
 
   const [partnerToEdit, setPartnerToEdit] = useState({});
-
-  const [alertEditError, setAlertEditError] = useState(false);
 
   const [openDialog, setOpenDialog] = useState(false);
 
@@ -129,27 +124,30 @@ export default function PartnerPage() {
 
   const handleDelete = async () => {
     try {
-       const results = await Promise.all(selected.map( async (client) => {
-        const result = await deletePartner(client.id);
-        return result;
-       }));
-       console.log(results);
-       setAlertDelete(true)
-       setOpenDialog(false);
-       setSelected([]);
-       
-      } catch (error) {
-        console.error('Erro ao excluir parceiros:', error)
-        setAlertDeleteError(true);
-        setOpenDialog(false);
-        setSelected([]);
+      const results = await Promise.all(
+        selected.map(async (client) => {
+          const result = await deletePartner(client.id);
+          return result;
+        })
+      );
+      console.log(results);
+      setAlert(true);
+      setMessageAlert('Parceiro deletado com sucesso');
+      setOpenDialog(false);
+      setSelected([]);
+    } catch (error) {
+      console.error('Erro ao excluir parceiros:', error);
+      setAlertError(true);
+      setMessageError('Erro ao Deletar o parceiro');
+      setOpenDialog(false);
+      setSelected([]);
     }
-}
+  };
 
   const notFound = !dataFiltered.length && !!filterName;
 
   return (
-    <Container >
+    <Container>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
         <Typography variant="h4">Parceiros</Typography>
         <Stack
@@ -160,14 +158,14 @@ export default function PartnerPage() {
           spacing={2}
         >
           {!newPartner && (
-          <Button
-            variant="contained"
-            color="inherit"
-            startIcon={<Iconify icon="eva:plus-fill" />}
-            onClick={handleAddUser}
-          >
-            Novo Parceiro
-          </Button>
+            <Button
+              variant="contained"
+              color="inherit"
+              startIcon={<Iconify icon="eva:plus-fill" />}
+              onClick={handleAddUser}
+            >
+              Novo Parceiro
+            </Button>
           )}
           {(newPartner || editPartner) && (
             <Button color="inherit" onClick={handleCloseAdd}>
@@ -182,67 +180,36 @@ export default function PartnerPage() {
           setAlert={setAlert}
           setAlertError={setAlertError}
           partnerToEdit={partnerToEdit}
-          setAlertEdit={setAlertEdit}
-         
+          setMessageAlert={setMessageAlert}
+          setMessageError={setMessageError}
         />
       )}
       {alert && (
-        <AlertNotifications
-          sendAlert={alert}
-          setSendAlert={setAlert}
-          message="Parceiro cadastrado com sucesso!"
-        />
-      )}
-      {alertEdit && (
-        <AlertNotifications
-          alert={alertEdit}
-          setAlert={setAlertEdit}
-          message="parceiro editado com sucesso"
-        />
+        <AlertNotifications sendAlert={alert} setSendAlert={setAlert} message={messageAlert} />
       )}
       {alertError && (
         <AlertNotifications
           alertError={alertError}
           setAlertError={setAlertError}
-          message="Erro ao cadastrar o parceiro"
+          message={messageError}
         />
       )}
-      {alertEditError && (
-        <AlertNotifications
-          alertError={alertEditError}
-          setAlertError={setAlertEditError}
-          message="Erro ao editar o parceiro"
-        />
-      )}
-      {alertDelete && (
-        <AlertNotifications
-          alert={alertDelete}
-          setAlert={setAlertDelete}
-          message="parceiro Deletado com sucesso"
-        />
-      )}
-      {alertDeleteError && (
-        <AlertNotifications
-          alertError={alertDeleteError}
-          setAlertError={setAlertDeleteError}
-          message="Erro ao deletar o parceiro"
-        />
-      )}
-
       <Card>
-        <TableToolbar numSelected={selected.length}
+        <TableToolbar
+          numSelected={selected.length}
           filterName={filterName}
           onFilterName={handleFilterByName}
           handleDelete={handleDelete}
           selected={selected}
-          openDialog = { openDialog }
-          setOpenDialog = {setOpenDialog}
-          placeholder='Procurar parceiros...'
-          message='parceiro'/>
+          openDialog={openDialog}
+          setOpenDialog={setOpenDialog}
+          placeholder="Procurar parceiros..."
+          message="parceiro"
+        />
 
         <Scrollbar>
           <TableContainer sx={{ overflow: 'unset' }}>
-            <Table sx={{ minWidth:800 }}>
+            <Table sx={{ minWidth: 800 }}>
               <ComoonTableHead
                 order={order}
                 orderBy={orderBy}
@@ -280,10 +247,11 @@ export default function PartnerPage() {
                       setEditClient={setEditPartner}
                       setClientId={setPartnerId}
                       setClientToEdit={setPartnerToEdit}
-                      setAlertEditError={setAlertEditError}
-                      setNewUser={setNewPartner}
-                      setAlertDelete={setAlertDelete}
-                      setAlertDeleteError={setAlertDeleteError}
+                      setNewPartner={setNewPartner}
+                      setAlert={setAlert}
+                      setAlertError={setAlertError}
+                      setMessageAlert={setMessageAlert}
+                      setMessageError={setMessageError}
                     />
                   ))}
 

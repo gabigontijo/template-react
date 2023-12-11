@@ -34,10 +34,11 @@ export default function ClientTableRow({
   setEditClient,
   setClientId,
   setClientToEdit,
-  setAlertEditError,
+  setAlert,
+  setAlertError,
   setNewUser,
-  setAlertDelete,
-  setAlertDeleteError,
+  setMessageAlert,
+  setMessageError,
 }) {
   const [open, setOpen] = useState(null);
 
@@ -62,7 +63,6 @@ export default function ClientTableRow({
       setOpen(null);
       console.log(id);
     } catch (error) {
-      setAlertEditError(true);
       // eslint-disable-next-line
       setNewUser(true); //somente para ver o resultado depois remover
       setEditClient(true);
@@ -77,10 +77,12 @@ export default function ClientTableRow({
       const response = await deleteClient(id);
       console.log('Resposta da API:', response);
       setOpenDialog(false);
-      setAlertDelete(true);
+      setAlert(true);
+      setMessageAlert('Cliente deletado com sucesso')
     } catch (error) {
       setOpenDialog(false);
-      setAlertDeleteError(true);
+      setAlertError(true);
+      setMessageError('Erro ao Deletar o cliente')
       console.log('Erro ao Deletar o cliente:', error);
     }
   };
@@ -181,8 +183,9 @@ ClientTableRow.propTypes = {
   setEditClient: PropTypes.func,
   setClientId: PropTypes.func,
   setClientToEdit: PropTypes.func,
-  setAlertEditError: PropTypes.func,
+  setAlertError: PropTypes.func,
   setNewUser: PropTypes.func,
-  setAlertDeleteError: PropTypes.func,
-  setAlertDelete: PropTypes.func,
+  setAlert: PropTypes.func,
+  setMessageError: PropTypes.func,
+  setMessageAlert: PropTypes.func,
 };

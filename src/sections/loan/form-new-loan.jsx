@@ -9,22 +9,17 @@ import StepLabel from '@mui/material/StepLabel';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
-import AlertNotifications from 'src/layouts/dashboard/common/alert-notifications';
-
 import FormStepOne from './form-step-one';
 import FormStepTwo from './form-step-two';
 import FormStepThree from './form-step-three';
 
 const steps = ['Selecione o cliente', 'Dados do empréstimo', 'Selecione o parceiro'];
 
-export default function FormNewLoan({ filterName, onFilterName }) {
+export default function FormNewLoan({ filterName, onFilterName, setAlertClient, setAlertPartner }) {
   const [activeStep, setActiveStep] = useState(0);
   const [skipped, setSkipped] = useState(new Set());
   const [isNewPartner, setIsNewPartner] = useState(false);
   const [isNewClient, setIsNewClient] = useState(false);
-  const [sendAlertClient, setSendAlertClient] = useState(false);
-  const [sendAlertPartner, setSendAlertPartner] = useState(false);
-
 
   const isStepSkipped = (step) => {
     skipped.has(step);
@@ -76,33 +71,21 @@ export default function FormNewLoan({ filterName, onFilterName }) {
           onFilterName={onFilterName}
           isNewClient={isNewClient}
           setIsNewClient={setIsNewClient}
-          setSendAlert={setSendAlertClient}
+          setSendAlert={setAlertClient}
         />
       )}
-      {sendAlertClient && (
-        <AlertNotifications
-          sendAlert={sendAlertClient}
-          setSendAlert={setSendAlertClient}
-          message="Cliente cadastrado com sucesso!"
-        />
-      )}
+
       {activeStep === 1 && <FormStepTwo />}
       {activeStep === 2 && (
         <FormStepThree
-          setSendAlert={setSendAlertPartner}
+          setSendAlert={setAlertPartner}
           filterName={filterName}
           onFilterName={onFilterName}
           isNewPartner={isNewPartner}
           setIsNewPartner={setIsNewPartner}
         />
       )}
-      {sendAlertPartner && (
-        <AlertNotifications
-          sendAlert={sendAlertPartner}
-          setSendAlert={setSendAlertPartner}
-          message="Parceiro cadastrado com sucesso!"
-        />
-      )}
+
       <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
         <Button color="inherit" disabled={activeStep === 0} onClick={handleBack} sx={{ mr: 1 }}>
           Back
@@ -118,6 +101,8 @@ export default function FormNewLoan({ filterName, onFilterName }) {
 FormNewLoan.propTypes = {
   setNewUser: PropTypes.func,
   setSendAlert: PropTypes.func,
+  setAlertClient: PropTypes.func,
+  setAlertPartner: PropTypes.func,
   setCloseAdd: PropTypes.func,
   filterName: PropTypes.string,
   onFilterName: PropTypes.func,

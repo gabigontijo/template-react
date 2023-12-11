@@ -33,10 +33,11 @@ export default function PartnerTableRow({
   setEditPartner,
   setPartnerId,
   setPartnerToEdit,
-  setAlertEditError,
+  setAlertError,
+  setAlert,
   setNewPartner,
-  setAlertDelete,
-  setAlertDeleteError,
+  setMessageAlert,
+  setMessageError,
 }) {
   const [open, setOpen] = useState(null);
 
@@ -60,7 +61,6 @@ export default function PartnerTableRow({
       setOpen(null);
       console.log(id);
     } catch (error) {
-      setAlertEditError(true);
       // eslint-disable-next-line
       setNewPartner(true); //somente para ver o resultado depois remover
       setEditPartner(true);
@@ -75,10 +75,12 @@ export default function PartnerTableRow({
       const response = await deletePartner(id);
       console.log('Resposta da API:', response);
       setOpenDialog(false);
-      setAlertDelete(true);
+      setAlert(true);
+      setMessageAlert('Parceiro deletado com sucesso')
     } catch (error) {
       setOpenDialog(false);
-      setAlertDeleteError(true);
+      setAlertError(true);
+      setMessageError('Erro ao deletar o parceiro')
       console.log('Erro ao Deletar o parceiro:', error);
     }
   };
@@ -175,8 +177,9 @@ PartnerTableRow.propTypes = {
   setEditPartner: PropTypes.func,
   setPartnerId: PropTypes.func,
   setPartnerToEdit: PropTypes.func,
-  setAlertEditError: PropTypes.func,
   setNewPartner: PropTypes.func,
-  setAlertDeleteError: PropTypes.func,
-  setAlertDelete: PropTypes.func,
+  setAlertError: PropTypes.func,
+  setAlert: PropTypes.func,
+  setMessageAlert: PropTypes.func,
+  setMessageError: PropTypes.func,
 };
