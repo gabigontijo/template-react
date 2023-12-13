@@ -1,13 +1,32 @@
+import axios from 'axios';
 import { apiFetch, getHeaders } from "..";
+
+// export const createClient = async (client) => {
+//   const apiOpts = {
+//     method: 'post',
+//     body: JSON.stringify(client),
+//     headers: getHeaders({ 'Content-Type': 'application/json' }),
+//   };
+//   const res = await apiFetch('http://195.35.16.37:3000/clients', apiOpts);
+//   return res.json();
+// };
 
 export const createClient = async (client) => {
   const apiOpts = {
     method: 'post',
-    body: JSON.stringify(client),
-    headers: getHeaders({ 'Content-Type': 'application/json' }),
+    data: client, // Axios irá serializar automaticamente o objeto JSON
+    headers: {
+      'Content-Type': 'application/json',
+      // Adicione quaisquer outros cabeçalhos necessários aqui
+    },
   };
-  const res = await apiFetch('http://195.35.16.37:3000/clients', apiOpts);
-  return res.json();
+
+  try {
+    const res = await axios.post('http://195.35.16.37:3000/clients', apiOpts);
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
 };
 
 export const allClients = async () => {
