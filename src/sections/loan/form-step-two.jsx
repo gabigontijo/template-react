@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -14,17 +15,52 @@ import SelectNumberOfCardsFields from '../common/input-select-number-of-cards';
 
 // ----------------------------------------------------------------------
 
-export default function FormStepTwo() {
-  const [requestedValue, setRequestedValue] = useState('');
-  const [numberOfCards, setNumberOfCards] = useState(1);
+export default function FormStepTwo({ loan, setLoan }) {
 
+  const getDefaultCard = () => ({
+    machinId: '',
+    banner: '',
+    value: '',
+    installments: '',
+    paymentType: '',
+  });
+
+  const [numberOfCards, setNumberOfCards] = useState(1);
+  const [cards, setCards] = useState(
+    Array.from({ length: Number(numberOfCards) }, (_, index) => getDefaultCard())
+  );
+
+ 
   const handleRequestedValue = ({ target }) => {
-    setRequestedValue(target.value);
+    setLoan({
+      ...loan,
+      'value': target.value,
+    });
   };
 
   const handleNumberOfCards = ({ target }) => {
-    setNumberOfCards(target.value);
+    const qttCArds = Number(target.value)
+    setNumberOfCards(qttCArds);
+    setLoan({
+      ...loan,
+      'numberOfCards': numberOfCards,
+      'cards': cards,
+    });
   };
+
+  const handleCardChange = (cardIndex, field, value) => {
+    setCards((prevCards) => {
+      const updatedCards = [...prevCards];
+      updatedCards[cardIndex][field] = value;
+
+      setLoan((prevLoan) => ({
+        ...prevLoan,
+        cards: updatedCards,
+      }));
+      return updatedCards;
+    });
+  };
+
 
   return (
     <Card sx={{ marginTop: '1.5em' }}>
@@ -37,7 +73,7 @@ export default function FormStepTwo() {
                 label="Valor Solicitado"
                 type="number"
                 fullWidth
-                value={requestedValue}
+                value={loan.value}
                 onChange={handleRequestedValue}
               />
             </Box>
@@ -51,7 +87,7 @@ export default function FormStepTwo() {
             p={2}
             sx={{ marginTop: '1.5em', backgroundColor: 'rgba(145, 158, 171, 0.12)' }}
           >
-            {Array.from({ length: Number(numberOfCards) }, (_, index) => (
+            {cards.map((card, index) => (
               <div key={index}>
                 <Typography variant="body2" sx={{ color: 'primary.main' }}>
                   {`Cartão ${index + 1}`}
@@ -60,10 +96,23 @@ export default function FormStepTwo() {
                   <SelectMachin />
                   <SelectCardFlag />
                   <Box width="33%">
-                    <TextField name="valueCard" label="Valor" type="number" fullWidth />
+                    <TextField
+                      name={`valueCard-${index}`}
+                      label="Valor"
+                      type="number"
+                      fullWidth
+                      value={card.value}
+                      onChange={(e) => handleCardChange(index, 'value', e.target.value)}
+                    />
                   </Box>
-                  <SelectInstallments numInstallments={12} />
-                  <SelectPaymentType />
+                  <SelectInstallments
+                    numInstallments={12}
+                    value={card.installments}
+                    onChange={(value) => handleCardChange(index, 'installments', value)}
+                  />
+                  <SelectPaymentType 
+                  value={card.paymentType}
+                  onChange={(value) => handleCardChange(index, 'paymentType', value)} />
                 </Stack>
               </div>
             ))}
@@ -73,3 +122,8 @@ export default function FormStepTwo() {
     </Card>
   );
 }
+
+FormStepTwo.propTypes = {
+  setLoan: PropTypes.func,
+  loan: PropTypes.any,
+};

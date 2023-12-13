@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 
-// import Stack from '@mui/material/Stack';
-// import Avatar from '@mui/material/Avatar';
 import Popover from '@mui/material/Popover';
 import TableRow from '@mui/material/TableRow';
 import Checkbox from '@mui/material/Checkbox';
@@ -11,12 +9,17 @@ import TableCell from '@mui/material/TableCell';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 
+import {loanById,  deleteLoan } from 'src/apis/loan';
+
 import Iconify from 'src/components/iconify';
+
+import DialogDelete from '../common/dialog-delete';
 
 // ----------------------------------------------------------------------
 
 export default function LoanTableRow({
   selected,
+  id,
   client,
   value,
   banner,
@@ -27,14 +30,60 @@ export default function LoanTableRow({
   partnerProfit,
   netProfit,
   handleClick,
+  setEditLoan,
+  setLoanToEdit,
+  setAlertError,
+  setAlert,
+  setNewLoan,
+  setMessageAlert,
+  setMessageError,
 }) {
   const [open, setOpen] = useState(null);
+
+  const [openDialog, setOpenDialog] = useState(false);
 
   const handleOpenMenu = (event) => {
     setOpen(event.currentTarget);
   };
 
   const handleCloseMenu = () => {
+    setOpen(null);
+  };
+
+  const handleEdit = async () => {
+    try {
+      const response = await loanById(id);
+      setEditLoan(true);
+      setNewLoan(true);
+      setLoanToEdit(response);
+      setOpen(null);
+      console.log(id);
+    } catch (error) {
+      // eslint-disable-next-line
+      setNewLoan(true); //somente para ver o resultado depois remover
+      setEditLoan(true);
+      setOpen(null);
+      console.log('Erro ao editar o empréstimo:', error);
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      const response = await deleteLoan(id);
+      console.log('Resposta da API:', response);
+      setOpenDialog(false);
+      setAlert(true);
+      setMessageAlert('Empréstimo deletado com sucesso')
+    } catch (error) {
+      setOpenDialog(false);
+      setAlertError(true);
+      setMessageError('Erro ao deletar o empréstimo')
+      console.log('Erro ao Deletar o empréstimo:', error);
+    }
+  };
+
+  const handleDialog = () => {
+    setOpenDialog(true);
     setOpen(null);
   };
 
@@ -84,22 +133,40 @@ export default function LoanTableRow({
           sx: { width: 140 },
         }}
       >
-        <MenuItem onClick={handleCloseMenu}>
-          <Iconify icon="eva:edit-fill" sx={{ mr: 2 }} />
-          Edit
+        <MenuItem onClick={handleEdit} type="button">
+        <IconButton sx={{ p: 0, '&:hover': { backgroundColor: 'transparent' } }}>
+            <Iconify icon="eva:edit-fill" sx={{ mr: 2 }} />
+            <Typography variant="subtitle2" noWrap>
+              Edit
+            </Typography>
+          </IconButton>
         </MenuItem>
 
-        <MenuItem onClick={handleCloseMenu} sx={{ color: 'error.main' }}>
-          <Iconify icon="eva:trash-2-outline" sx={{ mr: 2 }} />
-          Delete
+        <MenuItem onClick={handleDialog}>
+        <IconButton
+            sx={{ p: 0, '&:hover': { backgroundColor: 'transparent' }, color: 'error.main' }}
+          >
+            <Iconify icon="eva:trash-2-outline" sx={{ mr: 2 }} />
+            <Typography variant="subtitle2" noWrap>
+              Delete
+            </Typography>
+          </IconButton>
         </MenuItem>
       </Popover>
+      <DialogDelete
+        open={openDialog}
+        setOpen={setOpenDialog}
+        handleDelete={handleDelete}
+        name='o empréstimo'
+        message="empréstimo"
+      />
     </>
   );
 }
 
 LoanTableRow.propTypes = {
   client: PropTypes.any,
+  id: PropTypes.any,
   value: PropTypes.any,
   banner: PropTypes.any,
   valueMachine: PropTypes.any,
@@ -110,4 +177,11 @@ LoanTableRow.propTypes = {
   netProfit: PropTypes.any,
   selected: PropTypes.any,
   handleClick: PropTypes.func,
+  setNewLoan: PropTypes.func,
+  setLoanToEdit: PropTypes.func,
+  setEditLoan: PropTypes.func,
+  setAlertError: PropTypes.func,
+  setAlert: PropTypes.func,
+  setMessageAlert: PropTypes.func,
+  setMessageError: PropTypes.func,
 };

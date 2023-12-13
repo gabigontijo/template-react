@@ -125,6 +125,7 @@ export default function ClientPage() {
     inputData: clients,
     comparator: getComparator(order, orderBy),
     filterName,
+    field: 'name',
   });
 
   const handleDelete = async () => {

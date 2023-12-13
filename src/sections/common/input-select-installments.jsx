@@ -6,7 +6,7 @@ import TextField from '@mui/material/TextField';
 
 
 
-export default function SelectInstallments({ numInstallments }) {
+export default function SelectInstallments({ numInstallments, value, onChange }) {
     const installmentsOptions = Array.from({ length: numInstallments }, (_, index) => ({
         value: `${index + 1}`,
         label: `${index + 1}`,
@@ -21,6 +21,8 @@ export default function SelectInstallments({ numInstallments }) {
           label="Parcelas"
           defaultValue="1"
           helperText="Selecione quantas parcelas"
+          value={value}
+          onChange={onChange}
         >
           {installmentsOptions.map((option) => (
             <MenuItem key={option.value} value={option.value}>
@@ -35,4 +37,6 @@ export default function SelectInstallments({ numInstallments }) {
 
 SelectInstallments.propTypes = {
   numInstallments: PropTypes.number,
+  value: PropTypes.any,
+  onChange:  PropTypes.func,
 };

@@ -15,7 +15,16 @@ import FormStepThree from './form-step-three';
 
 const steps = ['Selecione o cliente', 'Dados do empréstimo', 'Selecione o parceiro'];
 
-export default function FormNewLoan({ filterName, onFilterName, setAlertClient, setAlertPartner }) {
+export default function FormNewLoan({
+  filterName,
+  onFilterName,
+  setAlert,
+  setAlertError,
+  setMessageError,
+  setMessageAlert,
+  setLoan,
+  loan,
+}) {
   const [activeStep, setActiveStep] = useState(0);
   const [skipped, setSkipped] = useState(new Set());
   const [isNewPartner, setIsNewPartner] = useState(false);
@@ -39,11 +48,6 @@ export default function FormNewLoan({ filterName, onFilterName, setAlertClient, 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
-
-  // const handleAddUser = () => {
-  //   // setNewUser(true);
-  //   // setCloseAdd(true);
-  // };
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -71,18 +75,28 @@ export default function FormNewLoan({ filterName, onFilterName, setAlertClient, 
           onFilterName={onFilterName}
           isNewClient={isNewClient}
           setIsNewClient={setIsNewClient}
-          setSendAlert={setAlertClient}
+          setAlert={setAlert}
+          setAlertError={setAlertError}
+          setMessageAlert={setMessageAlert}
+          setMessageError={setMessageError}
+          setLoan={setLoan}
+          loan={loan}
         />
       )}
 
-      {activeStep === 1 && <FormStepTwo />}
+      {activeStep === 1 && <FormStepTwo setLoan={setLoan} loan={loan} />}
       {activeStep === 2 && (
         <FormStepThree
-          setSendAlert={setAlertPartner}
+          setAlert={setAlert}
+          setAlertError={setAlertError}
+          setMessageAlert={setMessageAlert}
+          setMessageError={setMessageError}
           filterName={filterName}
           onFilterName={onFilterName}
           isNewPartner={isNewPartner}
           setIsNewPartner={setIsNewPartner}
+          setLoan={setLoan}
+          loan={loan}
         />
       )}
 
@@ -99,11 +113,13 @@ export default function FormNewLoan({ filterName, onFilterName, setAlertClient, 
 }
 
 FormNewLoan.propTypes = {
-  setNewUser: PropTypes.func,
-  setSendAlert: PropTypes.func,
-  setAlertClient: PropTypes.func,
-  setAlertPartner: PropTypes.func,
   setCloseAdd: PropTypes.func,
   filterName: PropTypes.string,
   onFilterName: PropTypes.func,
+  setAlert: PropTypes.func,
+  setAlertError: PropTypes.func,
+  setMessageError: PropTypes.func,
+  setMessageAlert: PropTypes.func,
+  setLoan: PropTypes.func,
+  loan: PropTypes.any,
 };

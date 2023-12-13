@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useLocation } from 'react-router-dom';
 
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -8,20 +9,26 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 
 export default function DialogDelete({ setOpen, open, handleDelete, name, message }) {
+  
+  const location = useLocation();
+
   const handleClose = () => {
     setOpen(false);
   };
 
   const getContentText = () => {
     if (typeof name === 'string') {
-      return `Tem certeza que deseja deletar ${name} ?`;
+      return `Tem certeza que deseja deletar ${name}?`;
     }
 
     if (Array.isArray(name)) {
-      if (name.length === 1) {
-        return `Tem certeza que deseja deletar ${name[0].name} ?`;
+      if ((location.pathname === '/emprestimo') && (name.length === 1)) {
+        return `Tem certeza que deseja deletar o empréstimo?`;
       }
-      return `Tem certeza que deseja deletar ${name.length} ${message}s ?`;
+      if (name.length === 1) {
+        return `Tem certeza que deseja deletar ${name[0].name}?`;
+      }
+      return `Tem certeza que deseja deletar ${name.length} ${message}s?`;
     }
     return ''
   };

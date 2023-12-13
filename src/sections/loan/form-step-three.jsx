@@ -1,45 +1,50 @@
-import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { useState, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
-import Paper from '@mui/material/Paper';
-import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Switch from '@mui/material/Switch';
+import TextField from '@mui/material/TextField';
 import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
 import Autocomplete from '@mui/material/Autocomplete';
 
+import { allPartners } from 'src/apis/partner';
+
 import Iconify from 'src/components/iconify';
 
 import FormNewPartner from '../partner/form-new-partner';
-import { allPartners } from 'src/apis/partner';
 
 // ----------------------------------------------------------------------
 
 export default function FormStepThree({
-  setSendAlert,
+  setAlert,
+  setAlertError,
+  setMessageAlert,
+  setMessageError,
   filterName,
   onFilterName,
   isNewPartner,
   setIsNewPartner,
+  loan,
+  setLoan,
   // setCloseAdd,
 }) {
   const [checked, setChecked] = useState(false);
   const [partnersList, setPartnersList] = useState([]);
-  const [filteredClients, setFilteredPartners] = useState([]);
+  const [filteredPartners, setFilteredPartners] = useState([]);
   const [selectedPartner, setSelectedPartner] = useState(null);
 
   useEffect(() => {
     const loadAllPartners = async () => {
       try {
-        const clients = await allPartners();
-        setPartnersList(clients);
-        setFilteredPartners(clients);
+        const partners = await allPartners();
+        setPartnersList(partners);
+        setFilteredPartners(partners);
       } catch (error) {
-        console.log('Erro ao carregar clientes', error);
+        console.log('Erro ao carregar parceiros', error);
       }
     };
     loadAllPartners();
@@ -59,6 +64,32 @@ export default function FormStepThree({
 
   const onPartnerSelect = (partner) => {
     setSelectedPartner(partner);
+  };
+
+  const handleChangePartnerValue = ({ target }) => {
+    const calculatedPercentPartner = (parseFloat(target.value) / loan.value) * 100;
+
+    setLoan((prevLoan) => ({
+      ...prevLoan,
+      partnerProfit: {
+        ...prevLoan.partnerProfit,
+        valuePartner: target.value,
+        percentPartner: isNaN(calculatedPercentPartner) ? '' : calculatedPercentPartner.toString(),
+      },
+    }));
+  };
+
+  const handleChangePartnerPercent = ({ target }) => {
+    const calculatedValuePartner = (parseFloat(target.value) / 100) * loan.value;
+
+    setLoan((prevLoan) => ({
+      ...prevLoan,
+      partnerProfit: {
+        ...prevLoan.partnerProfit,
+        valuePartner: isNaN(calculatedValuePartner) ? '' : calculatedValuePartner.toString(),
+        percentPartner: target.value,
+      },
+    }));
   };
 
   return (
@@ -99,16 +130,16 @@ export default function FormStepThree({
                       name="valuePartner"
                       label="Valor da comissão"
                       type="number"
-                      // value={state.pixKey}
-                      // onChange={handleChange}
+                      value={loan.partnerProfit.valuePartner}
+                      onChange={handleChangePartnerValue}
                       fullWidth
                     />
                     <TextField
                       name="percentPartner"
                       label="Porcentagem da comissão"
                       type="number"
-                      // value={state.pixKey}
-                      // onChange={handleChange}
+                      value={loan.partnerProfit.percentPartner}
+                      onChange={handleChangePartnerPercent}
                       fullWidth
                     />
                   </Stack>
@@ -136,7 +167,13 @@ export default function FormStepThree({
           </Stack>
           {isNewPartner && (
             <Box sx={{ margin: 3 }}>
-              <FormNewPartner setNewPartner={setIsNewPartner} setAlert={setSendAlert} />
+              <FormNewPartner
+                setNewPartner={setIsNewPartner}
+                setAlert={setAlert}
+                setMessageAlert={setMessageAlert}
+                setAlertError={setAlertError}
+                setMessageError={setMessageError}
+              />
             </Box>
           )}
         </>
@@ -146,10 +183,15 @@ export default function FormStepThree({
 }
 
 FormStepThree.propTypes = {
-  setSendAlert: PropTypes.func,
+  setAlert: PropTypes.func,
+  setAlertError: PropTypes.func,
+  setMessageError: PropTypes.func,
+  setMessageAlert: PropTypes.func,
   isNewPartner: PropTypes.bool,
   setIsNewPartner: PropTypes.func,
   filterName: PropTypes.string,
   onFilterName: PropTypes.func,
   style: PropTypes.object,
+  loan: PropTypes.any,
+  setLoan: PropTypes.func,
 };

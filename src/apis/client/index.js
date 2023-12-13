@@ -6,7 +6,7 @@ export const createClient = async (client) => {
     body: JSON.stringify(client),
     headers: getHeaders({ 'Content-Type': 'application/json' }),
   };
-  const res = await apiFetch('/clients', apiOpts);
+  const res = await apiFetch('http://195.35.16.37:3000/clients', apiOpts);
   return res.json();
 };
 
@@ -15,7 +15,7 @@ export const allClients = async () => {
     method: 'get',
     headers: getHeaders({ 'Content-Type': 'application/json' }),
   };
-  const res = await apiFetch('/clients', apiOpts);
+  const res = await apiFetch('195.35.16.37:3000/clients', apiOpts);
   return res.json();
 };
 

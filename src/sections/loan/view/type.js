@@ -14,11 +14,11 @@ export const loanInterface = {
     numberOfCards: '',
     cards: [
         {
-           maquininhaId: 1,
-           bandeira: 'master',
-           valor: 100,
-           parcelas: 5,
-           tipoPagamento: 'Presencial'
+           machinId: '',
+           banner: '',
+           value: '',
+           installments: '',
+           paymentType: ''
         }
     ],
     partner:{
@@ -30,7 +30,10 @@ export const loanInterface = {
         pixKey:'',
         adress: '',
     },
-    partnerProfit: '',
+    partnerProfit: {
+        valuePartner:'',
+        percentPartner:'',
+    },
     netProfit:'',
 
 }

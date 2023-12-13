@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+
 import Box from '@mui/material/Box';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
@@ -10,10 +12,10 @@ const currencies = [
   {
     value: 'online',
     label: 'Online',
-  }
+  },
 ];
 
-export default function SelectPaymentType() {
+export default function SelectPaymentType({ value, onChange }) {
   return (
     <Box component="form" noValidate autoComplete="off" width="36%">
       <div>
@@ -23,6 +25,8 @@ export default function SelectPaymentType() {
           select
           label="Tipo do Pagamento"
           defaultValue="inPerson"
+          value={value}
+          onChange={onChange}
           helperText="Selecione o tipo do pagamento"
         >
           {currencies.map((option) => (
@@ -35,3 +39,8 @@ export default function SelectPaymentType() {
     </Box>
   );
 }
+
+SelectPaymentType.propTypes = {
+  value: PropTypes.any,
+  onChange: PropTypes.func,
+};

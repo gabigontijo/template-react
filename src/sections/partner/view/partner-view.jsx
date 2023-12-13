@@ -120,6 +120,7 @@ export default function PartnerPage() {
     inputData: partners,
     comparator: getComparator(order, orderBy),
     filterName,
+    field: 'name',
   });
 
   const handleDelete = async () => {

@@ -12,6 +12,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 
 import { loans } from 'src/_mock/loan';
+import { deleteLoan } from 'src/apis/loan';
 import AlertNotifications from 'src/layouts/dashboard/common/alert-notifications';
 
 import Iconify from 'src/components/iconify';
@@ -24,7 +25,7 @@ import ComoonTableHead from '../../common/table-head';
 import TableToolbar from '../../common/table-toolbar';
 import TableEmptyRows from '../../common/table-empty-rows';
 import { emptyRows, applyFilter, getComparator } from '../../utils';
-import { deleteLoan } from 'src/apis/loan';
+import { loanInterface } from './type';
 
 // ----------------------------------------------------------------------
 
@@ -45,29 +46,19 @@ export default function LoanPage() {
 
   const [alert, setAlert] = useState(false);
 
-  const [alertClient, setAlertClient] = useState(false);
-
-  const [alertPartner, setAlertPartner] = useState(false);
-
   const [alertError, setAlertError] = useState(false);
 
-  const [alertClientErr, setAlertClientErr] = useState(false);
+  const [messageError, setMessageError] = useState('');
 
-  const [alertPartnerErr, setAlertPartnerErr] = useState(false);
-
-  const [alertEdit, setAlertEdit] = useState(false);
-
-  const [alertDelete, setAlertDelete] = useState(false);
-
-  const [alertDeleteError, setAlertDeleteError] = useState(false);
+  const [messageAlert, setMessageAlert] = useState('');
 
   const [editLoan, setEditLoan] = useState(false);
 
   const [loanId, setLoanId] = useState('');
 
-  const [loanToEdit, setLoanToEdit] = useState({});
+  const [loanToEdit, setLoanToEdit] = useState();
 
-  const [alertEditError, setAlertEditError] = useState(false);
+  const [loan, setLoan] = useState(loanToEdit || loanInterface);
 
   const [openDialog, setOpenDialog] = useState(false);
 
@@ -131,25 +122,30 @@ export default function LoanPage() {
     inputData: loans,
     comparator: getComparator(order, orderBy),
     filterName,
+    field: 'client',
   });
 
   const handleDelete = async () => {
     try {
       const results = await Promise.all(
-        selected.map(async (loan) => {
-          const result = await deleteLoan(loan.id);
+        selected.map(async (l) => {
+          const result = await deleteLoan(l.id);
           return result;
         })
       );
       console.log(results);
-      setAlertDelete(true);
+      setAlert(true);
+      setMessageAlert('Empréstimo excluído com sucesso')
       setOpenDialog(false);
       setSelected([]);
     } catch (error) {
       console.error('Erro ao excluir empréstimos:', error);
-      setAlertDeleteError(true);
+      setAlertError(true);
+      setMessageError('Erro ao excluir empréstimos')
       setOpenDialog(false);
       setSelected([]);
+
+
     }
   };
 
@@ -187,8 +183,13 @@ export default function LoanPage() {
         <FormNewLoan
           filterName={filterName}
           onFilterName={handleFilterByName}
-          setAlertClient={setAlertClient}
-          setAlertClientErr={setAlertClientErr}
+          setAlert={setAlert}
+          setAlertError={setAlertError}
+          setMessageAlert={setMessageAlert}
+          setMessageError={setMessageError}
+          setLoan= {setLoan}
+          loan={loan}
+      
         />
       )}
 
@@ -196,72 +197,14 @@ export default function LoanPage() {
         <AlertNotifications
           alert={alert}
           setAlert={setAlert}
-          message="Empréstimo cadastrado com sucesso"
-        />
-      )}
-      {alertEdit && (
-        <AlertNotifications
-          alert={alertEdit}
-          setAlert={setAlertEdit}
-          message="Empréstimo editado com sucesso"
+          message={messageAlert}
         />
       )}
       {alertError && (
         <AlertNotifications
           alertError={alertError}
           setAlertError={setAlertError}
-          message="Erro ao cadastrar o empréstimo"
-        />
-      )}
-      {alertEditError && (
-        <AlertNotifications
-          alertError={alertEditError}
-          setAlertError={setAlertEditError}
-          message="Erro ao editar o empréstimo"
-        />
-      )}
-      {alertDelete && (
-        <AlertNotifications
-          alert={alertDelete}
-          setAlert={setAlertDelete}
-          message="Empréstimo Deletado com sucesso"
-        />
-      )}
-      {alertDeleteError && (
-        <AlertNotifications
-          alertError={alertDeleteError}
-          setAlertError={setAlertDeleteError}
-          message="Erro ao deletar o empréstimo"
-        />
-      )}
-
-      {alertClient && (
-        <AlertNotifications
-          alert={alertClient}
-          setAlert={setAlertClient}
-          message="Client Deletado com sucesso"
-        />
-      )}
-      {alertClientErr && (
-        <AlertNotifications
-          alertError={alertClientErr}
-          setAlertError={setAlertClientErr}
-          message="Erro ao deletar o client"
-        />
-      )}
-      {alertPartner && (
-        <AlertNotifications
-          sendAlert={alertPartner}
-          setSendAlert={setAlertPartner}
-          message="Parceiro cadastrado com sucesso!"
-        />
-      )}
-
-      {alertPartnerErr && (
-        <AlertNotifications
-          alertError={alertPartnerErr}
-          setAlertError={setAlertPartnerErr}
-          message="Erro ao deletar o parceiro"
+          message={messageError}
         />
       )}
       <Card>
@@ -274,6 +217,7 @@ export default function LoanPage() {
           selected={selected}
           openDialog={openDialog}
           setOpenDialog={setOpenDialog}
+          message='empréstimo'
         />
 
         <Scrollbar>
@@ -283,8 +227,8 @@ export default function LoanPage() {
                 order={order}
                 orderBy={orderBy}
                 rowCount={loans.length}
-                numSelected={selected.length}
                 onRequestSort={handleSort}
+                numSelected={selected.length}
                 onSelectAllClick={handleSelectAllClick}
                 headLabel={[
                   { id: 'client', label: 'Cliente' },
@@ -316,6 +260,13 @@ export default function LoanPage() {
                       netProfit={row.netProfit}
                       selected={selected.some((item) => item.name === row.client)}
                       handleClick={(event) => handleClick(event, row.client, row.id)}
+                      setEditLoan={setEditLoan}
+                      setLoanToEdit={setLoanToEdit}
+                      setNewLoan={setNewLoan}
+                      setAlert={setAlert}
+                      setAlertError={setAlertError}
+                      setMessageAlert={setMessageAlert}
+                      setMessageError={setMessageError}
                     />
                   ))}
 

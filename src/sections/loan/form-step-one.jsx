@@ -29,6 +29,10 @@ export default function FormStepOne({
   clientName,
   setNextStep,
   loanToEdit,
+  setMessageAlert,
+  setMessageError,
+  setLoan,
+  loan,
 }) {
   const [clientsList, setClientsList] = useState([]);
   const [filteredClients, setFilteredClients] = useState([]);
@@ -57,14 +61,12 @@ export default function FormStepOne({
     // setCloseAdd(true);
   };
 
-  // const onFilterClient = (event) => {
-  //   const searchTerm = event.target.value.toLowerCase();
-  //   const filtered = ClientsList.filter((client) => client.name.toLowerCase().includes(searchTerm));
-  //   setFilteredClients(filtered);
-  // };
-
   const onClientSelect = (client) => {
     setSelectedClient(client);
+    setLoan({
+      ...loan,
+      'client': client,
+    });
   };
 
   return (
@@ -114,6 +116,8 @@ export default function FormStepOne({
           <FormNewClient
             setNewUser={setIsNewClient}
             setAlert={setAlert}
+            setMessageAlert={setMessageAlert}
+            setMessageError={setMessageError}
             setAlertError={setAlertError}
             setClientName={setClientName}
             setNextStep={setNextStep}
@@ -126,11 +130,15 @@ export default function FormStepOne({
 
 FormStepOne.propTypes = {
   setAlert: PropTypes.func,
+  setMessageAlert: PropTypes.func,
+  setMessageError: PropTypes.func,
   isNewClient: PropTypes.bool,
   setIsNewClient: PropTypes.func,
   clientName: PropTypes.string,
   setAlertError: PropTypes.func,
   setClientName: PropTypes.func,
   setNextStep: PropTypes.func,
+  setLoan: PropTypes.func,
+  loan: PropTypes.any,
   loanToEdit: PropTypes.any,
 };
