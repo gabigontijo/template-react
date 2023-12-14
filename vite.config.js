@@ -28,12 +28,11 @@ export default defineConfig({
   },
   server: {
     port: 3030,
-    cors:false,
+    cors:true,
     proxy: {
-      '/clients': {
+      '/195.35.16.37:3000': {
         target: 'http://195.35.16.37:3000',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/clients/, ''),
       },
     },
   },

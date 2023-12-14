@@ -12,7 +12,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 
 import { clients } from 'src/_mock/clients';
-import { deleteClient } from 'src/apis/client';
+import { allClients, deleteClient } from 'src/apis/client';
 import AlertNotifications from 'src/layouts/dashboard/common/alert-notifications';
 
 import Iconify from 'src/components/iconify';
@@ -59,10 +59,20 @@ export default function ClientPage() {
 
   const [openDialog, setOpenDialog] = useState(false);
 
+  const [clientList, setClientList] = useState([]);
+
   useEffect(() => {
-    console.log(selected);
-    console.log(clientId);
-  }, [selected, clientId]);
+    const fetchClients = async () => {
+      try {
+        const response = await allClients();
+        setClientList(response.Clients);
+      } catch (error) {
+        console.error('Erro ao carregar clientes:', error);
+      }
+    };
+
+    fetchClients();
+  }, []);
 
   const handleSort = (event, id) => {
     const isAsc = orderBy === id && order === 'asc';
@@ -122,7 +132,7 @@ export default function ClientPage() {
   };
 
   const dataFiltered = applyFilter({
-    inputData: clients,
+    inputData: clientList,
     comparator: getComparator(order, orderBy),
     filterName,
     field: 'name',
@@ -156,6 +166,14 @@ export default function ClientPage() {
     <Container>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
         <Typography variant="h4">Clientes</Typography>
+        {/* <div>
+          {test.map((client, index) => (
+            <>
+            <p> teste</p>
+            <p key={index}>{client.Name}</p>
+            </>
+          ))}
+        </div> */}
         <Stack
           direction="row"
           alignItems="center"
@@ -219,7 +237,7 @@ export default function ClientPage() {
               <ComoonTableHead
                 order={order}
                 orderBy={orderBy}
-                rowCount={clients.length}
+                rowCount={clientList.length}
                 numSelected={selected.length}
                 onRequestSort={handleSort}
                 onSelectAllClick={handleSelectAllClick}
@@ -237,18 +255,19 @@ export default function ClientPage() {
               <TableBody>
                 {dataFiltered
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row) => (
+                  .map((row, index) => (
                     <ClientTableRow
+                      index={index}
                       key={row.id}
-                      id={row.id}
-                      name={row.name}
+                      id={row.ID}
+                      name={row.Name}
                       phone={row.phone}
                       cpf={row.cpf}
                       pixType={row.pixType}
                       pixKey={row.pixKey}
                       partner={row.partner}
                       documents={row.documents}
-                      avatarUrl={row.avatarUrl}
+                      // avatarUrl={row.avatarUrl}
                       selected={selected.some((item) => item.name === row.name)}
                       handleClick={(event) => handleClick(event, row.name, row.id)}
                       setEditClient={setEditClient}

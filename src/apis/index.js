@@ -24,7 +24,6 @@ const getCookie = (cname) => {
 
 export const getHeaders = (extraheaders) => {
   const headers = {
-    'x-xsrf-token': getCookie('XSRF-TOKEN'),
     'cash-control': 'no-store',
     ...extraheaders,
   };

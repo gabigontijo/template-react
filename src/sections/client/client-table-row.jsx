@@ -21,6 +21,7 @@ import DialogDelete from '../common/dialog-delete';
 
 export default function ClientTableRow({
   selected,
+  index,
   id,
   name,
   avatarUrl,
@@ -78,11 +79,11 @@ export default function ClientTableRow({
       console.log('Resposta da API:', response);
       setOpenDialog(false);
       setAlert(true);
-      setMessageAlert('Cliente deletado com sucesso')
+      setMessageAlert('Cliente deletado com sucesso');
     } catch (error) {
       setOpenDialog(false);
       setAlertError(true);
-      setMessageError('Erro ao Deletar o cliente')
+      setMessageError('Erro ao Deletar o cliente');
       console.log('Erro ao Deletar o cliente:', error);
     }
   };
@@ -91,6 +92,13 @@ export default function ClientTableRow({
     setOpenDialog(true);
     setOpen(null);
   };
+
+  const getCycledAvatarIndex = (avtIndex) => {
+    const totalAvatarOptions = 24;
+    return (avtIndex % totalAvatarOptions) + 1;
+  };
+
+  const currentAvatarIndex = getCycledAvatarIndex(index);
 
   return (
     <>
@@ -101,7 +109,7 @@ export default function ClientTableRow({
 
         <TableCell component="th" scope="row" padding="none">
           <Stack direction="row" alignItems="center" spacing={2}>
-            <Avatar alt={name} src={avatarUrl} />
+            <Avatar alt={name} src={`/assets/images/avatars/avatar_${currentAvatarIndex}.jpg`} />
             <Typography variant="subtitle2" noWrap>
               {name}
             </Typography>
@@ -162,7 +170,7 @@ export default function ClientTableRow({
         setOpen={setOpenDialog}
         handleDelete={handleDelete}
         name={name}
-        message='cliente'
+        message="cliente"
       />
     </>
   );
@@ -188,4 +196,5 @@ ClientTableRow.propTypes = {
   setAlert: PropTypes.func,
   setMessageError: PropTypes.func,
   setMessageAlert: PropTypes.func,
+  index: PropTypes.any,
 };

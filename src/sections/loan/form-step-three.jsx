@@ -74,7 +74,7 @@ export default function FormStepThree({
       partnerProfit: {
         ...prevLoan.partnerProfit,
         valuePartner: target.value,
-        percentPartner: isNaN(calculatedPercentPartner) ? '' : calculatedPercentPartner.toString(),
+        percentPartner:  Number.isNaN(calculatedPercentPartner) ? '' : calculatedPercentPartner.toString(),
       },
     }));
   };
@@ -86,7 +86,7 @@ export default function FormStepThree({
       ...prevLoan,
       partnerProfit: {
         ...prevLoan.partnerProfit,
-        valuePartner: isNaN(calculatedValuePartner) ? '' : calculatedValuePartner.toString(),
+        valuePartner:  Number.isNaN(calculatedValuePartner) ? '' : calculatedValuePartner.toString(),
         percentPartner: target.value,
       },
     }));

@@ -138,7 +138,7 @@ export default function FormNewClient({
         </Stack>
       </Stack>
       <Stack direction="row" alignItems="center" justifyContent="flex-end" sx={{ my: 2 }}>
-        {state.id == null && (
+        {state.id !== undefined && (
           <LoadingButton
             fullWidth
             size="large"
@@ -150,7 +150,7 @@ export default function FormNewClient({
             Cadastrar
           </LoadingButton>
         )}
-        {state.id == '' && (
+        {state.id === undefined && (
           <LoadingButton
             fullWidth
             size="large"

@@ -18,6 +18,7 @@ import AlertNotifications from 'src/layouts/dashboard/common/alert-notifications
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 
+import { loanInterface } from './type';
 import FormNewLoan from '../form-new-loan';
 import LoanTableRow from '../loan-table-row';
 import TableNoData from '../../common/table-no-data';
@@ -25,7 +26,6 @@ import ComoonTableHead from '../../common/table-head';
 import TableToolbar from '../../common/table-toolbar';
 import TableEmptyRows from '../../common/table-empty-rows';
 import { emptyRows, applyFilter, getComparator } from '../../utils';
-import { loanInterface } from './type';
 
 // ----------------------------------------------------------------------
 
