@@ -51,7 +51,7 @@ export default function Nav({ openNav, onCloseNav }) {
       }}
     >
       <Avatar  sx={{ bgcolor: themeColor.palette.grey[100] }}
-      src='/public/assets/images/outline_account_circle_black_24dp.png' />
+      src='/assets/images/outline_account_circle_black_24dp.png' />
 
       <Box sx={{ ml: 2 }}>
         <Typography variant="subtitle2">{account.displayName}</Typography>
