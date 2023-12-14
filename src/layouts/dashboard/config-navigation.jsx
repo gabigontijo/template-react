@@ -20,22 +20,22 @@ const navConfig = [
   {
     title: 'empréstimos',
     path: '/emprestimo',
-    icon: icon('ic_disabled'),
+    icon: icon('ic_loan'),
   },
   {
     title: 'parceiros',
     path: '/parceiro',
-    icon: icon('ic_cart'),
+    icon: icon('ic_partner'),
   },
   {
     title: 'maquininhas',
-    path: '/blog',
-    icon: icon('ic_blog'),
+    path: '/maquininha',
+    icon: icon('ic_machin'),
   },
   {
     title: 'simulações',
     path: '/simulacoes',
-    icon: icon('ic_blog'),
+    icon: icon('ic_simulation'),
   },
   {
     title: 'login',

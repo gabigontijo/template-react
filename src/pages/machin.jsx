@@ -1,18 +1,19 @@
 import { Helmet } from 'react-helmet-async';
 
-// import { AppView } from 'src/sections/overview/view';
+// import { BlogView } from 'src/sections/blog/view';
 // import { NotFoundView } from 'src/sections/error';
 
 // ----------------------------------------------------------------------
 
-export default function AppPage() {
+export default function BlogPage() {
   return (
     <>
       <Helmet>
-        <title> Relátorios | Cash By Card </title>
+        <title> Relátórios | Cash By Card</title>
       </Helmet>
+
+      {/* <BlogView /> */}
       {/* <NotFoundView/> */}
-      {/* <AppView /> */}
       <div>...em construção.....</div>
     </>
   );
