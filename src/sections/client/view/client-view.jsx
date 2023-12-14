@@ -173,6 +173,7 @@ export default function ClientPage() {
             <p key={index}>{client.Name}</p>
             </>
           ))}
+          <>
         </div> */}
         <Stack
           direction="row"
