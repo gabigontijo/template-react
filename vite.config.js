@@ -4,10 +4,7 @@ import react from '@vitejs/plugin-react-swc';
 import checker from 'vite-plugin-checker';
 
 // ----------------------------------------------------------------------
-const localPROD = true // Change it for local usage
-
 const basicConfig = {
-  base: (localPROD ? '/cashbycard-app/' : ''),
   plugins: [
     react(),
     checker({
