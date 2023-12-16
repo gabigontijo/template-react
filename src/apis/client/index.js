@@ -1,13 +1,15 @@
 import { apiFetch, getHeaders } from '..';
 
-const URlClients = 'http://195.35.16.37:81/cashbycard/clients';
+// const URlClients = 'http://195.35.16.37:81/cashbycard/clients';
+const URlClients = '/cashbycard/clients';
 
 export const createClient = async (client) => {
   const apiOpts = {
     method: 'post',
     body: JSON.stringify(client),
-    mode: 'no-cors',
-    headers: getHeaders({ 'Content-Type': 'application/json' }),
+    headers: { 
+      'Content-Type': 'application/json'
+    },
   };
   const res = await apiFetch(URlClients, apiOpts);
   return res.json();
@@ -56,7 +58,6 @@ export const deleteClient = async (clientId) => {
   const apiOpts = {
     method: 'delete',
     headers: getHeaders({ 'Content-Type': 'application/json' }),
-    mode: 'no-cors',
   };
   const res = await apiFetch(`${URlClients}/${clientId}`, apiOpts);
   return res.json();

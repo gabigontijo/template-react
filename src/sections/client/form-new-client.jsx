@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import LoadingButton from '@mui/lab/LoadingButton';
-import Autocomplete from '@mui/material/Autocomplete';
+// import Autocomplete from '@mui/material/Autocomplete';
 
 import { allPartners } from 'src/apis/partner';
 import { createClient, updateClient } from 'src/apis/client';
@@ -31,7 +31,7 @@ export default function FormNewClient({
   setClientId,
 }) {
   const [state, setState] = useState(clientToEdit || clientInterface);
-  const [partnersList, setPartnersList] = useState([]);
+  const [, setPartnersList] = useState([]);
   const location = useLocation();
 
   useEffect(() => {
@@ -59,7 +59,6 @@ export default function FormNewClient({
         documenst: state.documenst,
       };
       const response = await createClient(bodyClient);
-      console.log('Resposta da API:', response);
       if (location.pathname === '/emprestimo') {
         setClientName(response.name);
         setNextStep(true);

@@ -1,0 +1,37 @@
+version: '3.7'
+
+networks:
+  cashbycard-network:
+    driver: bridge
+
+services:
+  nginx:
+    image: nginx:latest
+    container_name: meu_nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    restart: always
+    networks:
+      - cashbycard-network
+
+  cashbycard:
+    image: cashbycard:1.1
+    container_name: cashbycard-container
+    restart: unless-stopped
+    ports:
+      - "3000"
+    networks:
+      - cashbycard-network
+
+  cashbycard-app:
+    build:
+      context: . 
+      dockerfile: ./Dockerfile
+    container_name: cashbycard-app
+    restart: unless-stopped
+    ports:
+      - "5000"
+    networks:
+      - cashbycard-network
