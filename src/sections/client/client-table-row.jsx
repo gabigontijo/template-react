@@ -60,7 +60,7 @@ export default function ClientTableRow({
       setEditClient(true);
       setNewUser(true);
       setClientId(id);
-      setClientToEdit(response);
+      setClientToEdit(response.Client);
       setOpen(null);
       console.log(id);
     } catch (error) {

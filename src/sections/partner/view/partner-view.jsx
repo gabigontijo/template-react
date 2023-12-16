@@ -53,7 +53,7 @@ export default function PartnerPage() {
 
   const [editPartner, setEditPartner] = useState(false);
 
-  const [partnerId, setPartnerId] = useState('');
+  const [partnerId, setPartnerId] = useState(null);
 
   const [partnerToEdit, setPartnerToEdit] = useState({});
 
@@ -183,6 +183,7 @@ export default function PartnerPage() {
           partnerToEdit={partnerToEdit}
           setMessageAlert={setMessageAlert}
           setMessageError={setMessageError}
+          partnerId={partnerId}
         />
       )}
       {alert && (

@@ -1,10 +1,19 @@
 export const clientInterface = {
+  id: '',
+  name: '',
+  phone: '',
+  cpf: '',
+  pixType: '',
+  pixKey: '',
+  partner: {
     id: '',
     name: '',
-    phone: '',
     cpf: '',
-    pixType: '',
-    pixKey:'',
-    partner: '',
-    documenst: [],
-}
+    pixKey: '',
+    phone: '',
+    endereco: '',
+    CreatedAt: '',
+    UpdatedAt: '',
+  },
+  documenst: [],
+};

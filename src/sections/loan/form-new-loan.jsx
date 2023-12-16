@@ -23,6 +23,8 @@ export default function FormNewLoan({
   setMessageError,
   setMessageAlert,
   setLoan,
+  loanId,
+  setLoanId,
   loan,
 }) {
   const [activeStep, setActiveStep] = useState(0);
@@ -122,4 +124,6 @@ FormNewLoan.propTypes = {
   setMessageAlert: PropTypes.func,
   setLoan: PropTypes.func,
   loan: PropTypes.any,
+  loanId: PropTypes.any,
+  setLoanId: PropTypes.func,
 };

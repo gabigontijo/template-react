@@ -54,7 +54,7 @@ export default function LoanPage() {
 
   const [editLoan, setEditLoan] = useState(false);
 
-  const [loanId, setLoanId] = useState('');
+  const [loanId, setLoanId] = useState(null);
 
   const [loanToEdit, setLoanToEdit] = useState();
 
@@ -189,6 +189,8 @@ export default function LoanPage() {
           setMessageError={setMessageError}
           setLoan= {setLoan}
           loan={loan}
+          loanId={loanId}
+          setLoanId={setLoanId}
       
         />
       )}

@@ -16,6 +16,7 @@ import SelectPixFields from '../common/input-select-pix';
 
 export default function FormNewPartner({
   setNewPartner,
+  partnerId,
   setAlert,
   setAlertError,
   partnerToEdit,
@@ -138,7 +139,7 @@ export default function FormNewPartner({
       </Stack>
 
       <Stack direction="row" alignItems="center" justifyContent="flex-end" sx={{ my: 2 }}>
-        {state.id === '' && (
+        {partnerId === null && (
           <LoadingButton
             fullWidth
             size="large"
@@ -150,7 +151,7 @@ export default function FormNewPartner({
             Cadastrar
           </LoadingButton>
         )}
-        {(state.id !== '' || state.id !== null) && (
+        {partnerId !== null && (
           <LoadingButton
             fullWidth
             size="large"
@@ -169,6 +170,7 @@ export default function FormNewPartner({
 
 FormNewPartner.propTypes = {
   setNewPartner: PropTypes.func,
+  partnerId:PropTypes.any,
   setAlert: PropTypes.func,
   setAlertError: PropTypes.func,
   partnerToEdit: PropTypes.any,

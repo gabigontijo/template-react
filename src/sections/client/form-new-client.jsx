@@ -25,9 +25,9 @@ export default function FormNewClient({
   setNextStep,
   setMessageError,
   setMessageAlert,
+  clientId,
 }) {
   const [state, setState] = useState(clientToEdit || clientInterface);
-
   const location = useLocation();
 
   const handleSubmit = async () => {
@@ -133,12 +133,12 @@ export default function FormNewClient({
             />
           </Box>
           <Box width="33%">
-            <InputFileUpload />
+            <InputFileUpload setState={setState} uploadedDocuments={state.documents}/>
           </Box>
         </Stack>
       </Stack>
       <Stack direction="row" alignItems="center" justifyContent="flex-end" sx={{ my: 2 }}>
-        {state.id !== undefined && (
+        {clientId === null && (
           <LoadingButton
             fullWidth
             size="large"
@@ -150,7 +150,7 @@ export default function FormNewClient({
             Cadastrar
           </LoadingButton>
         )}
-        {state.id === undefined && (
+        {clientId !== null && (
           <LoadingButton
             fullWidth
             size="large"
@@ -176,4 +176,5 @@ FormNewClient.propTypes = {
   setClientName: PropTypes.func,
   setMessageError: PropTypes.func,
   setMessageAlert: PropTypes.func,
+  clientId: PropTypes.any,
 };

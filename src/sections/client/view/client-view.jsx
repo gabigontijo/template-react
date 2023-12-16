@@ -53,9 +53,9 @@ export default function ClientPage() {
 
   const [editClient, setEditClient] = useState(false);
 
-  const [clientId, setClientId] = useState('');
+  const [clientId, setClientId] = useState(null);
 
-  const [clientToEdit, setClientToEdit] = useState({});
+  const [clientToEdit, setClientToEdit] = useState([]);
 
   const [openDialog, setOpenDialog] = useState(false);
 
@@ -207,6 +207,7 @@ export default function ClientPage() {
           clientToEdit={clientToEdit}
           setMessageAlert={setMessageAlert}
           setMessageError={setMessageError}
+          clientId={clientId}
         />
       )}
 
@@ -260,13 +261,13 @@ export default function ClientPage() {
                     <ClientTableRow
                       index={index}
                       key={row.id}
-                      id={row.ID}
-                      name={row.Name}
+                      id={row.id}
+                      name={row.name}
                       phone={row.phone}
                       cpf={row.cpf}
                       pixType={row.pixType}
                       pixKey={row.pixKey}
-                      partner={row.partner}
+                      partner={row.partner.name}
                       documents={row.documents}
                       // avatarUrl={row.avatarUrl}
                       selected={selected.some((item) => item.name === row.name)}

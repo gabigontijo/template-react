@@ -2,7 +2,7 @@
 
 import { apiFetch, getHeaders } from '..';
 
-const URlClients = 'http://195.35.16.37:3000/clients'
+const URlClients = 'http://195.35.16.37:81/cashbycard/clients'
 
 export const createClient = async (client) => {
   const apiOpts = {
@@ -26,8 +26,7 @@ export const allClients = async () => {
   // const res = await apiFetch('http://195.35.16.37:3000/clients', apiOpts);
   // const result = await res.json();
   // return result;
-  const ENDPOINT = URlClients;
-  const response = await fetch(ENDPOINT);
+  const response = await fetch(URlClients);
   const result = await response.json();
   return result;
 };
