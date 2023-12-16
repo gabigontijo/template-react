@@ -28,13 +28,6 @@ export default defineConfig({
   },
   server: {
     port: 3030,
-    cors:true,
-    proxy: {
-      '/195.35.16.37:3000': {
-        target: 'http://195.35.16.37:3000',
-        changeOrigin: true,
-      },
-    },
   },
   preview: {
     port: 3030,
