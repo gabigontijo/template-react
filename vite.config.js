@@ -4,8 +4,10 @@ import react from '@vitejs/plugin-react-swc';
 import checker from 'vite-plugin-checker';
 
 // ----------------------------------------------------------------------
+const localPROD = true // Change it for local usage
 
-export default defineConfig({
+const basicConfig = {
+  base: (localPROD ? '/cashbycard-app/' : ''),
   plugins: [
     react(),
     checker({
@@ -32,6 +34,8 @@ export default defineConfig({
   },
   preview: {
     host: '0.0.0.0',
-    port: 3030,
+    port: 5000,
   },
-});
+}
+
+export default defineConfig(basicConfig);
