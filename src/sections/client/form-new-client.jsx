@@ -35,7 +35,7 @@ export default function FormNewClient({
   const location = useLocation();
 
   useEffect(() => {
-    console.log(state.pixType)
+    console.log(state.pixType);
     const loadAllPartners = async () => {
       try {
         const partners = await allPartners();
@@ -53,64 +53,81 @@ export default function FormNewClient({
         name: state.name,
         pixType: state.pixType,
         pixKey: state.pixKey,
-        partnerId: Number(state.partner.id)
-      }
+        partnerId: Number(state.partner.id),
+        phone: state.phone,
+        cpf: state.cpf,
+        documenst: state.documenst,
+      };
       const response = await createClient(bodyClient);
       console.log('Resposta da API:', response);
       if (location.pathname === '/emprestimo') {
         setClientName(response.name);
-        setNextStep(true)
+        setNextStep(true);
       }
       setNewUser(false);
       setAlert(true);
-      setMessageAlert('cliente cadastrado com sucesso')
+      setMessageAlert('cliente cadastrado com sucesso');
     } catch (error) {
       setAlertError(true);
-      setMessageError('Erro ao Cadastrar o cliente')
+      setMessageError('Erro ao Cadastrar o cliente');
       console.log('Erro ao Cadastrar o cliente:', error);
     }
   };
 
   const handleSubmitEdit = async () => {
     try {
-      const response = await updateClient(clientToEdit, clientId);
+      const bodyClientEdit = {
+        name: clientToEdit.name,
+        pixType: clientToEdit.pixType,
+        pixKey: clientToEdit.pixKey,
+        partnerId: Number(clientToEdit.partner.id),
+        phone: clientToEdit.phone,
+        cpf: clientToEdit.cpf,
+        documenst: clientToEdit.documenst,
+      };
+      const response = await updateClient(bodyClientEdit, clientId);
       console.log('Resposta da API:', response);
       setNewUser(false);
       setClientId(null);
     } catch (error) {
       setAlertError(true);
-      setMessageError('Erro ao Editar o cliente')
+      setMessageError('Erro ao Editar o cliente');
       setClientId(null);
       console.log('Erro ao Editar o cliente:', error);
     }
   };
 
-  // const onPartnerSelect = (partner) => {
-  //   setState({
-  //     ...state,
-  //     'partner': partner,
-  //   });
-  // };
-
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setState({
-      ...state,
-      [name]: value,
-    });
-    console.log(value);
-  };
-  
-  const handleChangePartnerId = (event) => {
-    const { value } = event.target;
+  const onPartnerSelect = (value) => {
     setState({
       ...state,
       partner: {
         ...state.partner,
         id: value,
-      }
+      },
     });
   };
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    // const numericValue = value.replace(/\D/g, '');
+    // const x = numericValue.match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
+    // const maskedValue = !x[2] ? x[1] : `(${x[1]}) ${x[2]}${x[3] ? `-${x[3]}` : ''}`;
+    setState({
+      ...state,
+      [name]: value,
+    });
+  };
+
+  // const handleChangePartnerId = (event) => {
+  //   const { value } = event.target;
+  //   setState({
+  //     ...state,
+  //     partner: {
+  //       ...state.partner,
+  //       id: value,
+  //     },
+  //   });
+  // };
 
   return (
     <>
@@ -165,7 +182,7 @@ export default function FormNewClient({
             />
           </Box>
           <Box width="33%">
-          {/* <Autocomplete
+            <Autocomplete
                     disablePortal
                     id="client-autocomplete"
                     options={partnersList}
@@ -173,18 +190,18 @@ export default function FormNewClient({
                     sx={{ width: 300 }}
                     renderInput={(params) => <TextField {...params} label="Procurar parceiro" />}
                     onChange={(event, value) => onPartnerSelect(value)}
-                  /> */}
-            <TextField
+                  />
+            {/* <TextField
               name="partner"
               label="Parceiro"
               type="text"
               value={state.partner.id}
               onChange={handleChangePartnerId}
               fullWidth
-            />
+            /> */}
           </Box>
           <Box width="33%">
-            <InputFileUpload setState={setState} uploadedDocuments={state.documents}/>
+            <InputFileUpload setState={setState} uploadedDocuments={state.documents} />
           </Box>
         </Stack>
       </Stack>
