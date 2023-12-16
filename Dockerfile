@@ -7,6 +7,8 @@ WORKDIR /app
 # Copie os arquivos do package.json e package-lock.json para o diretório de trabalho
 COPY package*.json ./
 
+RUN rm -rf node_modules
+
 # Instale as dependências
 RUN npm install
 
@@ -17,7 +19,7 @@ COPY . .
 RUN npm run build
 
 # Exponha a porta em que a aplicação será executada
-EXPOSE 3030
+EXPOSE 5000
 
 # Comando para iniciar a aplicação quando o contêiner for iniciado
 CMD ["npm", "start"]

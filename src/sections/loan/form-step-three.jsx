@@ -34,8 +34,8 @@ export default function FormStepThree({
 }) {
   const [checked, setChecked] = useState(false);
   const [partnersList, setPartnersList] = useState([]);
-  const [filteredPartners, setFilteredPartners] = useState([]);
-  const [selectedPartner, setSelectedPartner] = useState(null);
+  const [, setFilteredPartners] = useState([]);
+  const [, setSelectedPartner] = useState(null);
 
   useEffect(() => {
     const loadAllPartners = async () => {
