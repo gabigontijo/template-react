@@ -1,6 +1,6 @@
 import { apiFetch, getHeaders } from '..';
 
-const URlClients = 'http://195.35.16.37:81/cashbycard/clients'
+const URlClients = 'http://195.35.16.37:81/cashbycard/clients';
 
 export const createClient = async (client) => {
   const apiOpts = {
@@ -42,11 +42,10 @@ export const clientById = async (clientId) => {
   return result;
 };
 
-export const updateClient = async (client, clientId ) => {
+export const updateClient = async (client, clientId) => {
   const apiOpts = {
     method: 'put',
     body: JSON.stringify(client),
-    mode: 'no-cors',
     headers: getHeaders({ 'Content-Type': 'application/json' }),
   };
   const res = await apiFetch(`${URlClients}/${clientId}`, apiOpts);

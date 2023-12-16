@@ -129,6 +129,8 @@ export default function ClientPage() {
   const handleCloseAdd = () => {
     setNewUser(false);
     setEditClient(false);
+    setClientId(null);
+    setClientToEdit();
   };
 
   const dataFiltered = applyFilter({
@@ -208,6 +210,7 @@ export default function ClientPage() {
           setMessageAlert={setMessageAlert}
           setMessageError={setMessageError}
           clientId={clientId}
+          setClientId={setClientId}
         />
       )}
 

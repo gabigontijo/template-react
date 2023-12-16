@@ -28,12 +28,14 @@ export default function FormNewClient({
   setMessageError,
   setMessageAlert,
   clientId,
+  setClientId,
 }) {
   const [state, setState] = useState(clientToEdit || clientInterface);
   const [partnersList, setPartnersList] = useState([]);
   const location = useLocation();
 
   useEffect(() => {
+    console.log(state.pixType)
     const loadAllPartners = async () => {
       try {
         const partners = await allPartners();
@@ -43,11 +45,17 @@ export default function FormNewClient({
       }
     };
     loadAllPartners();
-  }, []);
+  }, [state.pixType]);
 
   const handleSubmit = async () => {
     try {
-      const response = await createClient(state);
+      const bodyClient = {
+        name: state.name,
+        pixType: state.pixType,
+        pixKey: state.pixKey,
+        partnerId: Number(state.partner.id)
+      }
+      const response = await createClient(bodyClient);
       console.log('Resposta da API:', response);
       if (location.pathname === '/emprestimo') {
         setClientName(response.name);
@@ -68,20 +76,21 @@ export default function FormNewClient({
       const response = await updateClient(clientToEdit, clientId);
       console.log('Resposta da API:', response);
       setNewUser(false);
+      setClientId(null);
     } catch (error) {
       setAlertError(true);
       setMessageError('Erro ao Editar o cliente')
-      // setAlertError(true);
+      setClientId(null);
       console.log('Erro ao Editar o cliente:', error);
     }
   };
 
-  const onPartnerSelect = (partner) => {
-    setState({
-      ...state,
-      'partner': partner,
-    });
-  };
+  // const onPartnerSelect = (partner) => {
+  //   setState({
+  //     ...state,
+  //     'partner': partner,
+  //   });
+  // };
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -90,6 +99,17 @@ export default function FormNewClient({
       [name]: value,
     });
     console.log(value);
+  };
+  
+  const handleChangePartnerId = (event) => {
+    const { value } = event.target;
+    setState({
+      ...state,
+      partner: {
+        ...state.partner,
+        id: value,
+      }
+    });
   };
 
   return (
@@ -145,7 +165,7 @@ export default function FormNewClient({
             />
           </Box>
           <Box width="33%">
-          <Autocomplete
+          {/* <Autocomplete
                     disablePortal
                     id="client-autocomplete"
                     options={partnersList}
@@ -153,15 +173,15 @@ export default function FormNewClient({
                     sx={{ width: 300 }}
                     renderInput={(params) => <TextField {...params} label="Procurar parceiro" />}
                     onChange={(event, value) => onPartnerSelect(value)}
-                  />
-            {/* <TextField
+                  /> */}
+            <TextField
               name="partner"
               label="Parceiro"
               type="text"
-              value={state.partner.name}
-              onChange={handleChange}
+              value={state.partner.id}
+              onChange={handleChangePartnerId}
               fullWidth
-            /> */}
+            />
           </Box>
           <Box width="33%">
             <InputFileUpload setState={setState} uploadedDocuments={state.documents}/>
@@ -207,5 +227,6 @@ FormNewClient.propTypes = {
   setClientName: PropTypes.func,
   setMessageError: PropTypes.func,
   setMessageAlert: PropTypes.func,
+  setClientId: PropTypes.func,
   clientId: PropTypes.any,
 };

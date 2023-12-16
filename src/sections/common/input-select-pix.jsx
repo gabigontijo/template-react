@@ -6,19 +6,19 @@ import TextField from '@mui/material/TextField';
 
 const currencies = [
   {
-    value: 'cpf',
+    value: 1,
     label: 'CPF',
   },
   {
-    value: 'celphone',
+    value: 2,
     label: 'Celular',
   },
   {
-    value: 'email',
+    value: 3,
     label: 'Email',
   },
   {
-    value: 'random',
+    value: 4,
     label: 'Aleatório',
   },
 ];
@@ -35,7 +35,7 @@ export default function SelectPixFields({ pixType, handleChange }) {
           defaultValue=""
           helperText="Selecione o Tipo do Pix"
           name="pixType"
-          value={pixType}
+        
           onChange={handleChange}
         >
           {currencies.map((option) => (
