@@ -82,6 +82,7 @@ export default function FormStepOne({
               sx={{ width: 300 }}
               renderInput={(params) => <TextField {...params} label="Procurar cliente" />}
               onChange={(event, value) => onClientSelect(value)}
+              value={selectedClient}
             />
           </Stack>
           <Box sx={{ margin: 3 }}>

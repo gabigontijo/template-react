@@ -1,12 +1,14 @@
-import { useState } from 'react';
 import PropTypes from 'prop-types';
+import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import LoadingButton from '@mui/lab/LoadingButton';
+import Autocomplete from '@mui/material/Autocomplete';
 
+import { allPartners } from 'src/apis/partner';
 import { createClient, updateClient } from 'src/apis/client';
 
 import { clientInterface } from './view/type';
@@ -28,7 +30,20 @@ export default function FormNewClient({
   clientId,
 }) {
   const [state, setState] = useState(clientToEdit || clientInterface);
+  const [partnersList, setPartnersList] = useState([]);
   const location = useLocation();
+
+  useEffect(() => {
+    const loadAllPartners = async () => {
+      try {
+        const partners = await allPartners();
+        setPartnersList(partners);
+      } catch (error) {
+        console.log('Erro ao carregar parceiros', error);
+      }
+    };
+    loadAllPartners();
+  }, []);
 
   const handleSubmit = async () => {
     try {
@@ -50,7 +65,7 @@ export default function FormNewClient({
 
   const handleSubmitEdit = async () => {
     try {
-      const response = await updateClient(clientToEdit);
+      const response = await updateClient(clientToEdit, clientId);
       console.log('Resposta da API:', response);
       setNewUser(false);
     } catch (error) {
@@ -59,6 +74,13 @@ export default function FormNewClient({
       // setAlertError(true);
       console.log('Erro ao Editar o cliente:', error);
     }
+  };
+
+  const onPartnerSelect = (partner) => {
+    setState({
+      ...state,
+      'partner': partner,
+    });
   };
 
   const handleChange = (event) => {
@@ -123,14 +145,23 @@ export default function FormNewClient({
             />
           </Box>
           <Box width="33%">
-            <TextField
+          <Autocomplete
+                    disablePortal
+                    id="client-autocomplete"
+                    options={partnersList}
+                    getOptionLabel={(option) => option.name}
+                    sx={{ width: 300 }}
+                    renderInput={(params) => <TextField {...params} label="Procurar parceiro" />}
+                    onChange={(event, value) => onPartnerSelect(value)}
+                  />
+            {/* <TextField
               name="partner"
               label="Parceiro"
               type="text"
-              value={state.partner}
+              value={state.partner.name}
               onChange={handleChange}
               fullWidth
-            />
+            /> */}
           </Box>
           <Box width="33%">
             <InputFileUpload setState={setState} uploadedDocuments={state.documents}/>

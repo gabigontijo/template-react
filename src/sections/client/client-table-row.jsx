@@ -24,7 +24,6 @@ export default function ClientTableRow({
   index,
   id,
   name,
-  avatarUrl,
   cpf,
   phone,
   pixType,
@@ -177,7 +176,6 @@ export default function ClientTableRow({
 }
 
 ClientTableRow.propTypes = {
-  avatarUrl: PropTypes.any,
   cpf: PropTypes.any,
   phone: PropTypes.any,
   handleClick: PropTypes.func,

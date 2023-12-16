@@ -42,7 +42,7 @@ export default function FormNewPartner({
 
   const handleSubmitEdit = async () => {
     try {
-      const response = await updatePartner(partnerToEdit);
+      const response = await updatePartner(partnerToEdit, partnerId);
       console.log('Resposta da API:', response);
       setNewPartner(false);
       setAlert(true);

@@ -1,12 +1,14 @@
 import { apiFetch, getHeaders } from "..";
 
+const URlPartners = 'http://195.35.16.37:81/cashbycard/partners'
+
 export const createPartner = async (partner) => {
   const apiOpts = {
     method: 'post',
     body: JSON.stringify(partner),
     headers: getHeaders({ 'Content-Type': 'application/json' }),
   };
-  const res = await apiFetch('/partners', apiOpts);
+  const res = await apiFetch(URlPartners, apiOpts);
   return res.json();
 };
 
@@ -15,7 +17,7 @@ export const allPartners = async () => {
     method: 'get',
     headers: getHeaders({ 'Content-Type': 'application/json' }),
   };
-  const res = await apiFetch('/partners', apiOpts);
+  const res = await apiFetch(URlPartners, apiOpts);
   return res.json();
 };
 
@@ -24,17 +26,17 @@ export const partnerById = async (partnerId) => {
     method: 'get',
     headers: getHeaders({ 'Content-Type': 'application/json' }),
   };
-  const res = await apiFetch(`/partners/${partnerId}`, apiOpts);
+  const res = await apiFetch(`${URlPartners}/${partnerId}`, apiOpts);
   return res.json();
 };
 
-export const updatePartner = async (partner) => {
+export const updatePartner = async (partner, partnerId) => {
   const apiOpts = {
     method: 'put',
     body: JSON.stringify(partner),
     headers: getHeaders({ 'Content-Type': 'application/json' }),
   };
-  const res = await apiFetch(`/partners`, apiOpts);
+  const res = await apiFetch(`${URlPartners}/${partnerId}`, apiOpts);
   return res.json();
 };
 
@@ -43,7 +45,7 @@ export const deletePartner = async (partnerId) => {
     method: 'delete',
     headers: getHeaders({ 'Content-Type': 'application/json' }),
   };
-  const res = await apiFetch(`/partners/${partnerId}`, apiOpts);
+  const res = await apiFetch(`${URlPartners}/${partnerId}`, apiOpts);
   return res.json();
 };
 

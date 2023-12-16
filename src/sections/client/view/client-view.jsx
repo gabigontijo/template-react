@@ -55,7 +55,7 @@ export default function ClientPage() {
 
   const [clientId, setClientId] = useState(null);
 
-  const [clientToEdit, setClientToEdit] = useState([]);
+  const [clientToEdit, setClientToEdit] = useState();
 
   const [openDialog, setOpenDialog] = useState(false);
 
