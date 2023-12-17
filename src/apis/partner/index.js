@@ -1,6 +1,7 @@
 import { apiFetch, getHeaders } from "..";
 
-const URlPartners = 'http://195.35.16.37:81/cashbycard/partners'
+// const URlPartners = 'http://195.35.16.37:81/cashbycard/partners'
+const URlPartners = '/cashbycard/partners'
 
 export const createPartner = async (partner) => {
   const apiOpts = {
@@ -13,12 +14,15 @@ export const createPartner = async (partner) => {
 };
 
 export const allPartners = async () => {
-  const apiOpts = {
-    method: 'get',
-    headers: getHeaders({ 'Content-Type': 'application/json' }),
-  };
-  const res = await apiFetch(URlPartners, apiOpts);
-  return res.json();
+  // const apiOpts = {
+  //   method: 'get',
+  //   headers: getHeaders({ 'Content-Type': 'application/json' }),
+  // };
+  // const res = await apiFetch(URlPartners, apiOpts);
+  // return res.json();
+  const response = await fetch(URlPartners);
+  const result = await response.json();
+  return result;
 };
 
 export const partnerById = async (partnerId) => {

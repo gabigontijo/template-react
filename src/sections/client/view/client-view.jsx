@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useQuery } from 'react';
 
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
@@ -61,18 +61,27 @@ export default function ClientPage() {
 
   const [clientList, setClientList] = useState([]);
 
-  useEffect(() => {
-    const fetchClients = async () => {
-      try {
-        const response = await allClients();
-        setClientList(response.Clients);
-      } catch (error) {
-        console.error('Erro ao carregar clientes:', error);
-      }
-    };
+  const {isError, isLoading, refetchClients} = useQuery("allClients", allClients, {
+    onSuccess: (response) => {
+      setClientList(response.Clients);
+    },
+    onError: (error) => {
+      console.error('Erro ao carregar clientes:', error);
+    }
+  });
 
-    fetchClients();
-  }, []);
+  // useEffect(() => {
+  //   const fetchClients = async () => {
+  //     try {
+  //       const response = await allClients();
+  //       setClientList(response.Clients);
+  //     } catch (error) {
+  //       console.error('Erro ao carregar clientes:', error);
+  //     }
+  //   };
+
+  //   fetchClients();
+  // }, []);
 
   const handleSort = (event, id) => {
     const isAsc = orderBy === id && order === 'asc';
@@ -211,6 +220,7 @@ export default function ClientPage() {
           setMessageError={setMessageError}
           clientId={clientId}
           setClientId={setClientId}
+          refetchClients={refetchClients}
         />
       )}
 

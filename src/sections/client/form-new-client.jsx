@@ -29,6 +29,7 @@ export default function FormNewClient({
   setMessageAlert,
   clientId,
   setClientId,
+  refetchClients
 }) {
   const [state, setState] = useState(clientToEdit || clientInterface);
   const [partnersList, setPartnersList] = useState([]);
@@ -66,6 +67,7 @@ export default function FormNewClient({
       setNewUser(false);
       setAlert(true);
       setMessageAlert('cliente cadastrado com sucesso');
+      refetchClients();
     } catch (error) {
       setAlertError(true);
       setMessageError('Erro ao Cadastrar o cliente');
@@ -245,4 +247,5 @@ FormNewClient.propTypes = {
   setMessageAlert: PropTypes.func,
   setClientId: PropTypes.func,
   clientId: PropTypes.any,
+  refetchClients: PropTypes.func
 };
