@@ -1,4 +1,5 @@
-import { useState, useQuery } from 'react';
+import { useState } from 'react';
+import { useQuery } from "react-query";
 
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';

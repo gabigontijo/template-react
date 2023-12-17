@@ -31,10 +31,11 @@ export default function SelectPixFields({ pixType, handleChange }) {
           fullWidth
           id="outlined-select-currency"
           select
+          defaultValue={1}
           label="Tipo Pix"
-          defaultValue=""
           helperText="Selecione o Tipo do Pix"
           name="pixType"
+          value={pixType}
         
           onChange={handleChange}
         >
@@ -50,6 +51,6 @@ export default function SelectPixFields({ pixType, handleChange }) {
 }
 
 SelectPixFields.propTypes = {
-  pixType: PropTypes.string,
+  pixType: PropTypes.any,
   handleChange: PropTypes.func,
 };

@@ -1,5 +1,7 @@
 import PropTypes from 'prop-types';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import { useQuery } from "react-query";
+
 import { useLocation } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
@@ -35,18 +37,14 @@ export default function FormNewClient({
   const [partnersList, setPartnersList] = useState([]);
   const location = useLocation();
 
-  useEffect(() => {
-    console.log(state.pixType);
-    const loadAllPartners = async () => {
-      try {
-        const partners = await allPartners();
-        setPartnersList(partners);
-      } catch (error) {
-        console.log('Erro ao carregar parceiros', error);
-      }
-    };
-    loadAllPartners();
-  }, [state.pixType]);
+    const {isError, isLoading} = useQuery("allPartners", allPartners, {
+    onSuccess: (response) => {
+      setPartnersList(response.Partners);
+    },
+    onError: (error) => {
+      console.error('Erro ao carregar clientes:', error);
+    }
+  });
 
   const handleSubmit = async () => {
     try {
@@ -99,20 +97,20 @@ export default function FormNewClient({
   };
 
   const onPartnerSelect = (value) => {
-    setState({
-      ...state,
-      partner: {
-        ...state.partner,
-        id: value,
-      },
-    });
+    if (value && value.id) {
+      console.log('valuePartner-----------------------', value);
+      setState({
+        ...state,
+        partner: {
+          ...state.partner,
+          id: value.id,
+        },
+      });
+    }
   };
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    // const numericValue = value.replace(/\D/g, '');
-    // const x = numericValue.match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
-    // const maskedValue = !x[2] ? x[1] : `(${x[1]}) ${x[2]}${x[3] ? `-${x[3]}` : ''}`;
     setState({
       ...state,
       [name]: value,
