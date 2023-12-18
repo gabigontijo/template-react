@@ -15,6 +15,7 @@ import { createClient, updateClient } from 'src/apis/client';
 import MaskFields from '../common/mask-field';
 import SelectPixFields from '../common/input-select-pix';
 import InputFileUpload from '../common/input-upload-file';
+import { clientInterface } from './view/type';
 
 // ----------------------------------------------------------------------
 
@@ -65,6 +66,7 @@ export default function FormNewClient({
       setAlert(true);
       setMessageAlert('Cliente cadastrado com sucesso');
       refetchClients();
+      setStateClient(clientInterface)
     } catch (error) {
       // eslint-disable-next-line no-debugger
       debugger;
@@ -94,6 +96,7 @@ export default function FormNewClient({
       console.log('Resposta da API:', response);
       setNewUser(false);
       setClientId(null);
+      setStateClient(clientInterface)
       refetchClients();
     } catch (error) {
       setAlertError(true);
