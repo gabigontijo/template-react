@@ -96,6 +96,8 @@ export default function FormNewClient({
       console.log('Resposta da API:', response);
       setNewUser(false);
       setClientId(null);
+      setAlert(true);
+      setMessageAlert('Cliente editado com sucesso');
       setStateClient(clientInterface)
       refetchClients();
     } catch (error) {

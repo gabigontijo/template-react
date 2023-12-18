@@ -54,8 +54,6 @@ export default function ClientPage() {
 
   const [messageAlert, setMessageAlert] = useState('');
 
-  const [editClient, setEditClient] = useState(false);
-
   const [clientId, setClientId] = useState(null);
 
   const [openDialog, setOpenDialog] = useState(false);
@@ -127,7 +125,6 @@ export default function ClientPage() {
 
   const handleCloseAdd = () => {
     setNewUser(false);
-    setEditClient(false);
     setClientId(null);
     setStateClient(clientInterface);
   };
@@ -186,14 +183,14 @@ export default function ClientPage() {
               Novo Cliente
             </Button>
           )}
-          {(newUser || editClient) && (
+          {(newUser ) && (
             <Button color="inherit" onClick={handleCloseAdd}>
               <CloseIcon />
             </Button>
           )}
         </Stack>
       </Stack>
-      {(newUser || editClient) && (
+      {(newUser ) && (
         <FormNewClient
           setNewUser={setNewUser}
           setAlert={setAlert}
@@ -268,7 +265,6 @@ export default function ClientPage() {
                       documents={row.documents}
                       selected={selected.some((item) => item.name === row.name)}
                       handleClick={(event) => handleClick(event, row.name, row.id)}
-                      setEditClient={setEditClient}
                       setClientId={setClientId}
                       setStateClient={setStateClient}
                       setNewUser={setNewUser}

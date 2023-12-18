@@ -31,7 +31,6 @@ export default function ClientTableRow({
   partner,
   documents,
   handleClick,
-  setEditClient,
   setClientId,
   setStateClient,
   setAlert,
@@ -57,15 +56,13 @@ export default function ClientTableRow({
   const handleEdit = async () => {
     try {
       // eslint-disable-next-line no-debugger
-      debugger;
+      // debugger;
       const { Client } = await clientById(id);
-      setEditClient(true);
       setNewUser(true);
       setClientId(id);
       setStateClient(Client);
       setOpen(null);
     } catch (error) {
-      // eslint-disable-next-line
       console.log('Erro ao editar o cliente:', error);
     }
   };
@@ -185,7 +182,6 @@ ClientTableRow.propTypes = {
   documents: PropTypes.any,
   selected: PropTypes.any,
   id: PropTypes.any,
-  setEditClient: PropTypes.func,
   setClientId: PropTypes.func,
   setStateClient: PropTypes.func,
   setAlertError: PropTypes.func,
