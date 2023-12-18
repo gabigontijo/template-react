@@ -11,6 +11,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
+import CircularProgress from '@mui/material/CircularProgress';
 
 import { clients } from 'src/_mock/clients';
 import { allClients, deleteClient } from 'src/apis/client';
@@ -19,6 +20,7 @@ import AlertNotifications from 'src/layouts/dashboard/common/alert-notifications
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 
+import { clientInterface } from './type';
 import FormNewClient from '../form-new-client';
 import ClientTableRow from '../client-table-row';
 import TableNoData from '../../common/table-no-data';
@@ -56,13 +58,13 @@ export default function ClientPage() {
 
   const [clientId, setClientId] = useState(null);
 
-  const [clientToEdit, setClientToEdit] = useState();
-
   const [openDialog, setOpenDialog] = useState(false);
 
   const [clientList, setClientList] = useState([]);
 
-  const {isError, isLoading, refetchClients} = useQuery("allClients", allClients, {
+  const [stateClient, setStateClient] = useState( clientInterface);
+
+  const {isLoading, refetch: refetchClients} = useQuery("allClients", allClients, {
     onSuccess: (response) => {
       setClientList(response.Clients);
     },
@@ -70,19 +72,6 @@ export default function ClientPage() {
       console.error('Erro ao carregar clientes:', error);
     }
   });
-
-  // useEffect(() => {
-  //   const fetchClients = async () => {
-  //     try {
-  //       const response = await allClients();
-  //       setClientList(response.Clients);
-  //     } catch (error) {
-  //       console.error('Erro ao carregar clientes:', error);
-  //     }
-  //   };
-
-  //   fetchClients();
-  // }, []);
 
   const handleSort = (event, id) => {
     const isAsc = orderBy === id && order === 'asc';
@@ -140,7 +129,7 @@ export default function ClientPage() {
     setNewUser(false);
     setEditClient(false);
     setClientId(null);
-    setClientToEdit();
+    setStateClient(clientInterface);
   };
 
   const dataFiltered = applyFilter({
@@ -163,6 +152,7 @@ export default function ClientPage() {
       setMessageAlert('Cliente deletado com sucesso');
       setOpenDialog(false);
       setSelected([]);
+      refetchClients();
     } catch (error) {
       console.error('Erro ao excluir clientes:', error);
       setAlertError(true);
@@ -178,15 +168,7 @@ export default function ClientPage() {
     <Container>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
         <Typography variant="h4">Clientes</Typography>
-        {/* <div>
-          {test.map((client, index) => (
-            <>
-            <p> teste</p>
-            <p key={index}>{client.Name}</p>
-            </>
-          ))}
-          <>
-        </div> */}
+        {isLoading && <CircularProgress /> }
         <Stack
           direction="row"
           alignItems="center"
@@ -216,12 +198,13 @@ export default function ClientPage() {
           setNewUser={setNewUser}
           setAlert={setAlert}
           setAlertError={setAlertError}
-          clientToEdit={clientToEdit}
           setMessageAlert={setMessageAlert}
           setMessageError={setMessageError}
           clientId={clientId}
           setClientId={setClientId}
           refetchClients={refetchClients}
+          setStateClient={setStateClient}
+          stateClient={stateClient}
         />
       )}
 
@@ -283,17 +266,17 @@ export default function ClientPage() {
                       pixKey={row.pixKey}
                       partner={row.partner.name}
                       documents={row.documents}
-                      // avatarUrl={row.avatarUrl}
                       selected={selected.some((item) => item.name === row.name)}
                       handleClick={(event) => handleClick(event, row.name, row.id)}
                       setEditClient={setEditClient}
                       setClientId={setClientId}
-                      setClientToEdit={setClientToEdit}
+                      setStateClient={setStateClient}
                       setNewUser={setNewUser}
                       setAlert={setAlert}
                       setAlertError={setAlertError}
                       setMessageError={setMessageError}
                       setMessageAlert={setMessageAlert}
+                      refetchClients={refetchClients}
                     />
                   ))}
 

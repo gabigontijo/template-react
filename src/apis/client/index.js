@@ -8,8 +8,8 @@ export const createClient = async (client) => {
   const apiOpts = {
     method: 'post',
     body: JSON.stringify(client),
-    headers: { 
-      'Content-Type': 'application/json'
+    headers: {
+      'Content-Type': 'application/json',
     },
   };
   const res = await apiFetch(URlClients, apiOpts);
@@ -22,11 +22,12 @@ export const allClients = async () => {
   //   headers: getHeaders({ 'Content-Type': 'application/json' }),
 
   // };
-  // // eslint-disable-next-line no-debugger
-  // debugger;
+
   // const res = await apiFetch('http://195.35.16.37:3000/clients', apiOpts);
   // const result = await res.json();
   // return result;
+  // eslint-disable-next-line no-debugger
+  // debugger;
   const response = await fetch(URlClients);
   const result = await response.json();
   return result;

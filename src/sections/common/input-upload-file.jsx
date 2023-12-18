@@ -48,30 +48,31 @@ export default function InputFileUpload({ setState, uploadedDocuments }) {
 
   return (
     <List sx={{ padding: 0 }}>
-      <ListItem alignItems="flex-start">
-        <ListItemText primary="Documentos" />
+      <ListItem alignItems="flex-start" sx={{ mb: 2 , display: 'flex', flexDirection:{md: 'row', xs: 'column', sm:'column'}, justifyContent: 'center'}}>
+        <ListItemText primary="Documentos" sx={{ mr: 2, mb: {md: 0, xs: 2, sm: 1} }} />
         <Button component="label" variant="contained" startIcon={<CloudUploadIcon />}>
-          Carregar arquivos
+          Carregar arquivos 
           <VisuallyHiddenInput type="file" onChange={handleFileChange} />
         </Button>
       </ListItem>
       <ListItem>
-        <ul style={{ listStyle: 'initial' }}>
-          {Array.isArray(uploadedDocuments) &&
-            uploadedDocuments.map((file, index) => (
-              <li key={index}>
-                {file.name}
-                <Button
-                  size="small"
-                  color="inherit"
-                  onClick={() => handleRemoveFile(index)}
-                  whiteSpace='nowrap'
-                >
-                   <DeleteIcon  sx={{width: '20px'}} />
-                </Button>
-              </li>
-            ))}
-        </ul>
+        <List>
+      {Array.isArray(uploadedDocuments) &&
+        uploadedDocuments.map((file, index) => (
+          <ListItem key={index} alignItems="flex-start" >
+            <ListItemText primary={file.name.length > 10 ? `${file.name.substring(0, 10)}...` : file.name} />
+            <Button
+              size="small"
+              color="inherit"
+              onClick={() => handleRemoveFile(index)}
+              whiteSpace='nowrap'
+              alignItems='center'
+            >
+              <DeleteIcon sx={{ width: '20px' }} />
+            </Button>
+          </ListItem>
+        ))}
+    </List>
       </ListItem>
     </List>
   );

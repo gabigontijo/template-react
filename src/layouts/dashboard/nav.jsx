@@ -5,8 +5,8 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Drawer from '@mui/material/Drawer';
 import Avatar from '@mui/material/Avatar';
+import { alpha } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-import { alpha, useTheme } from '@mui/material/styles';
 import ListItemButton from '@mui/material/ListItemButton';
 
 import { usePathname } from 'src/routes/hooks';
@@ -26,7 +26,6 @@ import navConfig from './config-navigation';
 
 export default function Nav({ openNav, onCloseNav }) {
   const pathname = usePathname();
-  const themeColor = useTheme();
 
   const upLg = useResponsive('up', 'lg');
 
@@ -50,8 +49,8 @@ export default function Nav({ openNav, onCloseNav }) {
         bgcolor: (theme) => alpha(theme.palette.grey[500], 0.12),
       }}
     >
-      <Avatar  sx={{ bgcolor: themeColor.palette.grey[100] }}
-      src='/assets/images/outline_account_circle_black_24dp.png' />
+      <Avatar 
+      src='/assets/images/user-adm.png' />
 
       <Box sx={{ ml: 2 }}>
         <Typography variant="subtitle2">{account.displayName}</Typography>

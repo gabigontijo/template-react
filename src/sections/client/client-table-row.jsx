@@ -33,12 +33,13 @@ export default function ClientTableRow({
   handleClick,
   setEditClient,
   setClientId,
-  setClientToEdit,
+  setStateClient,
   setAlert,
   setAlertError,
   setNewUser,
   setMessageAlert,
   setMessageError,
+  refetchClients,
 }) {
   const [open, setOpen] = useState(null);
 
@@ -55,19 +56,16 @@ export default function ClientTableRow({
 
   const handleEdit = async () => {
     try {
-      const response = await clientById(id);
+      // eslint-disable-next-line no-debugger
+      debugger;
+      const { Client } = await clientById(id);
       setEditClient(true);
       setNewUser(true);
       setClientId(id);
-      setClientToEdit(response.Client);
+      setStateClient(Client);
       setOpen(null);
-      console.log(id);
     } catch (error) {
       // eslint-disable-next-line
-      setNewUser(true); //somente para ver o resultado depois remover
-      setEditClient(true);
-      setClientId(id);
-      setOpen(null);
       console.log('Erro ao editar o cliente:', error);
     }
   };
@@ -79,6 +77,7 @@ export default function ClientTableRow({
       setOpenDialog(false);
       setAlert(true);
       setMessageAlert('Cliente deletado com sucesso');
+      refetchClients();
     } catch (error) {
       setOpenDialog(false);
       setAlertError(true);
@@ -188,11 +187,12 @@ ClientTableRow.propTypes = {
   id: PropTypes.any,
   setEditClient: PropTypes.func,
   setClientId: PropTypes.func,
-  setClientToEdit: PropTypes.func,
+  setStateClient: PropTypes.func,
   setAlertError: PropTypes.func,
   setNewUser: PropTypes.func,
   setAlert: PropTypes.func,
   setMessageError: PropTypes.func,
   setMessageAlert: PropTypes.func,
   index: PropTypes.any,
+  refetchClients: PropTypes.func,
 };

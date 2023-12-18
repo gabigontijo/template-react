@@ -1,7 +1,6 @@
-import PropTypes from 'prop-types';
 import { useState } from 'react';
+import PropTypes from 'prop-types';
 import { useQuery } from "react-query";
-
 import { useLocation } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
@@ -13,7 +12,6 @@ import Autocomplete from '@mui/material/Autocomplete';
 import { allPartners } from 'src/apis/partner';
 import { createClient, updateClient } from 'src/apis/client';
 
-import { clientInterface } from './view/type';
 import MaskFields from '../common/mask-field';
 import SelectPixFields from '../common/input-select-pix';
 import InputFileUpload from '../common/input-upload-file';
@@ -24,20 +22,20 @@ export default function FormNewClient({
   setNewUser,
   setAlert,
   setAlertError,
-  clientToEdit,
   setClientName,
   setNextStep,
   setMessageError,
   setMessageAlert,
   clientId,
   setClientId,
-  refetchClients
+  refetchClients,
+  stateClient,
+  setStateClient
 }) {
-  const [state, setState] = useState(clientToEdit || clientInterface);
   const [partnersList, setPartnersList] = useState([]);
   const location = useLocation();
 
-    const {isError, isLoading} = useQuery("allPartners", allPartners, {
+  useQuery("allPartners", allPartners, {
     onSuccess: (response) => {
       setPartnersList(response.Partners);
     },
@@ -49,13 +47,13 @@ export default function FormNewClient({
   const handleSubmit = async () => {
     try {
       const bodyClient = {
-        name: state.name,
-        pixType: state.pixType,
-        pixKey: state.pixKey,
-        partnerId: Number(state.partner.id),
-        phone: state.phone,
-        cpf: state.cpf,
-        documenst: state.documenst,
+        name: stateClient.name,
+        pixType: stateClient.pixType,
+        pixKey: stateClient.pixKey,
+        partnerId: Number(stateClient.partner.id),
+        phone: stateClient.phone,
+        cpf: stateClient.cpf,
+        documents: '',
       };
       const response = await createClient(bodyClient);
       if (location.pathname === '/emprestimo') {
@@ -63,10 +61,13 @@ export default function FormNewClient({
         setNextStep(true);
       }
       setNewUser(false);
+
       setAlert(true);
-      setMessageAlert('cliente cadastrado com sucesso');
+      setMessageAlert('Cliente cadastrado com sucesso');
       refetchClients();
     } catch (error) {
+      // eslint-disable-next-line no-debugger
+      debugger;
       setAlertError(true);
       setMessageError('Erro ao Cadastrar o cliente');
       console.log('Erro ao Cadastrar o cliente:', error);
@@ -75,23 +76,29 @@ export default function FormNewClient({
 
   const handleSubmitEdit = async () => {
     try {
+      // eslint-disable-next-line no-debugger
+      debugger;
+      const nonEmptyState = Object.fromEntries(
+        Object.entries(stateClient).map(([key, value]) => [key, value || ''])
+      );
       const bodyClientEdit = {
-        name: clientToEdit.name,
-        pixType: clientToEdit.pixType,
-        pixKey: clientToEdit.pixKey,
-        partnerId: Number(clientToEdit.partner.id),
-        phone: clientToEdit.phone,
-        cpf: clientToEdit.cpf,
-        documenst: clientToEdit.documenst,
+        name: nonEmptyState.name,
+        pixType: nonEmptyState.pixType,
+        pixKey: nonEmptyState.pixKey,
+        partnerId: Number(nonEmptyState.partner.id),
+        phone: nonEmptyState.phone,
+        cpf: nonEmptyState.cpf,
+        documents: '',
       };
       const response = await updateClient(bodyClientEdit, clientId);
       console.log('Resposta da API:', response);
       setNewUser(false);
       setClientId(null);
+      refetchClients();
     } catch (error) {
       setAlertError(true);
       setMessageError('Erro ao Editar o cliente');
-      setClientId(null);
+      setNewUser(true);
       console.log('Erro ao Editar o cliente:', error);
     }
   };
@@ -99,10 +106,10 @@ export default function FormNewClient({
   const onPartnerSelect = (value) => {
     if (value && value.id) {
       console.log('valuePartner-----------------------', value);
-      setState({
-        ...state,
+      setStateClient({
+        ...stateClient,
         partner: {
-          ...state.partner,
+          ...stateClient.partner,
           id: value.id,
         },
       });
@@ -111,96 +118,88 @@ export default function FormNewClient({
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setState({
-      ...state,
+    setStateClient({
+      ...stateClient,
       [name]: value,
     });
   };
 
-  // const handleChangePartnerId = (event) => {
-  //   const { value } = event.target;
-  //   setState({
-  //     ...state,
-  //     partner: {
-  //       ...state.partner,
-  //       id: value,
-  //     },
-  //   });
-  // };
-
   return (
     <>
-      <Stack spacing={2}>
-        <Stack direction="row" spacing={2}>
+      <Stack spacing={{ xs: 1, sm: 2 }}>
+        <Stack direction="row" spacing={{ xs: 1, sm: 2 }}>
           <Box width="100%">
             <TextField
               name="name"
               label="Nome Completo"
               type="text"
-              value={state.name}
+              value={stateClient.name}
               onChange={handleChange}
               fullWidth
             />
           </Box>
         </Stack>
-        <Stack direction="row" spacing={2}>
-          <Box width="33%">
+        <Stack spacing={{ xs: 1, sm: 2 }} direction="row" useFlexGap sx={{
+          flexWrap: {
+            xs: 'wrap',
+            sm: 'nowrap',
+          },
+        }}>
+          <Box width={{ xs: '100%', md: '30%' }}>
             <MaskFields
               mask="(99) 99999-9999"
               name="phone"
               label="Telefone"
               type="text"
-              value={state.phone}
+              value={stateClient.phone}
               handleChange={handleChange}
             />
           </Box>
-          <Box width="33%">
+          <Box width={{ xs: '100%', md: '30%' }}>
             <MaskFields
               mask="999.999.999-99"
               name="cpf"
               label="CPF"
               type="text"
-              value={state.cpf}
+              value={stateClient.cpf}
               handleChange={handleChange}
             />
           </Box>
-          <Box width="66%">
-            <SelectPixFields pixType={state.pixType} handleChange={handleChange} />
+          <Box width={{ xs: '100%', md: '40%' }}>
+            <SelectPixFields pixType={stateClient.pixType} handleChange={handleChange} />
           </Box>
         </Stack>
 
-        <Stack direction="row" spacing={2}>
-          <Box width="33%">
+        <Stack spacing={{ xs: 1, sm: 2 }} direction="row" useFlexGap sx={{
+          flexWrap: {
+            xs: 'wrap',
+            sm: 'nowrap',
+          },
+        }}>
+          <Box width={{ xs: '100%', md: '25%' }}>
             <TextField
               name="pixKey"
               label="Chave Pix"
               type="text"
-              value={state.pixKey}
+              value={stateClient.pixKey}
               onChange={handleChange}
               fullWidth
             />
           </Box>
-          <Box width="33%">
+          <Box width={{ xs: '100%', md: '40%' }}>
             <Autocomplete
-                    disablePortal
-                    id="client-autocomplete"
-                    options={partnersList}
-                    getOptionLabel={(option) => option.name}
-                    sx={{ width: 300 }}
-                    renderInput={(params) => <TextField {...params} label="Procurar parceiro" />}
-                    onChange={(event, value) => onPartnerSelect(value)}
-                  />
-            {/* <TextField
-              name="partner"
-              label="Parceiro"
-              type="text"
-              value={state.partner.id}
-              onChange={handleChangePartnerId}
-              fullWidth
-            /> */}
+              disablePortal
+              id="client-autocomplete"
+              options={partnersList}
+              getOptionLabel={(option) => option.name}
+              sx={{ width: '100%' }}
+              value={partnersList.find((partner) => partner.id === stateClient.partner.id) || null}
+              renderInput={(params) => <TextField {...params} label="Procurar parceiro" />}
+              onChange={(event, value) => onPartnerSelect(value)}
+            />
           </Box>
-          <Box width="33%">
-            <InputFileUpload setState={setState} uploadedDocuments={state.documents} />
+          <Box width={{ xs: '100%', md: '33%' }}>
+            <InputFileUpload setState={setStateClient} uploadedDocuments={stateClient.documents} />
           </Box>
         </Stack>
       </Stack>
@@ -238,12 +237,13 @@ FormNewClient.propTypes = {
   setNewUser: PropTypes.func,
   setAlert: PropTypes.func,
   setAlertError: PropTypes.func,
-  clientToEdit: PropTypes.any,
   setNextStep: PropTypes.func,
   setClientName: PropTypes.func,
   setMessageError: PropTypes.func,
   setMessageAlert: PropTypes.func,
   setClientId: PropTypes.func,
   clientId: PropTypes.any,
-  refetchClients: PropTypes.func
+  refetchClients: PropTypes.func,
+  stateClient: PropTypes.any,
+  setStateClient: PropTypes.func
 };
