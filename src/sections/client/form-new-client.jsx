@@ -13,9 +13,9 @@ import { allPartners } from 'src/apis/partner';
 import { createClient, updateClient } from 'src/apis/client';
 
 import MaskFields from '../common/mask-field';
+import { clientInterface } from './view/type';
 import SelectPixFields from '../common/input-select-pix';
 import InputFileUpload from '../common/input-upload-file';
-import { clientInterface } from './view/type';
 
 // ----------------------------------------------------------------------
 

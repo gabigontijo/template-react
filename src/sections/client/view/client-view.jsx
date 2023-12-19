@@ -13,7 +13,6 @@ import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 import CircularProgress from '@mui/material/CircularProgress';
 
-import { clients } from 'src/_mock/clients';
 import { allClients, deleteClient } from 'src/apis/client';
 import AlertNotifications from 'src/layouts/dashboard/common/alert-notifications';
 
@@ -81,7 +80,7 @@ export default function ClientPage() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = clients.map((n) => ({
+      const newSelecteds = clientList.map((n) => ({
         name: n.name,
         id: n.id,
       }));
@@ -183,14 +182,14 @@ export default function ClientPage() {
               Novo Cliente
             </Button>
           )}
-          {(newUser ) && (
+          {newUser && (
             <Button color="inherit" onClick={handleCloseAdd}>
               <CloseIcon />
             </Button>
           )}
         </Stack>
       </Stack>
-      {(newUser ) && (
+      {newUser && (
         <FormNewClient
           setNewUser={setNewUser}
           setAlert={setAlert}
@@ -278,7 +277,7 @@ export default function ClientPage() {
 
                 <TableEmptyRows
                   height={77}
-                  emptyRows={emptyRows(page, rowsPerPage, clients.length)}
+                  emptyRows={emptyRows(page, rowsPerPage, clientList.length)}
                 />
 
                 {notFound && <TableNoData query={filterName} />}
@@ -290,7 +289,7 @@ export default function ClientPage() {
         <TablePagination
           page={page}
           component="div"
-          count={clients.length}
+          count={clientList.length}
           rowsPerPage={rowsPerPage}
           onPageChange={handleChangePage}
           rowsPerPageOptions={[5, 10, 25]}

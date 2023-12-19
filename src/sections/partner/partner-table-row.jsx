@@ -26,16 +26,16 @@ export default function PartnerTableRow({
   pixType,
   pixKey,
   email,
-  adress,
+  address,
   handleClick,
-  setEditPartner,
   setPartnerId,
-  setPartnerToEdit,
   setAlertError,
   setAlert,
   setNewPartner,
   setMessageAlert,
   setMessageError,
+  setStatePartner,
+  refetchPartners,
 }) {
   const [open, setOpen] = useState(null);
 
@@ -51,19 +51,14 @@ export default function PartnerTableRow({
 
   const handleEdit = async () => {
     try {
-      const response = await partnerById(id);
-      setEditPartner(true);
+      console.log(id)
+      const { Partner } = await partnerById(id);
       setNewPartner(true);
       setPartnerId(id);
-      setPartnerToEdit(response);
+      setStatePartner(Partner);
       setOpen(null);
       console.log(id);
     } catch (error) {
-      // eslint-disable-next-line
-      setNewPartner(true); //somente para ver o resultado depois remover
-      setEditPartner(true);
-      setPartnerId(id);
-      setOpen(null);
       console.log('Erro ao editar o parceiro:', error);
     }
   };
@@ -75,6 +70,7 @@ export default function PartnerTableRow({
       setOpenDialog(false);
       setAlert(true);
       setMessageAlert('Parceiro deletado com sucesso')
+      refetchPartners();
     } catch (error) {
       setOpenDialog(false);
       setAlertError(true);
@@ -111,7 +107,7 @@ export default function PartnerTableRow({
 
         <TableCell>{pixKey}</TableCell>
 
-        <TableCell>{adress}</TableCell>
+        <TableCell>{address}</TableCell>
 
         <TableCell align="right">
           <IconButton onClick={handleOpenMenu}>
@@ -168,16 +164,16 @@ PartnerTableRow.propTypes = {
   name: PropTypes.any,
   pixType: PropTypes.any,
   pixKey: PropTypes.any,
-  adress: PropTypes.any,
+  address: PropTypes.any,
   email: PropTypes.any,
   selected: PropTypes.any,
   id: PropTypes.any,
-  setEditPartner: PropTypes.func,
   setPartnerId: PropTypes.func,
-  setPartnerToEdit: PropTypes.func,
   setNewPartner: PropTypes.func,
   setAlertError: PropTypes.func,
   setAlert: PropTypes.func,
   setMessageAlert: PropTypes.func,
   setMessageError: PropTypes.func,
+  setStatePartner: PropTypes.func,
+  refetchPartners: PropTypes.func,
 };

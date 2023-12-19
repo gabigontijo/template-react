@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useQuery } from "react-query";
 
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
@@ -10,14 +11,15 @@ import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
+import CircularProgress from '@mui/material/CircularProgress';
 
-import { partners } from 'src/_mock/partner';
-import { deletePartner } from 'src/apis/partner';
+import { allPartners, deletePartner } from 'src/apis/partner';
 import AlertNotifications from 'src/layouts/dashboard/common/alert-notifications';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 
+import { partnerInterface } from './type';
 import FormNewPartner from '../form-new-partner';
 import PartnerTableRow from '../partner-table-row';
 import TableNoData from '../../common/table-no-data';
@@ -51,13 +53,22 @@ export default function PartnerPage() {
 
   const [messageAlert, setMessageAlert] = useState('');
 
-  const [editPartner, setEditPartner] = useState(false);
-
   const [partnerId, setPartnerId] = useState(null);
 
-  const [partnerToEdit, setPartnerToEdit] = useState({});
+  const [partnerList, setPartnerList] = useState([]);
+
+  const [statePartner, setStatePartner] = useState(partnerInterface);
 
   const [openDialog, setOpenDialog] = useState(false);
+
+  const {isLoading, refetch: refetchPartners} = useQuery("allPartners", allPartners, {
+    onSuccess: (response) => {
+      setPartnerList(response.Partners);
+    },
+    onError: (error) => {
+      console.error('Erro ao carregar parceiros:', error);
+    }
+  });
 
   const handleSort = (event, id) => {
     const isAsc = orderBy === id && order === 'asc';
@@ -69,7 +80,7 @@ export default function PartnerPage() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = partners.map((n) => ({
+      const newSelecteds = partnerList.map((n) => ({
         name: n.name,
         id: n.id,
       }));
@@ -113,11 +124,12 @@ export default function PartnerPage() {
 
   const handleCloseAdd = () => {
     setNewPartner(false);
-    setEditPartner(false);
+    setPartnerId(null);
+    setStatePartner(partnerInterface);
   };
 
   const dataFiltered = applyFilter({
-    inputData: partners,
+    inputData: partnerList,
     comparator: getComparator(order, orderBy),
     filterName,
     field: 'name',
@@ -126,8 +138,8 @@ export default function PartnerPage() {
   const handleDelete = async () => {
     try {
       const results = await Promise.all(
-        selected.map(async (client) => {
-          const result = await deletePartner(client.id);
+        selected.map(async (partner) => {
+          const result = await deletePartner(partner.id);
           return result;
         })
       );
@@ -136,6 +148,7 @@ export default function PartnerPage() {
       setMessageAlert('Parceiro deletado com sucesso');
       setOpenDialog(false);
       setSelected([]);
+      refetchPartners();
     } catch (error) {
       console.error('Erro ao excluir parceiros:', error);
       setAlertError(true);
@@ -151,6 +164,7 @@ export default function PartnerPage() {
     <Container>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
         <Typography variant="h4">Parceiros</Typography>
+        {isLoading && <CircularProgress /> }
         <Stack
           direction="row"
           alignItems="center"
@@ -168,26 +182,29 @@ export default function PartnerPage() {
               Novo Parceiro
             </Button>
           )}
-          {(newPartner || editPartner) && (
+          {newPartner && (
             <Button color="inherit" onClick={handleCloseAdd}>
               <CloseIcon />
             </Button>
           )}
         </Stack>
       </Stack>
-      {(newPartner || editPartner) && (
+      {newPartner && (
         <FormNewPartner
           setNewPartner={setNewPartner}
           setAlert={setAlert}
           setAlertError={setAlertError}
-          partnerToEdit={partnerToEdit}
           setMessageAlert={setMessageAlert}
           setMessageError={setMessageError}
           partnerId={partnerId}
+          setPartnerId={setPartnerId}
+          refetchPartners={refetchPartners}
+          setStatePartner={setStatePartner}
+          statePartner={statePartner}
         />
       )}
       {alert && (
-        <AlertNotifications sendAlert={alert} setSendAlert={setAlert} message={messageAlert} />
+        <AlertNotifications alert={alert} setAlert={setAlert} message={messageAlert} />
       )}
       {alertError && (
         <AlertNotifications
@@ -215,7 +232,7 @@ export default function PartnerPage() {
               <ComoonTableHead
                 order={order}
                 orderBy={orderBy}
-                rowCount={partners.length}
+                rowCount={partnerList.length}
                 numSelected={selected.length}
                 onRequestSort={handleSort}
                 onSelectAllClick={handleSelectAllClick}
@@ -226,7 +243,7 @@ export default function PartnerPage() {
                   { id: 'cpf', label: 'CPF' },
                   { id: 'pixType', label: 'Tipo Pix' },
                   { id: 'pixKey', label: 'Chave Pix' },
-                  { id: 'adress', label: 'Endereço' },
+                  { id: 'address', label: 'Endereço' },
                   { id: '' },
                 ]}
               />
@@ -236,30 +253,30 @@ export default function PartnerPage() {
                   .map((row) => (
                     <PartnerTableRow
                       key={row.id}
+                      id={row.id}
                       name={row.name}
                       email={row.email}
                       phone={row.phone}
                       cpf={row.cpf}
                       pixType={row.pixType}
                       pixKey={row.pixKey}
-                      adress={row.adress}
-                      avatarUrl={row.avatarUrl}
+                      address={row.address}
                       selected={selected.some((item) => item.name === row.name)}
                       handleClick={(event) => handleClick(event, row.name, row.id)}
-                      setEditClient={setEditPartner}
-                      setClientId={setPartnerId}
-                      setClientToEdit={setPartnerToEdit}
+                      setPartnerId={setPartnerId}
                       setNewPartner={setNewPartner}
                       setAlert={setAlert}
                       setAlertError={setAlertError}
                       setMessageAlert={setMessageAlert}
                       setMessageError={setMessageError}
+                      refetchPartners={refetchPartners}
+                      setStatePartner={setStatePartner}
                     />
                   ))}
 
                 <TableEmptyRows
                   height={77}
-                  emptyRows={emptyRows(page, rowsPerPage, partners.length)}
+                  emptyRows={emptyRows(page, rowsPerPage, partnerList.length)}
                 />
 
                 {notFound && <TableNoData query={filterName} />}
@@ -271,7 +288,7 @@ export default function PartnerPage() {
         <TablePagination
           page={page}
           component="div"
-          count={partners.length}
+          count={partnerList.length}
           rowsPerPage={rowsPerPage}
           onPageChange={handleChangePage}
           rowsPerPageOptions={[5, 10, 25]}
