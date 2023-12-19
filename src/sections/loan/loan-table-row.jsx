@@ -30,8 +30,8 @@ export default function LoanTableRow({
   partnerProfit,
   netProfit,
   handleClick,
-  setEditLoan,
-  setLoanToEdit,
+  setLoanId,
+  setStateLoan,
   setAlertError,
   setAlert,
   setNewLoan,
@@ -53,15 +53,13 @@ export default function LoanTableRow({
   const handleEdit = async () => {
     try {
       const response = await loanById(id);
-      setEditLoan(true);
       setNewLoan(true);
-      setLoanToEdit(response);
+      setStateLoan(response);
       setOpen(null);
       console.log(id);
     } catch (error) {
       // eslint-disable-next-line
       setNewLoan(true); //somente para ver o resultado depois remover
-      setEditLoan(true);
       setOpen(null);
       console.log('Erro ao editar o empréstimo:', error);
     }
@@ -178,8 +176,8 @@ LoanTableRow.propTypes = {
   selected: PropTypes.any,
   handleClick: PropTypes.func,
   setNewLoan: PropTypes.func,
-  setLoanToEdit: PropTypes.func,
-  setEditLoan: PropTypes.func,
+  setStateLoan: PropTypes.func,
+  setLoanId: PropTypes.func,
   setAlertError: PropTypes.func,
   setAlert: PropTypes.func,
   setMessageAlert: PropTypes.func,

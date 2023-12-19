@@ -8,8 +8,8 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { createPartner, updatePartner } from 'src/apis/partner';
 
 import MaskFields from '../common/mask-field';
-import SelectPixFields from '../common/input-select-pix';
 import { partnerInterface } from './view/type';
+import SelectPixFields from '../common/input-select-pix';
 
 // ----------------------------------------------------------------------
 

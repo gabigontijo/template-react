@@ -35,6 +35,6 @@ export default function SelectNumberOfCardsFields({numberOfCards, handleNumberOf
 }
 
 SelectNumberOfCardsFields.propTypes = {
-  numberOfCards: PropTypes.string,
+  numberOfCards: PropTypes.any,
   handleNumberOfCards: PropTypes.func,
 };

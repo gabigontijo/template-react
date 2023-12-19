@@ -1,4 +1,5 @@
 import { useState } from 'react';
+// import { useQuery } from "react-query";
 
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
@@ -13,6 +14,7 @@ import TablePagination from '@mui/material/TablePagination';
 
 import { loans } from 'src/_mock/loan';
 import { deleteLoan } from 'src/apis/loan';
+// import { allLoans, deleteLoan } from 'src/apis/loan';
 import AlertNotifications from 'src/layouts/dashboard/common/alert-notifications';
 
 import Iconify from 'src/components/iconify';
@@ -52,15 +54,23 @@ export default function LoanPage() {
 
   const [messageAlert, setMessageAlert] = useState('');
 
-  const [editLoan, setEditLoan] = useState(false);
-
   const [loanId, setLoanId] = useState(null);
 
-  const [loanToEdit, setLoanToEdit] = useState();
-
-  const [loan, setLoan] = useState(loanToEdit || loanInterface);
+  const [stateLoan, setStateLoan] = useState(loanInterface);
 
   const [openDialog, setOpenDialog] = useState(false);
+
+  // const [loanList, setLoanList] = useState([]);
+
+
+  // const {isLoading, refetch: refetchLoans} = useQuery("allLoans", allLoans, {
+  //   onSuccess: (response) => {
+  //     setLoanList(response.Loans);
+  //   },
+  //   onError: (error) => {
+  //     console.error('Erro ao carregar empréstimos:', error);
+  //   }
+  // });
 
   const handleSort = (event, id) => {
     const isAsc = orderBy === id && order === 'asc';
@@ -116,6 +126,8 @@ export default function LoanPage() {
 
   const handleCloseAdd = () => {
     setNewLoan(false);
+    setLoanId(null);
+    setStateLoan(loanInterface)
   };
 
   const dataFiltered = applyFilter({
@@ -138,6 +150,7 @@ export default function LoanPage() {
       setMessageAlert('Empréstimo excluído com sucesso')
       setOpenDialog(false);
       setSelected([]);
+      // refetchLoans();
     } catch (error) {
       console.error('Erro ao excluir empréstimos:', error);
       setAlertError(true);
@@ -172,25 +185,27 @@ export default function LoanPage() {
               Novo Empréstimo
             </Button>
           )}
-          {(newLoan || editLoan) && (
+          {newLoan && (
             <Button color="inherit" onClick={handleCloseAdd}>
               <CloseIcon />
             </Button>
           )}
         </Stack>
       </Stack>
-      {(newLoan || editLoan) && (
+      {newLoan && (
         <FormNewLoan
           filterName={filterName}
           onFilterName={handleFilterByName}
+          setNewLoan={setNewLoan}
           setAlert={setAlert}
           setAlertError={setAlertError}
           setMessageAlert={setMessageAlert}
           setMessageError={setMessageError}
-          setLoan= {setLoan}
-          loan={loan}
+          setStateLoan= {setStateLoan}
+          stateLoan={stateLoan}
           loanId={loanId}
           setLoanId={setLoanId}
+          // refetchLoans={refetchLoans}
       
         />
       )}
@@ -251,6 +266,7 @@ export default function LoanPage() {
                   .map((row) => (
                     <LoanTableRow
                       key={row.id}
+                      id={row.id}
                       client={row.client}
                       value={row.value}
                       banner={row.banner}
@@ -262,13 +278,14 @@ export default function LoanPage() {
                       netProfit={row.netProfit}
                       selected={selected.some((item) => item.name === row.client)}
                       handleClick={(event) => handleClick(event, row.client, row.id)}
-                      setEditLoan={setEditLoan}
-                      setLoanToEdit={setLoanToEdit}
+                      setStateLoan={setStateLoan}
                       setNewLoan={setNewLoan}
                       setAlert={setAlert}
+                      setLoanId={setLoanId}
                       setAlertError={setAlertError}
                       setMessageAlert={setMessageAlert}
                       setMessageError={setMessageError}
+                          // refetchLoans={refetchLoans}
                     />
                   ))}
 

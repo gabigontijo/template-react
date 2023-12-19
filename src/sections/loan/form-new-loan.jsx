@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
+import { useQuery } from "react-query";
 
 import Box from '@mui/material/Box';
 import Step from '@mui/material/Step';
@@ -8,6 +9,9 @@ import Stepper from '@mui/material/Stepper';
 import StepLabel from '@mui/material/StepLabel';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+
+import { allClients } from 'src/apis/client';
+import { allPartners } from 'src/apis/partner';
 
 import FormStepOne from './form-step-one';
 import FormStepTwo from './form-step-two';
@@ -19,18 +23,39 @@ export default function FormNewLoan({
   filterName,
   onFilterName,
   setAlert,
+  setMessageAlert,
   setAlertError,
   setMessageError,
-  setMessageAlert,
-  setLoan,
+  setStateLoan,
+  stateLoan,
   loanId,
   setLoanId,
-  loan,
+  setNewLoan,
 }) {
   const [activeStep, setActiveStep] = useState(0);
   const [skipped, setSkipped] = useState(new Set());
   const [isNewPartner, setIsNewPartner] = useState(false);
   const [isNewClient, setIsNewClient] = useState(false);
+  const [clientList, setClientList] = useState([]);
+  const [partnerList, setPartnerList] = useState([]);
+
+  const { isLoading: isLoadingClients, refetch: refetchClients } = useQuery("allClients", allClients, {
+    onSuccess: (response) => {
+      setClientList(response.Clients);
+    },
+    onError: (error) => {
+      console.error('Erro ao carregar clientes:', error);
+    }
+  });
+
+  const { isLoading: isLoandingPartners, refetch: refetchCPartners } = useQuery("allPartners", allPartners, {
+    onSuccess: (response) => {
+      setPartnerList(response.Partners);
+    },
+    onError: (error) => {
+      console.error('Erro ao carregar Parceiros:', error);
+    }
+  });
 
   const isStepSkipped = (step) => {
     skipped.has(step);
@@ -59,7 +84,7 @@ export default function FormNewLoan({
           const labelProps = {};
 
           return (
-            <Step key={label} {...stepProps}>
+            <Step key={label} {...stepProps} sx={{ height: 'fit-content' }}>
               <StepLabel {...labelProps}>{label}</StepLabel>
             </Step>
           );
@@ -81,12 +106,15 @@ export default function FormNewLoan({
           setAlertError={setAlertError}
           setMessageAlert={setMessageAlert}
           setMessageError={setMessageError}
-          setLoan={setLoan}
-          loan={loan}
+          setLoan={setStateLoan}
+          loan={stateLoan}
+          clientList={clientList}
+          refetchClients={refetchClients}
+          isLoading={isLoadingClients}
         />
       )}
 
-      {activeStep === 1 && <FormStepTwo setLoan={setLoan} loan={loan} />}
+      {activeStep === 1 && <FormStepTwo setLoan={setStateLoan} loan={stateLoan} />}
       {activeStep === 2 && (
         <FormStepThree
           setAlert={setAlert}
@@ -97,8 +125,11 @@ export default function FormNewLoan({
           onFilterName={onFilterName}
           isNewPartner={isNewPartner}
           setIsNewPartner={setIsNewPartner}
-          setLoan={setLoan}
-          loan={loan}
+          setLoan={setStateLoan}
+          loan={stateLoan}
+          isLoading={isLoandingPartners}
+          partnerList={partnerList}
+          refetchCPartners={refetchCPartners}
         />
       )}
 
@@ -122,8 +153,9 @@ FormNewLoan.propTypes = {
   setAlertError: PropTypes.func,
   setMessageError: PropTypes.func,
   setMessageAlert: PropTypes.func,
-  setLoan: PropTypes.func,
-  loan: PropTypes.any,
+  setStateLoan: PropTypes.func,
+  stateLoan: PropTypes.any,
   loanId: PropTypes.any,
   setLoanId: PropTypes.func,
+  setNewLoan: PropTypes.func,
 };

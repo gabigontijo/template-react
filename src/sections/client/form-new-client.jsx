@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useQuery } from "react-query";
-import { useLocation } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
@@ -23,7 +22,6 @@ export default function FormNewClient({
   setNewUser,
   setAlert,
   setAlertError,
-  setClientName,
   setNextStep,
   setMessageError,
   setMessageAlert,
@@ -34,19 +32,32 @@ export default function FormNewClient({
   setStateClient
 }) {
   const [partnersList, setPartnersList] = useState([]);
-  const location = useLocation();
 
   useQuery("allPartners", allPartners, {
     onSuccess: (response) => {
       setPartnersList(response.Partners);
     },
     onError: (error) => {
-      console.error('Erro ao carregar clientes:', error);
+      console.error('Erro ao carregar Parceiros:', error);
     }
   });
 
   const handleSubmit = async () => {
     try {
+      // if (location.pathname === '/emprestimo') {
+      //   setNextStep(true);
+      //   refetchClients();
+      //   const bodyClientInLoan = {
+      //     name: stateClient.client.name,
+      //     pixType: stateClient.client.pixType,
+      //     pixKey: stateClient.client.pixKey,
+      //     partnerId: Number(stateClient.partner.id),
+      //     phone: stateClient.client.phone,
+      //     cpf: stateClient.client.cpf,
+      //     documents: '',
+      //   };
+      //   await createClient(bodyClientInLoan);
+      // } else {
       const bodyClient = {
         name: stateClient.name,
         pixType: stateClient.pixType,
@@ -56,17 +67,12 @@ export default function FormNewClient({
         cpf: stateClient.cpf,
         documents: '',
       };
-      const response = await createClient(bodyClient);
-      if (location.pathname === '/emprestimo') {
-        setClientName(response.name);
-        setNextStep(true);
-      }
-      setNewUser(false);
-
+      await createClient(bodyClient);
       setAlert(true);
       setMessageAlert('Cliente cadastrado com sucesso');
-      refetchClients();
+      setNewUser(false);
       setStateClient(clientInterface)
+      refetchClients();
     } catch (error) {
       // eslint-disable-next-line no-debugger
       debugger;
@@ -243,7 +249,6 @@ FormNewClient.propTypes = {
   setAlert: PropTypes.func,
   setAlertError: PropTypes.func,
   setNextStep: PropTypes.func,
-  setClientName: PropTypes.func,
   setMessageError: PropTypes.func,
   setMessageAlert: PropTypes.func,
   setClientId: PropTypes.func,

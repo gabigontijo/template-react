@@ -8,6 +8,7 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
 import SelectMachin from '../common/input-select-machin';
+import NumberFormatField from '../common/number-format-field';
 import SelectCardFlag from '../common/input-select-card-flag';
 import SelectPaymentType from '../common/input-select-payment-type';
 import SelectInstallments from '../common/input-select-installments';
@@ -30,7 +31,7 @@ export default function FormStepTwo({ loan, setLoan }) {
     Array.from({ length: Number(numberOfCards) }, (_, index) => getDefaultCard())
   );
 
- 
+
   const handleRequestedValue = ({ target }) => {
     setLoan({
       ...loan,
@@ -38,13 +39,31 @@ export default function FormStepTwo({ loan, setLoan }) {
     });
   };
 
+  const getUpdatedCards = (newQuantity) => {
+    if (loan.numberOfCards > newQuantity) {
+      return loan.cards.slice(0, newQuantity)
+    }
+
+    if (loan.numberOfCards < newQuantity) {
+      for (let i = 0; i < newQuantity - loan.numberOfCards; i += 1) {
+        loan.cards.push(getDefaultCard())
+      }
+      return loan.cards
+    }
+    return null;
+  }
+
   const handleNumberOfCards = ({ target }) => {
-    const qttCArds = Number(target.value)
-    setNumberOfCards(qttCArds);
+    const qttCards = target.value
+    setNumberOfCards(Number(qttCards));
+    const cardsUpdated = getUpdatedCards(qttCards)
+    setCards(cardsUpdated)
+
+    console.log(typeof qttCards, Number(qttCards));
     setLoan({
       ...loan,
-      'numberOfCards': numberOfCards,
-      'cards': cards,
+      'numberOfCards': qttCards,
+      'cards': cardsUpdated,
     });
   };
 
@@ -68,13 +87,11 @@ export default function FormStepTwo({ loan, setLoan }) {
         <Stack spacing={2}>
           <Stack direction="row" spacing={2}>
             <Box width="50%">
-              <TextField
+              <NumberFormatField
                 name="value"
                 label="Valor Solicitado"
-                type="number"
-                fullWidth
                 value={loan.value}
-                onChange={handleRequestedValue}
+                handleChange={handleRequestedValue}
               />
             </Box>
             <SelectNumberOfCardsFields
@@ -102,17 +119,17 @@ export default function FormStepTwo({ loan, setLoan }) {
                       type="number"
                       fullWidth
                       value={card.value}
-                      onChange={(e) => handleCardChange(index, 'value', e.target.value)}
+                      onChange={(e) => handleCardChange(index, 'value', Number(e.target.value))}
                     />
                   </Box>
                   <SelectInstallments
                     numInstallments={12}
                     value={card.installments}
-                    onChange={(value) => handleCardChange(index, 'installments', value)}
+                    onChange={(e) => handleCardChange(index, 'installments',  Number(e.target.value))}
                   />
-                  <SelectPaymentType 
-                  value={card.paymentType}
-                  onChange={(value) => handleCardChange(index, 'paymentType', value)} />
+                  <SelectPaymentType
+                    value={card.paymentType}
+                    onChange={(e) => handleCardChange(index, 'paymentType', e.target.value)} />
                 </Stack>
               </div>
             ))}

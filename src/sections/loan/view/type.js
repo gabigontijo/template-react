@@ -11,10 +11,10 @@ export const loanInterface = {
         documenst: [],
     },
     value: '',
-    numberOfCards: '',
+    numberOfCards: 1,
     cards: [
         {
-           machinId: '',
+           machineId: '',
            banner: '',
            value: '',
            installments: '',
@@ -28,7 +28,7 @@ export const loanInterface = {
         cpf: '',
         pixType: '',
         pixKey:'',
-        adress: '',
+        address: '',
     },
     partnerProfit: {
         valuePartner:'',

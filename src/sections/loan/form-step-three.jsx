@@ -1,5 +1,5 @@
+import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useState, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -10,8 +10,7 @@ import TextField from '@mui/material/TextField';
 import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
 import Autocomplete from '@mui/material/Autocomplete';
-
-import { allPartners } from 'src/apis/partner';
+import CircularProgress from '@mui/material/CircularProgress';
 
 import Iconify from 'src/components/iconify';
 
@@ -30,25 +29,13 @@ export default function FormStepThree({
   setIsNewPartner,
   loan,
   setLoan,
-  // setCloseAdd,
+  isLoading,
+  partnerList,
+  setPartnerList,
+
 }) {
   const [checked, setChecked] = useState(false);
-  const [partnersList, setPartnersList] = useState([]);
-  const [, setFilteredPartners] = useState([]);
   const [, setSelectedPartner] = useState(null);
-
-  useEffect(() => {
-    const loadAllPartners = async () => {
-      try {
-        const partners = await allPartners();
-        setPartnersList(partners);
-        setFilteredPartners(partners);
-      } catch (error) {
-        console.log('Erro ao carregar parceiros', error);
-      }
-    };
-    loadAllPartners();
-  }, []);
 
   const handleNewPartner = () => {
     setIsNewPartner(true);
@@ -74,7 +61,7 @@ export default function FormStepThree({
       partnerProfit: {
         ...prevLoan.partnerProfit,
         valuePartner: target.value,
-        percentPartner:  Number.isNaN(calculatedPercentPartner) ? '' : calculatedPercentPartner.toString(),
+        percentPartner: Number.isNaN(calculatedPercentPartner) ? '' : calculatedPercentPartner.toString(),
       },
     }));
   };
@@ -86,7 +73,7 @@ export default function FormStepThree({
       ...prevLoan,
       partnerProfit: {
         ...prevLoan.partnerProfit,
-        valuePartner:  Number.isNaN(calculatedValuePartner) ? '' : calculatedValuePartner.toString(),
+        valuePartner: Number.isNaN(calculatedValuePartner) ? '' : calculatedValuePartner.toString(),
         percentPartner: target.value,
       },
     }));
@@ -105,6 +92,9 @@ export default function FormStepThree({
       </Stack>
       {checked && (
         <>
+          {isLoading && <Box sx={{ display: 'flex', justifyContent: 'center', mt: '1em' }}>
+            <CircularProgress />
+          </Box>}
           <Stack direction="row" spacing={4} p={3} alignItems="center">
             <Box width="90%">
               <Stack direction="row" justifyContent="flex-start" alignContent="center" spacing={3}>
@@ -112,7 +102,7 @@ export default function FormStepThree({
                   <Autocomplete
                     disablePortal
                     id="client-autocomplete"
-                    options={partnersList}
+                    options={partnerList}
                     getOptionLabel={(option) => option.name}
                     sx={{ width: 300 }}
                     renderInput={(params) => <TextField {...params} label="Procurar parceiro" />}
@@ -194,4 +184,7 @@ FormStepThree.propTypes = {
   style: PropTypes.object,
   loan: PropTypes.any,
   setLoan: PropTypes.func,
+  isLoading: PropTypes.func,
+  setPartnerList: PropTypes.func,
+  partnerList: PropTypes.any,
 };
