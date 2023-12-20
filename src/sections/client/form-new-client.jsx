@@ -44,20 +44,6 @@ export default function FormNewClient({
 
   const handleSubmit = async () => {
     try {
-      // if (location.pathname === '/emprestimo') {
-      //   setNextStep(true);
-      //   refetchClients();
-      //   const bodyClientInLoan = {
-      //     name: stateClient.client.name,
-      //     pixType: stateClient.client.pixType,
-      //     pixKey: stateClient.client.pixKey,
-      //     partnerId: Number(stateClient.partner.id),
-      //     phone: stateClient.client.phone,
-      //     cpf: stateClient.client.cpf,
-      //     documents: '',
-      //   };
-      //   await createClient(bodyClientInLoan);
-      // } else {
       const bodyClient = {
         name: stateClient.name,
         pixType: stateClient.pixType,

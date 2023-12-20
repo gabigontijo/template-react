@@ -236,6 +236,7 @@ export default function ClientPage() {
                 numSelected={selected.length}
                 onRequestSort={handleSort}
                 onSelectAllClick={handleSelectAllClick}
+                isLoan={false}
                 headLabel={[
                   { id: 'name', label: 'Nome' },
                   { id: 'phone', label: 'Telefone' },

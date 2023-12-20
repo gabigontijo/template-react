@@ -236,6 +236,7 @@ export default function PartnerPage() {
                 numSelected={selected.length}
                 onRequestSort={handleSort}
                 onSelectAllClick={handleSelectAllClick}
+                isLoan={false}
                 headLabel={[
                   { id: 'name', label: 'Nome' },
                   { id: 'email', label: 'Email' },
