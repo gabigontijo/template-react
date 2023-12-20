@@ -48,7 +48,7 @@ export default function FormNewLoan({
     }
   });
 
-  const { isLoading: isLoandingPartners, refetch: refetchCPartners } = useQuery("allPartners", allPartners, {
+  const { isLoading: isLoandingPartners, refetch: refetchPartners } = useQuery("allPartners", allPartners, {
     onSuccess: (response) => {
       setPartnerList(response.Partners);
     },
@@ -129,7 +129,7 @@ export default function FormNewLoan({
           loan={stateLoan}
           isLoading={isLoandingPartners}
           partnerList={partnerList}
-          refetchCPartners={refetchCPartners}
+          refetchPartners={refetchPartners}
         />
       )}
 

@@ -25,16 +25,13 @@ export default function FormStepThree({
   setAlertError,
   setMessageAlert,
   setMessageError,
-  filterName,
-  onFilterName,
   isNewPartner,
   setIsNewPartner,
   loan,
   setLoan,
   isLoading,
   partnerList,
-  setPartnerList,
-
+  refetchPartners,
 }) {
   const [checked, setChecked] = useState(false);
   const [, setSelectedPartner] = useState(null);
@@ -71,7 +68,7 @@ export default function FormStepThree({
 
   const handleChangePartnerPercent = ({ target }) => {
     console.log(target.value);
-    const calculatedValuePartner = (parseFloat(target.value)/ 100) * loan.value;
+    const calculatedValuePartner = (parseFloat(target.value) / 100) * loan.value;
 
     setLoan((prevLoan) => ({
       ...prevLoan,
@@ -82,6 +79,13 @@ export default function FormStepThree({
       },
     }));
   };
+
+  const setPartner = (partner) => {
+    setLoan({
+      ...loan,
+      'partner': partner,
+    });
+  }
 
   return (
     <Card sx={{ marginTop: '1.5em' }}>
@@ -99,51 +103,41 @@ export default function FormStepThree({
           {isLoading && <Box sx={{ display: 'flex', justifyContent: 'center', mt: '1em' }}>
             <CircularProgress />
           </Box>}
-          <Stack direction="row" spacing={4} p={3} alignItems="center">
-            <Box width="90%">
-              <Stack direction="row" justifyContent="flex-start" alignContent="center" spacing={3}>
-                <Stack direction="row" justifyContent="flex-start" alignContent="center">
-                  <Autocomplete
-                    // disablePortal
-                    id="client-autocomplete"
-                    options={partnerList}
-                    getOptionLabel={(option) => option.name}
-                    sx={{ width: 300 }}
-                    renderInput={(params) => <TextField {...params} label="Procurar parceiro" />}
-                    onChange={(event, value) => onPartnerSelect(value)}
-                  />
-                </Stack>
-                <Box width="60%">
-                  <Stack
-                    direction="row"
-                    justifyContent="flex-start"
-                    alignContent="center"
-                    spacing={3}
-                  >
-                    <NumberFormatField
-                      name="valuePartner"
-                      label="Valor da comissão"
-                      value={loan.partnerProfit.valuePartner}
-                      handleChange={handleChangePartnerValue}
-                    />
-                    {/* <TextField
-                      name="percentPartner"
-                      label="Porcentagem da comissão"
-                      type="number"
-                      value={loan.partnerProfit.percentPartner}
-                      onChange={handleChangePartnerPercent}
-                      fullWidth
-                    /> */}
-                    <PercentFormatField
-                      name="percentPartner"
-                      label="Porcentagem da comissão"
-                      value={loan.partnerProfit.percentPartner}
-                      handleChange={handleChangePartnerPercent} />
-                  </Stack>
-                </Box>
-              </Stack>
+          <Stack direction="row" p={2} alignItems="center" spacing={{ xs: 2, sm: 2 }} useFlexGap sx={{
+            flexWrap: {
+              xs: 'wrap',
+              sm: 'nowrap',
+            },
+          }}>
+            <Box width={{ xs: '100%', md: '60%' }}>
+
+              <Autocomplete
+                id="client-autocomplete"
+                options={partnerList}
+                getOptionLabel={(option) => option.name}
+                renderInput={(params) => <TextField {...params} label="Procurar parceiro" />}
+                onChange={(event, value) => onPartnerSelect(value)}
+              />
             </Box>
-            <Box width="20%">
+
+            <Box width={{ xs: '100%', md: '60%' }}>
+              <NumberFormatField
+                name="valuePartner"
+                label="Valor da comissão"
+                value={loan.partnerProfit.valuePartner}
+                handleChange={handleChangePartnerValue}
+              />
+            </Box>
+            <Box width={{ xs: '100%', md: '60%' }}>
+              <PercentFormatField
+                name="percentPartner"
+                label="Porcentagem da comissão"
+                value={loan.partnerProfit.percentPartner}
+                handleChange={handleChangePartnerPercent} />
+            </Box>
+          </Stack>
+          <Stack p={2} justifyContent='end'>
+            <Box width="100%">
               <Stack direction="row" justifyContent="flex-end" alignItems="center">
                 {!isNewPartner ? (
                   <Button
@@ -170,6 +164,10 @@ export default function FormStepThree({
                 setMessageAlert={setMessageAlert}
                 setAlertError={setAlertError}
                 setMessageError={setMessageError}
+                partnerId={null}
+                refetchPartners={refetchPartners}
+                statePartner={loan.partner}
+                setStatePartner={setPartner}
               />
             </Box>
           )}
@@ -186,12 +184,10 @@ FormStepThree.propTypes = {
   setMessageAlert: PropTypes.func,
   isNewPartner: PropTypes.bool,
   setIsNewPartner: PropTypes.func,
-  filterName: PropTypes.string,
-  onFilterName: PropTypes.func,
   style: PropTypes.object,
   loan: PropTypes.any,
   setLoan: PropTypes.func,
-  isLoading: PropTypes.func,
-  setPartnerList: PropTypes.func,
+  isLoading: PropTypes.bool,
   partnerList: PropTypes.any,
+  refetchPartners: PropTypes.func
 };

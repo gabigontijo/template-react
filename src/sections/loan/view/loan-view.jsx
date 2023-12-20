@@ -247,6 +247,7 @@ export default function LoanPage() {
                 onRequestSort={handleSort}
                 numSelected={selected.length}
                 onSelectAllClick={handleSelectAllClick}
+                isLoan
                 headLabel={[
                   { id: 'client', label: 'Cliente' },
                   { id: 'value', label: 'Valor Solicitado' },

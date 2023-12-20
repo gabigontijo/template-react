@@ -19,6 +19,7 @@ export default function ComoonTableHead({
   numSelected,
   onRequestSort,
   onSelectAllClick,
+  isLoan,
 }) {
   const onSort = (property) => (event) => {
     onRequestSort(event, property);
@@ -34,7 +35,8 @@ export default function ComoonTableHead({
             onChange={onSelectAllClick}
           />
         </TableCell>
-        <TableCell/>
+        {isLoan && <TableCell/>}
+        
         {headLabel.map((headCell) => (
           <TableCell
             key={headCell.id}
@@ -70,4 +72,5 @@ ComoonTableHead.propTypes = {
   numSelected: PropTypes.number,
   onRequestSort: PropTypes.func,
   onSelectAllClick: PropTypes.func,
+  isLoan: PropTypes.bool,
 };
