@@ -35,6 +35,7 @@ export const loanInterface = {
         percentPartner:'',
     },
     netProfit:'',
+    date: '',
 
 }
 

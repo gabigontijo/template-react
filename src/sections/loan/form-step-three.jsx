@@ -15,6 +15,8 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Iconify from 'src/components/iconify';
 
 import FormNewPartner from '../partner/form-new-partner';
+import NumberFormatField from '../common/number-format-field';
+import PercentFormatField from '../common/percent-format-field';
 
 // ----------------------------------------------------------------------
 
@@ -54,6 +56,7 @@ export default function FormStepThree({
   };
 
   const handleChangePartnerValue = ({ target }) => {
+    console.log(target.value);
     const calculatedPercentPartner = (parseFloat(target.value) / loan.value) * 100;
 
     setLoan((prevLoan) => ({
@@ -67,7 +70,8 @@ export default function FormStepThree({
   };
 
   const handleChangePartnerPercent = ({ target }) => {
-    const calculatedValuePartner = (parseFloat(target.value) / 100) * loan.value;
+    console.log(target.value);
+    const calculatedValuePartner = (parseFloat(target.value)/ 100) * loan.value;
 
     setLoan((prevLoan) => ({
       ...prevLoan,
@@ -100,7 +104,7 @@ export default function FormStepThree({
               <Stack direction="row" justifyContent="flex-start" alignContent="center" spacing={3}>
                 <Stack direction="row" justifyContent="flex-start" alignContent="center">
                   <Autocomplete
-                    disablePortal
+                    // disablePortal
                     id="client-autocomplete"
                     options={partnerList}
                     getOptionLabel={(option) => option.name}
@@ -116,22 +120,25 @@ export default function FormStepThree({
                     alignContent="center"
                     spacing={3}
                   >
-                    <TextField
+                    <NumberFormatField
                       name="valuePartner"
                       label="Valor da comissão"
-                      type="number"
                       value={loan.partnerProfit.valuePartner}
-                      onChange={handleChangePartnerValue}
-                      fullWidth
+                      handleChange={handleChangePartnerValue}
                     />
-                    <TextField
+                    {/* <TextField
                       name="percentPartner"
                       label="Porcentagem da comissão"
                       type="number"
                       value={loan.partnerProfit.percentPartner}
                       onChange={handleChangePartnerPercent}
                       fullWidth
-                    />
+                    /> */}
+                    <PercentFormatField
+                      name="percentPartner"
+                      label="Porcentagem da comissão"
+                      value={loan.partnerProfit.percentPartner}
+                      handleChange={handleChangePartnerPercent} />
                   </Stack>
                 </Box>
               </Stack>

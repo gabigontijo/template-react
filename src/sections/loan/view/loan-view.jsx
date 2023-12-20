@@ -250,9 +250,9 @@ export default function LoanPage() {
                 headLabel={[
                   { id: 'client', label: 'Cliente' },
                   { id: 'value', label: 'Valor Solicitado' },
-                  { id: 'banner', label: 'Bandeira' },
-                  { id: 'valueMachine', label: 'Valor Máquina' },
-                  { id: 'installments', label: 'Parcelas' },
+                  // { id: 'banner', label: 'Bandeira' },
+                  // { id: 'valueMachine', label: 'Valor Máquina' },
+                  // { id: 'installments', label: 'Parcelas' },
                   { id: 'grossProfit', label: 'Lucro Bruto' },
                   { id: 'partner', label: 'Parceiro' },
                   { id: 'partnerProfit', label: 'Lucro Parceiro' },
@@ -269,9 +269,9 @@ export default function LoanPage() {
                       id={row.id}
                       client={row.client}
                       value={row.value}
-                      banner={row.banner}
-                      valueMachine={row.valueMachine}
-                      installments={row.installments}
+                      // banner={row.banner}
+                      // valueMachine={row.valueMachine}
+                      // installments={row.installments}
                       grossProfit={row.grossProfit}
                       partner={row.partner}
                       partnerProfit={row.partnerProfit}

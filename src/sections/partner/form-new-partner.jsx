@@ -31,8 +31,8 @@ export default function FormNewPartner({
     try {
       const bodyParnter = {
         name: statePartner.name,
-        // email: statePartner.email,
-        // pixType: statePartner.pixType,
+        email: statePartner.email,
+        pixType: statePartner.pixType,
         pixKey: statePartner.pixKey,
         phone: statePartner.phone,
         cpf: statePartner.cpf,
@@ -59,8 +59,8 @@ export default function FormNewPartner({
       );
       const bodyPartnerEdit = {
         name: nonEmptyState.name,
-        // email: nonEmptyState.email,
-        // pixType: nonEmptyState.pixType,
+        email: nonEmptyState.email,
+        pixType: nonEmptyState.pixType,
         pixKey: nonEmptyState.pixKey,
         phone: nonEmptyState.phone,
         cpf: nonEmptyState.cpf,

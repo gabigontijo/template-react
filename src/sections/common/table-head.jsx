@@ -34,7 +34,7 @@ export default function ComoonTableHead({
             onChange={onSelectAllClick}
           />
         </TableCell>
-
+        <TableCell/>
         {headLabel.map((headCell) => (
           <TableCell
             key={headCell.id}

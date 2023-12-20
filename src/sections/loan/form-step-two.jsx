@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
-import TextField from '@mui/material/TextField';
+// import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
 import SelectMachin from '../common/input-select-machin';
@@ -113,19 +113,25 @@ export default function FormStepTwo({ loan, setLoan }) {
                   <SelectMachin />
                   <SelectCardFlag />
                   <Box width="33%">
-                    <TextField
+                    {/* <TextField
                       name={`valueCard-${index}`}
                       label="Valor"
                       type="number"
                       fullWidth
                       value={card.value}
                       onChange={(e) => handleCardChange(index, 'value', Number(e.target.value))}
+                    /> */}
+                    <NumberFormatField
+                      name={`valueCard-${index}`}
+                      label="Valor"
+                      value={card.value}
+                      handleChange={(e) => handleCardChange(index, 'value', Number(e.target.value))}
                     />
                   </Box>
                   <SelectInstallments
                     numInstallments={12}
                     value={card.installments}
-                    onChange={(e) => handleCardChange(index, 'installments',  Number(e.target.value))}
+                    onChange={(e) => handleCardChange(index, 'installments', Number(e.target.value))}
                   />
                   <SelectPaymentType
                     value={card.paymentType}

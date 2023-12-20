@@ -12,6 +12,6 @@ export const loans = [...Array(24)].map((_, index) => ({
   installments: faker.finance.amount({ min: 1, max: 18 }),
   grossProfit: faker.finance.amount(),
   partner: faker.person.fullName(),
-  partnerProfit: faker.location.street(),
+  partnerProfit: faker.finance.amount(),
   netProfit: faker.finance.amount(),
 }));

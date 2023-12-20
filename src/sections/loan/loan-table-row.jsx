@@ -1,13 +1,20 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 
+import Box from '@mui/material/Box';
+import Table from '@mui/material/Table';
 import Popover from '@mui/material/Popover';
 import TableRow from '@mui/material/TableRow';
+import Collapse from '@mui/material/Collapse';
 import Checkbox from '@mui/material/Checkbox';
 import MenuItem from '@mui/material/MenuItem';
+import TableBody from '@mui/material/TableBody';
+import TableHead from '@mui/material/TableHead';
 import TableCell from '@mui/material/TableCell';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 import {loanById,  deleteLoan } from 'src/apis/loan';
 
@@ -22,9 +29,10 @@ export default function LoanTableRow({
   id,
   client,
   value,
-  banner,
-  valueMachine,
-  installments,
+  // banner,
+  // valueMachine,
+  // installments,
+  // cardData,
   grossProfit,
   partner,
   partnerProfit,
@@ -41,6 +49,9 @@ export default function LoanTableRow({
   const [open, setOpen] = useState(null);
 
   const [openDialog, setOpenDialog] = useState(false);
+
+  const [openCard, setOpenCard] = useState(false);
+
 
   const handleOpenMenu = (event) => {
     setOpen(event.currentTarget);
@@ -91,6 +102,15 @@ export default function LoanTableRow({
         <TableCell padding="checkbox">
           <Checkbox disableRipple checked={selected} onChange={handleClick} />
         </TableCell>
+        <TableCell>
+          <IconButton
+            aria-label="expand row"
+            size="small"
+            onClick={() => setOpenCard(!openCard)}
+          >
+            {openCard ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+          </IconButton>
+        </TableCell>
 
         <TableCell component="th" scope="row" padding="none">
           <Typography variant="subtitle2" noWrap>
@@ -100,11 +120,11 @@ export default function LoanTableRow({
 
         <TableCell>{value}</TableCell>
 
-        <TableCell>{banner}</TableCell>
+        {/* <TableCell>{banner}</TableCell> */}
 
-        <TableCell>{valueMachine}</TableCell>
+        {/* <TableCell>{valueMachine}</TableCell> */}
 
-        <TableCell>{installments}</TableCell>
+        {/* <TableCell>{cardData}</TableCell> */}
 
         <TableCell>{grossProfit}</TableCell>
 
@@ -118,6 +138,79 @@ export default function LoanTableRow({
           <IconButton onClick={handleOpenMenu}>
             <Iconify icon="eva:more-vertical-fill" />
           </IconButton>
+        </TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+          <Collapse in={openCard} timeout="auto" unmountOnExit>
+            <Box sx={{ margin: 1 }}>
+              <Typography variant="h6" gutterBottom component="div">
+                Dados do pagamento
+              </Typography> 
+              <Typography variant="h8" gutterBottom component="div">
+                20/12/2023 11:43
+              </Typography>
+              <Table size="small" aria-label="purchases">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Cartão </TableCell>
+                    <TableCell align="right">Bandeira</TableCell>
+                    <TableCell align="right">Valor (R$)</TableCell>
+                    <TableCell align="right">Parcelas</TableCell>
+                    <TableCell align="right">Tipo do pagamento</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {/* {cards.map((card) => (
+                    <TableRow key={card.id}>
+                      <TableCell component="th" scope="row">
+                        {card.machineId}
+                      </TableCell>
+                      <TableCell>{card.banner}</TableCell>
+                      <TableCell align="right">{card.value}</TableCell>
+                      <TableCell align="right">
+                        {card.installments}
+                      </TableCell>
+                       <TableCell align="right">
+                        {card.paymentType}
+                      </TableCell>
+                    </TableRow>
+                  ))} */}
+                     
+                    <TableRow key={1}>
+                      <TableCell component="th" scope="row">
+                        maquininha x
+                      </TableCell>
+                      <TableCell align="right">
+                      <Iconify icon="logos:visa" />
+                      </TableCell>
+                      <TableCell align="right">100,00</TableCell>
+                      <TableCell align="right">
+                        12
+                      </TableCell>
+                       <TableCell align="right">
+                        Presencial
+                      </TableCell>
+                    </TableRow>
+                    <TableRow key={2}>
+                      <TableCell component="th" scope="row">
+                        maquininha w
+                      </TableCell>
+                      <TableCell align="right">
+                      <Iconify  icon="logos:mastercard" />
+                      </TableCell>
+                      <TableCell align="right">1.000,00</TableCell>
+                      <TableCell align="right">
+                        18
+                      </TableCell>
+                       <TableCell align="right">
+                        Online
+                      </TableCell>
+                    </TableRow>
+                </TableBody>
+              </Table>
+            </Box>
+          </Collapse>
         </TableCell>
       </TableRow>
 
@@ -166,9 +259,9 @@ LoanTableRow.propTypes = {
   client: PropTypes.any,
   id: PropTypes.any,
   value: PropTypes.any,
-  banner: PropTypes.any,
-  valueMachine: PropTypes.any,
-  installments: PropTypes.any,
+  // banner: PropTypes.any,
+  // valueMachine: PropTypes.any,
+  // installments: PropTypes.any,
   grossProfit: PropTypes.any,
   partner: PropTypes.any,
   partnerProfit: PropTypes.any,
