@@ -11,6 +11,8 @@ export const loanInterface = {
         documenst: [],
     },
     value: '',
+    operationPercent: '',
+    amount: '',
     numberOfCards: 1,
     cards: [
         {
@@ -34,8 +36,8 @@ export const loanInterface = {
         valuePartner:'',
         percentPartner:'',
     },
+    grossProfit: '',
     netProfit:'',
-    date: '',
-
+    paymentStatus: '',
 }
 

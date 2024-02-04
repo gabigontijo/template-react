@@ -51,7 +51,7 @@ export default function FormNewClient({
         partnerId: Number(stateClient.partner.id),
         phone: stateClient.phone,
         cpf: stateClient.cpf,
-        documents: '',
+        documents: 'test.img',
       };
       await createClient(bodyClient);
       setAlert(true);
@@ -119,6 +119,7 @@ export default function FormNewClient({
       ...stateClient,
       [name]: value,
     });
+    console.log(Number(value));
   };
 
   return (

@@ -10,6 +10,7 @@ import Typography from '@mui/material/Typography';
 import SelectMachin from '../common/input-select-machin';
 import NumberFormatField from '../common/number-format-field';
 import SelectCardFlag from '../common/input-select-card-flag';
+import PercentFormatField from '../common/percent-format-field';
 import SelectPaymentType from '../common/input-select-payment-type';
 import SelectInstallments from '../common/input-select-installments';
 import SelectNumberOfCardsFields from '../common/input-select-number-of-cards';
@@ -19,7 +20,7 @@ import SelectNumberOfCardsFields from '../common/input-select-number-of-cards';
 export default function FormStepTwo({ loan, setLoan }) {
 
   const getDefaultCard = () => ({
-    machinId: '',
+    machinId: 1,
     banner: '',
     value: '',
     installments: '',
@@ -38,6 +39,13 @@ export default function FormStepTwo({ loan, setLoan }) {
       'value': target.value,
     });
   };
+
+  const handleRequestedOperationPercent = ({ target }) => {
+    setLoan({
+      ...loan,
+      'operationPercent': target.value,
+    });
+  }
 
   const getUpdatedCards = (newQuantity) => {
     if (loan.numberOfCards > newQuantity) {
@@ -86,12 +94,20 @@ export default function FormStepTwo({ loan, setLoan }) {
       <Stack p={3}>
         <Stack spacing={2}>
           <Stack direction="row" spacing={2}>
-            <Box width="50%">
+            <Box width="30%">
               <NumberFormatField
                 name="value"
                 label="Valor Solicitado"
                 value={loan.value}
                 handleChange={handleRequestedValue}
+              />
+            </Box>
+            <Box width="30%">
+              <PercentFormatField
+                name="operationPercent"
+                label="Taxa da operação"
+                value={loan.operationPercent}
+                handleChange={handleRequestedOperationPercent}
               />
             </Box>
             <SelectNumberOfCardsFields
@@ -110,17 +126,12 @@ export default function FormStepTwo({ loan, setLoan }) {
                   {`Cartão ${index + 1}`}
                 </Typography>
                 <Stack direction="row" spacing={2} marginTop={2}>
-                  <SelectMachin />
+                  <SelectMachin 
+                      name={`machin-${index}`}
+                      value={card.machinId}
+                      handleChange={(e) => handleCardChange(index, 'value', Number(e.target.value))} />
                   <SelectCardFlag />
                   <Box width="33%">
-                    {/* <TextField
-                      name={`valueCard-${index}`}
-                      label="Valor"
-                      type="number"
-                      fullWidth
-                      value={card.value}
-                      onChange={(e) => handleCardChange(index, 'value', Number(e.target.value))}
-                    /> */}
                     <NumberFormatField
                       name={`valueCard-${index}`}
                       label="Valor"

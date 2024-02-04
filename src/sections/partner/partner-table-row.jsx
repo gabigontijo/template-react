@@ -13,6 +13,7 @@ import { partnerById, deletePartner } from 'src/apis/partner';
 
 import Iconify from 'src/components/iconify';
 
+import { pixTypeMap } from '../common/constant';
 import DialogDelete from '../common/dialog-delete';
 
 // ----------------------------------------------------------------------
@@ -103,7 +104,7 @@ export default function PartnerTableRow({
 
         <TableCell>{cpf}</TableCell>
 
-        <TableCell>{pixType}</TableCell>
+        <TableCell>{pixTypeMap[pixType]}</TableCell>
 
         <TableCell>{pixKey}</TableCell>
 

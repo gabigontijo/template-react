@@ -15,6 +15,7 @@ import { clientById, deleteClient } from 'src/apis/client';
 
 import Iconify from 'src/components/iconify';
 
+import { pixTypeMap } from '../common/constant';
 import DialogDelete from '../common/dialog-delete';
 
 // ----------------------------------------------------------------------
@@ -115,7 +116,7 @@ export default function ClientTableRow({
 
         <TableCell>{cpf}</TableCell>
 
-        <TableCell>{pixType}</TableCell>
+        <TableCell>{pixTypeMap[pixType]}</TableCell>
 
         <TableCell>{pixKey}</TableCell>
 
@@ -144,7 +145,7 @@ export default function ClientTableRow({
           <IconButton sx={{ p: 0, '&:hover': { backgroundColor: 'transparent' } }}>
             <Iconify icon="eva:edit-fill" sx={{ mr: 2 }} />
             <Typography variant="subtitle2" noWrap>
-              Edit
+              Editar
             </Typography>
           </IconButton>
         </MenuItem>
@@ -155,7 +156,7 @@ export default function ClientTableRow({
           >
             <Iconify icon="eva:trash-2-outline" sx={{ mr: 2 }} />
             <Typography variant="subtitle2" noWrap>
-              Delete
+              Deletar
             </Typography>
           </IconButton>
         </MenuItem>

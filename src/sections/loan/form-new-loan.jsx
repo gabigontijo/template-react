@@ -12,9 +12,11 @@ import Typography from '@mui/material/Typography';
 
 import { allClients } from 'src/apis/client';
 import { allPartners } from 'src/apis/partner';
+import { createLoan, updateLoan } from 'src/apis/loan';
 
 import FormStepOne from './form-step-one';
 import FormStepTwo from './form-step-two';
+import { loanInterface } from './view/type';
 import FormStepThree from './form-step-three';
 
 const steps = ['Selecione o cliente', 'Dados do empréstimo', 'Selecione o parceiro'];
@@ -31,6 +33,7 @@ export default function FormNewLoan({
   loanId,
   setLoanId,
   setNewLoan,
+  refetchLoans,
 }) {
   const [activeStep, setActiveStep] = useState(0);
   const [skipped, setSkipped] = useState(new Set());
@@ -70,6 +73,87 @@ export default function FormNewLoan({
 
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
     setSkipped(newSkipped);
+  };
+
+  const handleSubmit = async () => {
+    console.log(stateLoan);
+    console.log({
+      clientId: stateLoan.client.id,
+      askValue: stateLoan.value,
+      operationPercent: stateLoan.operationPercent,
+      amount: stateLoan.amount,
+      numberCards: stateLoan.numberOfCards,
+      cards: stateLoan.cards,
+      partnerId: stateLoan.partner.id,
+      partnerPercent: stateLoan.partnerPercent,
+      partnerAmount: stateLoan.partnerAmount,
+      grossProfit: stateLoan.grossProfit,
+      profit: stateLoan.netProfit,
+      paymentStatus: 'pending'
+    })
+    try {
+      const bodyLoan = {
+        clientId: stateLoan.client.id,
+        askValue: stateLoan.value,
+        operationPercent: stateLoan.operationPercent,
+        amount: stateLoan.amount,
+        numberCards: stateLoan.numberOfCards,
+        cards: stateLoan.cards,
+        partnerId: stateLoan.partner.id,
+        partnerPercent: stateLoan.partnerPercent,
+        partnerAmount: stateLoan.partnerAmount,
+        grossProfit: stateLoan.grossProfit,
+        profit: stateLoan.netProfit,
+        paymentStatus: 'pending'
+      };
+      const response = await createLoan(bodyLoan);
+      console.log('Resposta da API Loan:', response);
+      setNewLoan(false);
+      setAlert(true);
+      setMessageAlert('Empréstimo cadastrado com sucesso')
+      refetchLoans();
+      setStateLoan(loanInterface)
+    } catch (error) {
+      setAlertError(true);
+      setMessageError('Erro ao Cadastrar o empréstimo')
+      console.log('Erro ao Cadastrar o empréstimo:', error);
+    }
+    
+  };
+
+  const handleSubmitEdit = async () => {
+    try {
+      const nonEmptyState = Object.fromEntries(
+        Object.entries(stateLoan).map(([key, value]) => [key, value || ''])
+      );
+      const bodyLoanEdit = {
+        clientId: nonEmptyState.client.id,
+        askValue: nonEmptyState.value,
+        operationPercent: nonEmptyState.operationPercent,
+        amount: nonEmptyState.amount,
+        numberCards: nonEmptyState.numberOfCards,
+        cards: nonEmptyState.cards,
+        partnerId: nonEmptyState.partner.id,
+        partnerPercent: nonEmptyState.partnerPercent,
+        partnerAmount: nonEmptyState.partnerAmount,
+        grossProfit: nonEmptyState.grossProfit,
+        profit: nonEmptyState.netProfit,
+        paymentStatus: nonEmptyState.paymentStatus,
+      };
+      const response = await updateLoan(bodyLoanEdit, loanId);
+      console.log('Resposta da API:', response);
+      setNewLoan(false);
+      setLoanId(null);
+      setAlert(true);
+      setMessageAlert('Empréstimo editado com sucesso');
+      setStateLoan(loanInterface);
+      refetchLoans();
+    } catch (error) {
+      setAlertError(true); 
+      setMessageError('Erro ao Editar o empréstimo')
+      setNewLoan(true);
+      console.log('Erro ao Editar o empréstimo:', error);
+    }
   };
 
   const handleBack = () => {
@@ -135,11 +219,11 @@ export default function FormNewLoan({
 
       <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
         <Button color="inherit" disabled={activeStep === 0} onClick={handleBack} sx={{ mr: 1 }}>
-          Back
+          Voltar
         </Button>
         <Box sx={{ flex: '1 1 auto' }} />
 
-        <Button onClick={handleNext}>{activeStep === steps.length - 1 ? 'Finish' : 'Next'}</Button>
+        <Button onClick={ activeStep === steps.length - 1 ? handleSubmit : handleNext}>{activeStep === steps.length - 1 ? 'Cadastrar' : 'Avançar'}</Button>
       </Box>
     </Box>
   );
@@ -158,4 +242,5 @@ FormNewLoan.propTypes = {
   loanId: PropTypes.any,
   setLoanId: PropTypes.func,
   setNewLoan: PropTypes.func,
+  refetchLoans: PropTypes.func,
 };

@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+
 import Box from '@mui/material/Box';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
@@ -17,7 +19,7 @@ const currencies = [
   }
 ];
 
-export default function SelectMachin() {
+export default function SelectMachin({name, value, onChange}) {
   return (
     <Box component="form" noValidate autoComplete="off" width="33%">
       <div>
@@ -28,6 +30,9 @@ export default function SelectMachin() {
           label="Maquininha"
           defaultValue="machin-1"
           helperText="Selecione a Maquininha"
+          value={value}
+          onChange={onChange}
+          name={name}
         >
           {currencies.map((option) => (
             <MenuItem key={option.value} value={option.value}>
@@ -39,3 +44,10 @@ export default function SelectMachin() {
     </Box>
   );
 }
+
+SelectMachin.propTypes = {
+  value: PropTypes.any,
+  name: PropTypes.any,
+  onChange: PropTypes.func,
+};
+

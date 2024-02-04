@@ -14,6 +14,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 import Iconify from 'src/components/iconify';
 
+import { partnerInterface } from '../partner/view/type';
 import FormNewPartner from '../partner/form-new-partner';
 import NumberFormatField from '../common/number-format-field';
 import PercentFormatField from '../common/percent-format-field';
@@ -38,6 +39,10 @@ export default function FormStepThree({
 
   const handleNewPartner = () => {
     setIsNewPartner(true);
+    setLoan({
+      ...loan,
+      'partner': partnerInterface,
+    });
   };
 
   const handleClosePartner = () => {
@@ -49,12 +54,16 @@ export default function FormStepThree({
   };
 
   const onPartnerSelect = (partner) => {
-    setSelectedPartner(partner);
+    setIsNewPartner(false);
+    setLoan({
+      ...loan,
+      'partner': partner || partnerInterface,
+    });
   };
 
   const handleChangePartnerValue = ({ target }) => {
     console.log(target.value);
-    const calculatedPercentPartner = (parseFloat(target.value) / loan.value) * 100;
+    const calculatedPercentPartner = (parseFloat(target.value) / (loan.value * (parseFloat(loan.operationPercent))/100)) * 100;
 
     setLoan((prevLoan) => ({
       ...prevLoan,
@@ -68,7 +77,7 @@ export default function FormStepThree({
 
   const handleChangePartnerPercent = ({ target }) => {
     console.log(target.value);
-    const calculatedValuePartner = (parseFloat(target.value) / 100) * loan.value;
+    const calculatedValuePartner = (parseFloat(target.value) / 100) * (loan.value * (parseFloat(loan.operationPercent))/100);
 
     setLoan((prevLoan) => ({
       ...prevLoan,
@@ -112,9 +121,10 @@ export default function FormStepThree({
             <Box width={{ xs: '100%', md: '60%' }}>
 
               <Autocomplete
-                id="client-autocomplete"
+                id="partner-autocomplete"
                 options={partnerList}
                 getOptionLabel={(option) => option.name}
+                value={partnerList.find((partner) => partner.id === loan.partner.id) || null}
                 renderInput={(params) => <TextField {...params} label="Procurar parceiro" />}
                 onChange={(event, value) => onPartnerSelect(value)}
               />
