@@ -137,7 +137,7 @@ export default function LoanTableRow({
 
         <TableCell component="th" scope="row" padding="none">
           <Typography variant="subtitle2" noWrap>
-            {client}
+            {client.name}
           </Typography>
         </TableCell>
 
@@ -151,7 +151,7 @@ export default function LoanTableRow({
 
         <TableCell>{grossProfit}</TableCell>
 
-        <TableCell>{partner}</TableCell>
+        <TableCell>{partner.name}</TableCell>
 
         <TableCell>{partnerProfit}</TableCell>
 

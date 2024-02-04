@@ -1,5 +1,5 @@
 import { useState } from 'react';
-// import { useQuery } from "react-query";
+import { useQuery } from "react-query";
 
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
@@ -11,10 +11,11 @@ import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
+import CircularProgress from '@mui/material/CircularProgress';
 
-import { loans } from 'src/_mock/loan';
-import { deleteLoan } from 'src/apis/loan';
-// import { allLoans, deleteLoan } from 'src/apis/loan';
+// import { loans } from 'src/_mock/loan';
+// import { deleteLoan } from 'src/apis/loan';
+import { allLoans, deleteLoan } from 'src/apis/loan';
 import AlertNotifications from 'src/layouts/dashboard/common/alert-notifications';
 
 import Iconify from 'src/components/iconify';
@@ -60,17 +61,18 @@ export default function LoanPage() {
 
   const [openDialog, setOpenDialog] = useState(false);
 
-  // const [loanList, setLoanList] = useState([]);
+  const [loanList, setLoanList] = useState([]);
 
 
-  // const {isLoading, refetch: refetchLoans} = useQuery("allLoans", allLoans, {
-  //   onSuccess: (response) => {
-  //     setLoanList(response.Loans);
-  //   },
-  //   onError: (error) => {
-  //     console.error('Erro ao carregar empréstimos:', error);
-  //   }
-  // });
+  const {isLoading, refetch: refetchLoans} = useQuery("allLoans", allLoans, {
+    onSuccess: (response) => {
+      setLoanList(response.Loans);
+      console.log("resposta api", response.Loans);
+    },
+    onError: (error) => {
+      console.error('Erro ao carregar empréstimos:', error);
+    }
+  });
 
   const handleSort = (event, id) => {
     const isAsc = orderBy === id && order === 'asc';
@@ -82,8 +84,8 @@ export default function LoanPage() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = loans.map((n) => ({
-        name: n.client,
+      const newSelecteds = loanList.map((n) => ({
+        name: n.client.name,
         id: n.id,
       }));
       setSelected(newSelecteds);
@@ -131,7 +133,7 @@ export default function LoanPage() {
   };
 
   const dataFiltered = applyFilter({
-    inputData: loans,
+    inputData: loanList,
     comparator: getComparator(order, orderBy),
     filterName,
     field: 'client',
@@ -150,7 +152,7 @@ export default function LoanPage() {
       setMessageAlert('Empréstimo excluído com sucesso')
       setOpenDialog(false);
       setSelected([]);
-      // refetchLoans();
+      refetchLoans();
     } catch (error) {
       console.error('Erro ao excluir empréstimos:', error);
       setAlertError(true);
@@ -168,6 +170,7 @@ export default function LoanPage() {
     <Container>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
         <Typography variant="h4">Empréstimos</Typography>
+        {isLoading && <CircularProgress /> }
         <Stack
           direction="row"
           alignItems="center"
@@ -205,7 +208,7 @@ export default function LoanPage() {
           stateLoan={stateLoan}
           loanId={loanId}
           setLoanId={setLoanId}
-          // refetchLoans={refetchLoans}
+          refetchLoans={refetchLoans}
       
         />
       )}
@@ -243,7 +246,7 @@ export default function LoanPage() {
               <ComoonTableHead
                 order={order}
                 orderBy={orderBy}
-                rowCount={loans.length}
+                rowCount={loanList.length}
                 onRequestSort={handleSort}
                 numSelected={selected.length}
                 onSelectAllClick={handleSelectAllClick}
@@ -258,6 +261,7 @@ export default function LoanPage() {
                   { id: 'partner', label: 'Parceiro' },
                   { id: 'partnerProfit', label: 'Lucro Parceiro' },
                   { id: 'netProfit', label: 'Lucro Líquido' },
+                  { id: 'paymentStatus', label: 'Status Pagamento' },
                   { id: '' },
                 ]}
               />
@@ -273,12 +277,13 @@ export default function LoanPage() {
                       // banner={row.banner}
                       // valueMachine={row.valueMachine}
                       // installments={row.installments}
+                      paymentStatus={row.paymentStatus}
                       grossProfit={row.grossProfit}
                       partner={row.partner}
                       partnerProfit={row.partnerProfit}
                       netProfit={row.netProfit}
-                      selected={selected.some((item) => item.name === row.client)}
-                      handleClick={(event) => handleClick(event, row.client, row.id)}
+                      selected={selected.some((item) => item.name === row.client.name)}
+                      handleClick={(event) => handleClick(event, row.client.name, row.id)}
                       setStateLoan={setStateLoan}
                       setNewLoan={setNewLoan}
                       setAlert={setAlert}
@@ -286,13 +291,13 @@ export default function LoanPage() {
                       setAlertError={setAlertError}
                       setMessageAlert={setMessageAlert}
                       setMessageError={setMessageError}
-                          // refetchLoans={refetchLoans}
+                      refetchLoans={refetchLoans}
                     />
                   ))}
 
                 <TableEmptyRows
                   height={77}
-                  emptyRows={emptyRows(page, rowsPerPage, loans.length)}
+                  emptyRows={emptyRows(page, rowsPerPage, loanList.length)}
                 />
 
                 {notFound && <TableNoData query={filterName} />}
@@ -304,7 +309,7 @@ export default function LoanPage() {
         <TablePagination
           page={page}
           component="div"
-          count={loans.length}
+          count={loanList.length}
           rowsPerPage={rowsPerPage}
           onPageChange={handleChangePage}
           rowsPerPageOptions={[5, 10, 25]}
