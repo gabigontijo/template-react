@@ -16,7 +16,7 @@ import IconButton from '@mui/material/IconButton';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
-import {loanById,  deleteLoan } from 'src/apis/loan';
+import { loanById, deleteLoan } from 'src/apis/loan';
 
 import Iconify from 'src/components/iconify';
 
@@ -45,8 +45,13 @@ export default function LoanTableRow({
   setNewLoan,
   setMessageAlert,
   setMessageError,
+  refetchLoans,
 }) {
   const [open, setOpen] = useState(null);
+
+  const [openStatus, setOpenStatus] = useState(null);
+
+  const [textStatus, setTextStatus] = useState('Processando');
 
   const [openDialog, setOpenDialog] = useState(false);
 
@@ -57,8 +62,17 @@ export default function LoanTableRow({
     setOpen(event.currentTarget);
   };
 
+  const handleOpenStatus = (event) => {
+    setOpenStatus(event.currentTarget);
+  };
+
   const handleCloseMenu = () => {
     setOpen(null);
+
+  }; 
+  
+  const handleCloseStatus = () => {
+    setOpenStatus(null);
   };
 
   const handleEdit = async () => {
@@ -94,6 +108,15 @@ export default function LoanTableRow({
   const handleDialog = () => {
     setOpenDialog(true);
     setOpen(null);
+  };
+
+  const handleStatus = (status) => {
+    if (status === 'Pago') {
+      setTextStatus('Pago');
+    } else {
+      setTextStatus('Pendente');
+    }
+    setOpenStatus(null);
   };
 
   return (
@@ -134,6 +157,16 @@ export default function LoanTableRow({
 
         <TableCell>{netProfit}</TableCell>
 
+        <TableCell align="center">
+          <IconButton onClick={handleOpenStatus} sx={{ p: 0, '&:hover': { backgroundColor: 'transparent' } }}>
+            {textStatus === 'Pago' ? <Iconify icon="el:ok-circle" sx={{ color: '#00a76f' }} /> : 
+            <Iconify icon="zondicons:timer"  sx={{ color: '#fdda00'}}/>}
+            <Typography variant='caption' display='none' >
+              {textStatus}
+            </Typography>
+          </IconButton>
+        </TableCell>
+
         <TableCell align="right">
           <IconButton onClick={handleOpenMenu}>
             <Iconify icon="eva:more-vertical-fill" />
@@ -146,7 +179,7 @@ export default function LoanTableRow({
             <Box sx={{ margin: 1 }}>
               <Typography variant="h6" gutterBottom component="div">
                 Dados do pagamento
-              </Typography> 
+              </Typography>
               <Typography variant="h8" gutterBottom component="div">
                 20/12/2023 11:43
               </Typography>
@@ -176,37 +209,37 @@ export default function LoanTableRow({
                       </TableCell>
                     </TableRow>
                   ))} */}
-                     
-                    <TableRow key={1}>
-                      <TableCell component="th" scope="row">
-                        maquininha x
-                      </TableCell>
-                      <TableCell align="right">
+
+                  <TableRow key={1}>
+                    <TableCell component="th" scope="row">
+                      maquininha x
+                    </TableCell>
+                    <TableCell align="right">
                       <Iconify icon="logos:visa" />
-                      </TableCell>
-                      <TableCell align="right">100,00</TableCell>
-                      <TableCell align="right">
-                        12
-                      </TableCell>
-                       <TableCell align="right">
-                        Presencial
-                      </TableCell>
-                    </TableRow>
-                    <TableRow key={2}>
-                      <TableCell component="th" scope="row">
-                        maquininha w
-                      </TableCell>
-                      <TableCell align="right">
-                      <Iconify  icon="logos:mastercard" />
-                      </TableCell>
-                      <TableCell align="right">1.000,00</TableCell>
-                      <TableCell align="right">
-                        18
-                      </TableCell>
-                       <TableCell align="right">
-                        Online
-                      </TableCell>
-                    </TableRow>
+                    </TableCell>
+                    <TableCell align="right">100,00</TableCell>
+                    <TableCell align="right">
+                      12
+                    </TableCell>
+                    <TableCell align="right">
+                      Presencial
+                    </TableCell>
+                  </TableRow>
+                  <TableRow key={2}>
+                    <TableCell component="th" scope="row">
+                      maquininha w
+                    </TableCell>
+                    <TableCell align="right">
+                      <Iconify icon="logos:mastercard" />
+                    </TableCell>
+                    <TableCell align="right">1.000,00</TableCell>
+                    <TableCell align="right">
+                      18
+                    </TableCell>
+                    <TableCell align="right">
+                      Online
+                    </TableCell>
+                  </TableRow>
                 </TableBody>
               </Table>
             </Box>
@@ -225,21 +258,21 @@ export default function LoanTableRow({
         }}
       >
         <MenuItem onClick={handleEdit} type="button">
-        <IconButton sx={{ p: 0, '&:hover': { backgroundColor: 'transparent' } }}>
+          <IconButton sx={{ p: 0, '&:hover': { backgroundColor: 'transparent' } }}>
             <Iconify icon="eva:edit-fill" sx={{ mr: 2 }} />
             <Typography variant="subtitle2" noWrap>
-              Edit
+              Editar
             </Typography>
           </IconButton>
         </MenuItem>
 
         <MenuItem onClick={handleDialog}>
-        <IconButton
+          <IconButton
             sx={{ p: 0, '&:hover': { backgroundColor: 'transparent' }, color: 'error.main' }}
           >
             <Iconify icon="eva:trash-2-outline" sx={{ mr: 2 }} />
             <Typography variant="subtitle2" noWrap>
-              Delete
+              Deletar
             </Typography>
           </IconButton>
         </MenuItem>
@@ -251,6 +284,34 @@ export default function LoanTableRow({
         name='o empréstimo'
         message="empréstimo"
       />
+      <Popover
+        open={!!openStatus}
+        anchorEl={openStatus}
+        onClose={handleCloseStatus}
+        anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+        PaperProps={{
+          sx: { width: 140 },
+        }}
+      >
+        <MenuItem onClick={() => handleStatus('Pago')} type="button">
+          <IconButton sx={{ p: 0, '&:hover': { backgroundColor: 'transparent' } }}>
+            <Typography variant="subtitle2" noWrap>
+              Pago
+            </Typography>
+          </IconButton>
+        </MenuItem>
+
+        <MenuItem onClick={() => handleStatus('Processando')}>
+          <IconButton
+            sx={{ p: 0, '&:hover': { backgroundColor: 'transparent' } }}
+          >
+            <Typography variant="subtitle2" noWrap>
+              Processando
+            </Typography>
+          </IconButton>
+        </MenuItem>
+      </Popover>
     </>
   );
 }
@@ -275,4 +336,5 @@ LoanTableRow.propTypes = {
   setAlert: PropTypes.func,
   setMessageAlert: PropTypes.func,
   setMessageError: PropTypes.func,
+  refetchLoans: PropTypes.func,
 };

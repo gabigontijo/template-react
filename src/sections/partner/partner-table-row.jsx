@@ -56,6 +56,7 @@ export default function PartnerTableRow({
       const { Partner } = await partnerById(id);
       setNewPartner(true);
       setPartnerId(id);
+      console.log()
       setStatePartner(Partner);
       setOpen(null);
       console.log(id);
