@@ -6,13 +6,14 @@ import TextField from '@mui/material/TextField';
 
 
 
-export default function SelectInstallments({ numInstallments, value, onChange }) {
+export default function SelectInstallments({ cardMachineList, value, onChange, cardMachineId }) {
+  const numInstallments = cardMachineList.find((machine) => machine.id === cardMachineId)?.installments
+  const installmentsOptions = Array.from({ length: Number(numInstallments) }, (_, index) => ({
+    value: `${index + 1}`,
+    label: `${index + 1}`,
+  }));
   console.log('numInstallments',numInstallments);
   console.log('numInstallments typeof', typeof(numInstallments));
-    const installmentsOptions = Array.from({ length: Number(numInstallments) }, (_, index) => ({
-        value: `${index + 1}`,
-        label: `${index + 1}`,
-      }));
   return (
     <Box component="form" noValidate autoComplete="off" width="33%">
       <div>
@@ -38,7 +39,8 @@ export default function SelectInstallments({ numInstallments, value, onChange })
 }
 
 SelectInstallments.propTypes = {
-  numInstallments: PropTypes.number,
   value: PropTypes.any,
   onChange:  PropTypes.func,
+  cardMachineList: PropTypes.any,
+  cardMachineId: PropTypes.any,
 };

@@ -163,7 +163,8 @@ export default function FormStepTwo({ loan, setLoan }) {
                     />
                   </Box>
                   <SelectInstallments
-                    numInstallments={cardMachineList.installments}
+                    cardMachineId={card.machineId}
+                    cardMachineList= {cardMachineList}
                     value={card.installments}
                     onChange={(e) => handleCardChange(index, 'installments', Number(e.target.value))}
                   />
