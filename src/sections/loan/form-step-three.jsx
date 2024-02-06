@@ -173,6 +173,7 @@ export default function FormStepThree({
                 refetchPartners={refetchPartners}
                 statePartner={loan.partner}
                 setStatePartner={setPartner}
+                sxPartner={{ padding: '1.5em', backgroundColor: 'rgba(145, 158, 171, 0.12)' }}
               />
             </Box>
           )}

@@ -29,7 +29,8 @@ export default function FormNewClient({
   setClientId,
   refetchClients,
   stateClient,
-  setStateClient
+  setStateClient,
+  sxClient,
 }) {
   const [partnersList, setPartnersList] = useState([]);
 
@@ -124,7 +125,7 @@ export default function FormNewClient({
 
   return (
     <>
-      <Stack spacing={{ xs: 1, sm: 2 }}>
+      <Stack spacing={{ xs: 1, sm: 2}}  sx={sxClient} >
         <Stack direction="row" spacing={{ xs: 1, sm: 2 }}>
           <Box width="100%">
             <TextField
@@ -211,7 +212,7 @@ export default function FormNewClient({
             color="success"
             onClick={handleSubmit}
           >
-            Cadastrar
+            Cadastrar Cliente
           </LoadingButton>
         )}
         {clientId !== null && (
@@ -242,5 +243,6 @@ FormNewClient.propTypes = {
   clientId: PropTypes.any,
   refetchClients: PropTypes.func,
   stateClient: PropTypes.any,
-  setStateClient: PropTypes.func
+  setStateClient: PropTypes.func,
+  sxClient: PropTypes.object,
 };

@@ -110,6 +110,7 @@ export default function FormStepOne({
               setStateClient={setClient}
               stateClient={loan.client}
               clientId={null}
+              sxClient={{ padding: '1.5em', backgroundColor: 'rgba(145, 158, 171, 0.12)' }}
             />
           </Box>
         )

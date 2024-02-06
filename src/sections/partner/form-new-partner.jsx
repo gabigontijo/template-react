@@ -24,6 +24,7 @@ export default function FormNewPartner({
   refetchPartners,
   statePartner,
   setStatePartner,
+  sxPartner,
 
 }) {
 
@@ -93,7 +94,7 @@ export default function FormNewPartner({
 
   return (
     <>
-      <Stack spacing={{ xs: 1, sm: 2 }}>
+      <Stack spacing={{ xs: 1, sm: 2 }} sx={sxPartner}>
         <Stack direction="row" spacing={{ xs: 1, sm: 2 }}>
           <Box width="100%">
             <TextField
@@ -186,7 +187,7 @@ export default function FormNewPartner({
             color="success"
             onClick={handleSubmit}
           >
-            Cadastrar
+            Cadastrar Parceiro
           </LoadingButton>
         )}
         {partnerId !== null && (
@@ -217,5 +218,5 @@ FormNewPartner.propTypes = {
   setStatePartner: PropTypes.func,
   statePartner: PropTypes.any,
   refetchPartners: PropTypes.func,
-
+  sxPartner: PropTypes.object,
 };
