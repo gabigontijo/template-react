@@ -198,7 +198,7 @@ export default function FormNewLoan({
         />
       )}
 
-      {activeStep === 1 && <FormStepTwo setLoan={setStateLoan} loan={stateLoan} />}
+      {activeStep === 1 && <FormStepTwo setLoan={setStateLoan} loan={stateLoan}/>}
       {activeStep === 2 && (
         <FormStepThree
           setAlert={setAlert}

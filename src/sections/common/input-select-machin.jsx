@@ -4,22 +4,7 @@ import Box from '@mui/material/Box';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 
-const currencies = [
-  {
-    value: 'machin-1',
-    label: 'Maquininha 1',
-  },
-  {
-    value: 'machin-2',
-    label: 'Maquininha 2',
-  },
-  {
-    value: 'machin-2',
-    label: 'Maquininha 2',
-  }
-];
-
-export default function SelectMachin({name, value, onChange}) {
+export default function SelectMachin({name, value, onChange, cardMachineList}) {
   return (
     <Box component="form" noValidate autoComplete="off" width="33%">
       <div>
@@ -28,15 +13,14 @@ export default function SelectMachin({name, value, onChange}) {
           id="select-machin"
           select
           label="Maquininha"
-          defaultValue="machin-1"
           helperText="Selecione a Maquininha"
           value={value}
           onChange={onChange}
           name={name}
         >
-          {currencies.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
-              {option.label}
+          {cardMachineList.map((option) => (
+            <MenuItem key={option.id} value={option.id}>
+              {option.name}
             </MenuItem>
           ))}
         </TextField>
@@ -48,6 +32,7 @@ export default function SelectMachin({name, value, onChange}) {
 SelectMachin.propTypes = {
   value: PropTypes.any,
   name: PropTypes.any,
+  cardMachineList: PropTypes.any,
   onChange: PropTypes.func,
 };
 

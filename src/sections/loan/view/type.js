@@ -39,5 +39,14 @@ export const loanInterface = {
     grossProfit: '',
     netProfit:'',
     paymentStatus: '',
-}
+};
+
+export const cardMachineInterface = {
+    id: 1,
+    name: '',
+    brand: [],
+    presentialTax: '',
+    onlineTax: '',
+    installments: 18,
+} 
 

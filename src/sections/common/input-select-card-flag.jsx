@@ -1,33 +1,16 @@
-import * as React from 'react';
+import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 
-const currencies = [
-  {
-    value: 'visa',
-    label: 'Visa',
-  },
-  {
-    value: 'mastercard',
-    label: 'Mastercard',
-  },
-  {
-    value: 'elo',
-    label: 'Elo',
-  },
-  {
-    value: 'hipercard',
-    label: 'Hipercard',
-  },
-  {
-    value: 'americanExpress',
-    label: 'American Express',
-  }
-];
+export default function SelectCardFlag({name, value, onChange, cardMachineList, cardMachineId}) {
+  const brandsString = cardMachineList.find((machine) => machine.id === cardMachineId)?.brand;
+  let brandMap = [];
+  if (typeof brandsString === 'string') {
+  brandMap = JSON.parse(brandsString);
+  };
 
-export default function SelectCardFlag() {
   return (
     <Box component="form" noValidate autoComplete="off" width="33%">
       <div>
@@ -36,12 +19,14 @@ export default function SelectCardFlag() {
           id="card-flag"
           select
           label="Bandeira"
-          defaultValue="visa"
           helperText="Selecione a bandeira"
+          value={value}
+          onChange={onChange}
+          name={name}
         >
-          {currencies.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
-              {option.label}
+          {brandMap.map((option) => (
+            <MenuItem key={`option${option}`} value={option}>
+              {option}
             </MenuItem>
           ))}
         </TextField>
@@ -49,3 +34,13 @@ export default function SelectCardFlag() {
     </Box>
   );
 }
+
+
+SelectCardFlag.propTypes = {
+  value: PropTypes.any,
+  name: PropTypes.any,
+  cardMachineList: PropTypes.any,
+  onChange: PropTypes.func,
+  cardMachineId: PropTypes.any,
+};
+

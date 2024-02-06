@@ -7,7 +7,9 @@ import TextField from '@mui/material/TextField';
 
 
 export default function SelectInstallments({ numInstallments, value, onChange }) {
-    const installmentsOptions = Array.from({ length: numInstallments }, (_, index) => ({
+  console.log('numInstallments',numInstallments);
+  console.log('numInstallments typeof', typeof(numInstallments));
+    const installmentsOptions = Array.from({ length: Number(numInstallments) }, (_, index) => ({
         value: `${index + 1}`,
         label: `${index + 1}`,
       }));

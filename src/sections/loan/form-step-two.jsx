@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
+import { useQuery } from "react-query";
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -7,6 +8,9 @@ import Stack from '@mui/material/Stack';
 // import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
+import { allCardMachines } from 'src/apis/card-machine';
+
+import { cardMachineInterface } from './view/type';
 import SelectMachin from '../common/input-select-machin';
 import NumberFormatField from '../common/number-format-field';
 import SelectCardFlag from '../common/input-select-card-flag';
@@ -19,8 +23,10 @@ import SelectNumberOfCardsFields from '../common/input-select-number-of-cards';
 
 export default function FormStepTwo({ loan, setLoan }) {
 
+  const [cardMachineList, setCardMachineList] = useState([cardMachineInterface]);
+
   const getDefaultCard = () => ({
-    machinId: 1,
+    machineId: 1,
     banner: '',
     value: '',
     installments: '',
@@ -32,6 +38,15 @@ export default function FormStepTwo({ loan, setLoan }) {
     Array.from({ length: Number(numberOfCards) }, (_, index) => getDefaultCard())
   );
 
+  useQuery("allCardMachines", allCardMachines, {
+    onSuccess: (response) => {
+      setCardMachineList(response.CardMachines);
+      console.log(response.CardMachines)
+    },
+    onError: (error) => {
+      console.error('Erro ao carregar maquininhas:', error);
+    }
+  });
 
   const handleRequestedValue = ({ target }) => {
     setLoan({
@@ -79,6 +94,8 @@ export default function FormStepTwo({ loan, setLoan }) {
     setCards((prevCards) => {
       const updatedCards = [...prevCards];
       updatedCards[cardIndex][field] = value;
+      console.log("item",updatedCards[cardIndex][field]);
+      console.log("value", value);
 
       setLoan((prevLoan) => ({
         ...prevLoan,
@@ -127,20 +144,26 @@ export default function FormStepTwo({ loan, setLoan }) {
                 </Typography>
                 <Stack direction="row" spacing={2} marginTop={2}>
                   <SelectMachin 
+                      cardMachineList= {cardMachineList}
                       name={`machin-${index}`}
-                      value={card.machinId}
-                      handleChange={(e) => handleCardChange(index, 'value', Number(e.target.value))} />
-                  <SelectCardFlag />
+                      value={card.machineId}
+                      onChange={(e) => handleCardChange(index, 'machineId', Number(e.target.value))} />
+                  <SelectCardFlag 
+                      cardMachineId={card.machineId}
+                      cardMachineList= {cardMachineList}
+                      name={`flag-${index}`}
+                      value={card.banner}
+                      onChange={(e) => handleCardChange(index, 'banner', e.target.value)} />
                   <Box width="33%">
                     <NumberFormatField
                       name={`valueCard-${index}`}
                       label="Valor"
                       value={card.value}
-                      handleChange={(e) => handleCardChange(index, 'value', Number(e.target.value))}
+                      onChange={(e) => handleCardChange(index, 'value', Number(e.target.value))}
                     />
                   </Box>
                   <SelectInstallments
-                    numInstallments={12}
+                    numInstallments={cardMachineList.installments}
                     value={card.installments}
                     onChange={(e) => handleCardChange(index, 'installments', Number(e.target.value))}
                   />
