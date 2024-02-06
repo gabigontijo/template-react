@@ -6,7 +6,9 @@ import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Switch from '@mui/material/Switch';
+import Tooltip from '@mui/material/Tooltip';
 import TextField from '@mui/material/TextField';
+import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
 import Autocomplete from '@mui/material/Autocomplete';
@@ -118,8 +120,7 @@ export default function FormStepThree({
               sm: 'nowrap',
             },
           }}>
-            <Box width={{ xs: '100%', md: '60%' }}>
-
+            <Box width={{ xs: '100%', md: '60%' }} direction= "row">
               <Autocomplete
                 id="partner-autocomplete"
                 options={partnerList}
@@ -128,6 +129,20 @@ export default function FormStepThree({
                 renderInput={(params) => <TextField {...params} label="Procurar parceiro" />}
                 onChange={(event, value) => onPartnerSelect(value)}
               />
+            </Box>
+            <Box>
+            {!isNewPartner ? (
+                  <Tooltip title="Novo Parceiro">
+                  <IconButton aria-label="delete" onClick={handleNewPartner} size="large" color="primary" >
+                   <Iconify icon="bx:user-plus" />
+                </IconButton>
+                </Tooltip>
+                ) : (
+                  <Button color="inherit" onClick={handleClosePartner}>
+                    <CloseIcon />
+                  </Button>
+                )}
+            
             </Box>
 
             <Box width={{ xs: '100%', md: '60%' }}>
@@ -144,26 +159,6 @@ export default function FormStepThree({
                 label="Porcentagem da comissão"
                 value={loan.partnerProfit.percentPartner}
                 handleChange={handleChangePartnerPercent} />
-            </Box>
-          </Stack>
-          <Stack p={2} justifyContent='end'>
-            <Box width="100%">
-              <Stack direction="row" justifyContent="flex-end" alignItems="center">
-                {!isNewPartner ? (
-                  <Button
-                    variant="contained"
-                    color="success"
-                    startIcon={<Iconify icon="eva:plus-fill" />}
-                    onClick={handleNewPartner}
-                  >
-                    Novo Parceiro
-                  </Button>
-                ) : (
-                  <Button color="inherit" onClick={handleClosePartner}>
-                    <CloseIcon />
-                  </Button>
-                )}
-              </Stack>
             </Box>
           </Stack>
           {isNewPartner && (

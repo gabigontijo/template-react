@@ -4,7 +4,9 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
+import Tooltip from '@mui/material/Tooltip';
 import TextField from '@mui/material/TextField';
+import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Autocomplete from '@mui/material/Autocomplete';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -79,16 +81,13 @@ export default function FormStepOne({
           />
         </Box>
         <Box width="50%">
-          <Stack direction="row" justifyContent="flex-end" alignItems="center">
+          <Stack direction="row" alignItems="center">
             {!isNewClient ? (
-              <Button
-                variant="contained"
-                color="success"
-                startIcon={<Iconify icon="eva:plus-fill" />}
-                onClick={handleNewClient}
-              >
-                Novo Cliente
-              </Button>
+              <Tooltip title="Novo Cliente">
+               <IconButton aria-label="delete" onClick={handleNewClient} size="large" color="primary" >
+                <Iconify icon="bx:user-plus" />
+             </IconButton>
+             </Tooltip>
             ) : (
               <Button color="inherit" onClick={handleCloseClient}>
                 <CloseIcon />
