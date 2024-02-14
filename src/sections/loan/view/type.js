@@ -16,11 +16,13 @@ export const loanInterface = {
     numberOfCards: 1,
     cards: [
         {
-           machineId: '',
-           banner: '',
+           cardMachineId: '',
+           cardMachineName:'',
+           brand: '',
            value: '',
            installments: '',
-           paymentType: ''
+           paymentType: '',
+           installmentsValue: ''
         }
     ],
     partner:{
@@ -38,6 +40,8 @@ export const loanInterface = {
     },
     grossProfit: '',
     netProfit:'',
+    type: 1,
+    clientAmount: '',
     paymentStatus: '',
 };
 
@@ -45,8 +49,8 @@ export const cardMachineInterface = {
     id: 1,
     name: '',
     brand: [],
-    presentialTax: '',
-    onlineTax: '',
+    presentialTax: {},
+    onlineTax: {},
     installments: 18,
 } 
 
