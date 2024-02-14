@@ -1,6 +1,6 @@
-import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useQuery } from "react-query";
+import { useState, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
 import Step from '@mui/material/Step';
@@ -13,11 +13,13 @@ import Typography from '@mui/material/Typography';
 import { allClients } from 'src/apis/client';
 import { allPartners } from 'src/apis/partner';
 import { createLoan, updateLoan } from 'src/apis/loan';
+import { allCardMachines } from 'src/apis/card-machine';
 
 import FormStepOne from './form-step-one';
 import FormStepTwo from './form-step-two';
-import { loanInterface } from './view/type';
 import FormStepThree from './form-step-three';
+import { createBodyLoan, createBodyStepTwo } from './service';
+import { loanInterface, cardMachineInterface } from './view/type';
 
 const steps = ['Selecione o cliente', 'Dados do empréstimo', 'Selecione o parceiro'];
 
@@ -41,6 +43,11 @@ export default function FormNewLoan({
   const [isNewClient, setIsNewClient] = useState(false);
   const [clientList, setClientList] = useState([]);
   const [partnerList, setPartnerList] = useState([]);
+  const [cardMachineList, setCardMachineList] = useState([cardMachineInterface]);
+
+  useEffect(()=>{
+    console.log(stateLoan);
+  },[stateLoan])
 
   const { isLoading: isLoadingClients, refetch: refetchClients } = useQuery("allClients", allClients, {
     onSuccess: (response) => {
@@ -60,6 +67,16 @@ export default function FormNewLoan({
     }
   });
 
+  useQuery("allCardMachines", allCardMachines, {
+    onSuccess: (response) => {
+      setCardMachineList(response.CardMachines);
+      console.log(response.CardMachines)
+    },
+    onError: (error) => {
+      console.error('Erro ao carregar maquininhas:', error);
+    }
+  });
+
   const isStepSkipped = (step) => {
     skipped.has(step);
   };
@@ -73,40 +90,14 @@ export default function FormNewLoan({
 
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
     setSkipped(newSkipped);
+    if(activeStep === 1) {
+      createBodyStepTwo(setStateLoan, stateLoan, cardMachineList);
+    }
   };
 
   const handleSubmit = async () => {
-    console.log(stateLoan);
-    console.log({
-      clientId: stateLoan.client.id,
-      askValue: stateLoan.value,
-      operationPercent: stateLoan.operationPercent,
-      amount: stateLoan.amount,
-      numberCards: stateLoan.numberOfCards,
-      cards: stateLoan.cards,
-      partnerId: stateLoan.partner.id,
-      partnerPercent: stateLoan.partnerPercent,
-      partnerAmount: stateLoan.partnerAmount,
-      grossProfit: stateLoan.grossProfit,
-      profit: stateLoan.netProfit,
-      paymentStatus: 'pending'
-    })
     try {
-      const bodyLoan = {
-        clientId: stateLoan.client.id,
-        askValue: stateLoan.value,
-        operationPercent: stateLoan.operationPercent,
-        amount: stateLoan.amount,
-        numberCards: stateLoan.numberOfCards,
-        cards: stateLoan.cards,
-        partnerId: stateLoan.partner.id,
-        partnerPercent: stateLoan.partnerPercent,
-        partnerAmount: stateLoan.partnerAmount,
-        grossProfit: stateLoan.grossProfit,
-        profit: stateLoan.netProfit,
-        paymentStatus: 'pending'
-      };
-      const response = await createLoan(bodyLoan);
+      const response = await createLoan(createBodyLoan(setStateLoan, stateLoan));
       console.log('Resposta da API Loan:', response);
       setNewLoan(false);
       setAlert(true);
@@ -118,7 +109,6 @@ export default function FormNewLoan({
       setMessageError('Erro ao Cadastrar o empréstimo')
       console.log('Erro ao Cadastrar o empréstimo:', error);
     }
-    
   };
 
   const handleSubmitEdit = async () => {
@@ -198,7 +188,7 @@ export default function FormNewLoan({
         />
       )}
 
-      {activeStep === 1 && <FormStepTwo setLoan={setStateLoan} loan={stateLoan}/>}
+      {activeStep === 1 && <FormStepTwo setLoan={setStateLoan} loan={stateLoan} cardMachineList={cardMachineList}/>}
       {activeStep === 2 && (
         <FormStepThree
           setAlert={setAlert}

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useQuery } from "react-query";
+// import { useQuery } from "react-query";
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -8,12 +8,13 @@ import Stack from '@mui/material/Stack';
 // import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
-import { allCardMachines } from 'src/apis/card-machine';
+// import { allCardMachines } from 'src/apis/card-machine';
 
-import { cardMachineInterface } from './view/type';
+// import { cardMachineInterface } from './view/type';
 import SelectMachin from '../common/input-select-machin';
 import NumberFormatField from '../common/number-format-field';
 import SelectCardFlag from '../common/input-select-card-flag';
+import SelectTypeLoan from '../common/input-select-type-loan';
 import PercentFormatField from '../common/percent-format-field';
 import SelectPaymentType from '../common/input-select-payment-type';
 import SelectInstallments from '../common/input-select-installments';
@@ -21,9 +22,9 @@ import SelectNumberOfCardsFields from '../common/input-select-number-of-cards';
 
 // ----------------------------------------------------------------------
 
-export default function FormStepTwo({ loan, setLoan }) {
+export default function FormStepTwo({ loan, setLoan, cardMachineList }) {
 
-  const [cardMachineList, setCardMachineList] = useState([cardMachineInterface]);
+  // const [cardMachineList, setCardMachineList] = useState([cardMachineInterface]);
 
   const getDefaultCard = () => ({
     machineId: 1,
@@ -31,6 +32,7 @@ export default function FormStepTwo({ loan, setLoan }) {
     value: '',
     installments: '',
     paymentType: '',
+    installmentsValue: '',
   });
 
   const [numberOfCards, setNumberOfCards] = useState(1);
@@ -38,15 +40,15 @@ export default function FormStepTwo({ loan, setLoan }) {
     Array.from({ length: Number(numberOfCards) }, (_, index) => getDefaultCard())
   );
 
-  useQuery("allCardMachines", allCardMachines, {
-    onSuccess: (response) => {
-      setCardMachineList(response.CardMachines);
-      console.log(response.CardMachines)
-    },
-    onError: (error) => {
-      console.error('Erro ao carregar maquininhas:', error);
-    }
-  });
+  // useQuery("allCardMachines", allCardMachines, {
+  //   onSuccess: (response) => {
+  //     setCardMachineList(response.CardMachines);
+  //     console.log(response.CardMachines)
+  //   },
+  //   onError: (error) => {
+  //     console.error('Erro ao carregar maquininhas:', error);
+  //   }
+  // });
 
   const handleRequestedValue = ({ target }) => {
     setLoan({
@@ -54,6 +56,15 @@ export default function FormStepTwo({ loan, setLoan }) {
       'value': target.value,
     });
   };
+
+  const handleTypeLoan = ({ target }) => {
+    console.log(target.value);
+    setLoan({
+      ...loan,
+      'type': target.value,
+    });
+  };
+
 
   const handleRequestedOperationPercent = ({ target }) => {
     setLoan({
@@ -111,6 +122,9 @@ export default function FormStepTwo({ loan, setLoan }) {
       <Stack p={3}>
         <Stack spacing={2}>
           <Stack direction="row" spacing={2}>
+          <Box>
+          <SelectTypeLoan handleChange={handleTypeLoan} loanType={loan.type}/>
+        </Box>
             <Box width="30%">
               <NumberFormatField
                 name="value"
@@ -147,19 +161,19 @@ export default function FormStepTwo({ loan, setLoan }) {
                       cardMachineList= {cardMachineList}
                       name={`machin-${index}`}
                       value={card.machineId}
-                      onChange={(e) => handleCardChange(index, 'machineId', Number(e.target.value))} />
+                      onChange={(e) => handleCardChange(index, 'cardMachineId', Number(e.target.value))} />
                   <SelectCardFlag 
                       cardMachineId={card.machineId}
                       cardMachineList= {cardMachineList}
                       name={`flag-${index}`}
                       value={card.banner}
-                      onChange={(e) => handleCardChange(index, 'banner', e.target.value)} />
+                      onChange={(e) => handleCardChange(index, 'brand', e.target.value)} />
                   <Box width="33%">
                     <NumberFormatField
                       name={`valueCard-${index}`}
                       label="Valor"
                       value={card.value}
-                      onChange={(e) => handleCardChange(index, 'value', Number(e.target.value))}
+                      handleChange={(e) => handleCardChange(index, 'value', Number(e.target.value))}
                     />
                   </Box>
                   <SelectInstallments
@@ -184,4 +198,5 @@ export default function FormStepTwo({ loan, setLoan }) {
 FormStepTwo.propTypes = {
   setLoan: PropTypes.func,
   loan: PropTypes.any,
+  cardMachineList: PropTypes.any
 };

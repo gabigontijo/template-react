@@ -15,7 +15,6 @@ import Iconify from 'src/components/iconify';
 
 import FormNewClient from '../client/form-new-client';
 import { clientInterface } from '../client/view/type';
-
 // ----------------------------------------------------------------------
 
 export default function FormStepOne({
