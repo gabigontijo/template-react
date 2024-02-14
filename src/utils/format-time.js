@@ -25,3 +25,21 @@ export function fToNow(date) {
       })
     : '';
 }
+
+export function formatarData(dataOriginal) {
+  // Crie um objeto Date com a data original
+  const data = new Date(dataOriginal);
+
+  // Extraia os componentes da data
+  const dia = (`0${  data.getDate()}`).slice(-2);
+  const mes = (`0${  data.getMonth() + 1}`).slice(-2);
+  const ano = data.getFullYear();
+  const hora = (`0${  data.getHours()}`).slice(-2);
+  const minutos = (`0${  data.getMinutes()}`).slice(-2);
+
+  // Formate a data no formato desejado (dd/mm/aaaa hora:minutos)
+  const dataFormatada = `${dia}/${mes}/${ano} ${hora}:${minutos}`;
+
+  return dataFormatada;
+}
+

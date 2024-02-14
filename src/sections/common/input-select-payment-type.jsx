@@ -6,7 +6,7 @@ import TextField from '@mui/material/TextField';
 
 const currencies = [
   {
-    value: 'inPerson',
+    value: 'present',
     label: 'Presencial',
   },
   {
@@ -24,7 +24,7 @@ export default function SelectPaymentType({ value, onChange }) {
           id="select-payment-type"
           select
           label="Tipo do Pagamento"
-          defaultValue="inPerson"
+          defaultValue="present"
           value={value}
           onChange={onChange}
           helperText="Selecione o tipo do pagamento"

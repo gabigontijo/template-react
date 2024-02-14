@@ -16,12 +16,14 @@ import IconButton from '@mui/material/IconButton';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
+import { formatarData } from 'src/utils/format-time';
+
 import { loanById, deleteLoan } from 'src/apis/loan';
 
 import Iconify from 'src/components/iconify';
 
+import CardIcon from '../common/card-brand-icon';
 import DialogDelete from '../common/dialog-delete';
-
 // ----------------------------------------------------------------------
 
 export default function LoanTableRow({
@@ -29,10 +31,9 @@ export default function LoanTableRow({
   id,
   client,
   value,
-  // banner,
-  // valueMachine,
-  // installments,
-  // cardData,
+  dateCreated,
+  dateUpdated,
+  cards,
   grossProfit,
   partner,
   partnerProfit,
@@ -119,6 +120,9 @@ export default function LoanTableRow({
     setOpenStatus(null);
   };
 
+  const createDate = formatarData(dateCreated);
+  const updateDate = formatarData(dateUpdated);
+
   return (
     <>
       <TableRow hover tabIndex={-1} role="checkbox" selected={selected}>
@@ -135,19 +139,13 @@ export default function LoanTableRow({
           </IconButton>
         </TableCell>
 
-        <TableCell component="th" scope="row" padding="none">
+        <TableCell component="th" scope="row">
           <Typography variant="subtitle2" noWrap>
             {client.name}
           </Typography>
         </TableCell>
 
         <TableCell>{value}</TableCell>
-
-        {/* <TableCell>{banner}</TableCell> */}
-
-        {/* <TableCell>{valueMachine}</TableCell> */}
-
-        {/* <TableCell>{cardData}</TableCell> */}
 
         <TableCell>{grossProfit}</TableCell>
 
@@ -181,7 +179,10 @@ export default function LoanTableRow({
                 Dados do pagamento
               </Typography>
               <Typography variant="h8" gutterBottom component="div">
-                20/12/2023 11:43
+                Criado: {createDate}
+              </Typography>
+              <Typography variant="h8" gutterBottom component="div">
+              Última modifição: {updateDate}
               </Typography>
               <Table size="small" aria-label="purchases">
                 <TableHead>
@@ -190,56 +191,30 @@ export default function LoanTableRow({
                     <TableCell align="right">Bandeira</TableCell>
                     <TableCell align="right">Valor (R$)</TableCell>
                     <TableCell align="right">Parcelas</TableCell>
+                    <TableCell align="right">Valor da Parcela</TableCell>
                     <TableCell align="right">Tipo do pagamento</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {/* {cards.map((card) => (
+                  {cards.map((card) => (
                     <TableRow key={card.id}>
                       <TableCell component="th" scope="row">
-                        {card.machineId}
+                        {card.cardMachineName}
                       </TableCell>
-                      <TableCell>{card.banner}</TableCell>
+                      <TableCell>
+                        <CardIcon brandIcon={card.brand}/></TableCell>
                       <TableCell align="right">{card.value}</TableCell>
                       <TableCell align="right">
                         {card.installments}
+                      </TableCell>
+                      <TableCell align="right">
+                        {card.installmentsValue}
                       </TableCell>
                        <TableCell align="right">
                         {card.paymentType}
                       </TableCell>
                     </TableRow>
-                  ))} */}
-
-                  <TableRow key={1}>
-                    <TableCell component="th" scope="row">
-                      maquininha x
-                    </TableCell>
-                    <TableCell align="right">
-                      <Iconify icon="logos:visa" />
-                    </TableCell>
-                    <TableCell align="right">100,00</TableCell>
-                    <TableCell align="right">
-                      12
-                    </TableCell>
-                    <TableCell align="right">
-                      Presencial
-                    </TableCell>
-                  </TableRow>
-                  <TableRow key={2}>
-                    <TableCell component="th" scope="row">
-                      maquininha w
-                    </TableCell>
-                    <TableCell align="right">
-                      <Iconify icon="logos:mastercard" />
-                    </TableCell>
-                    <TableCell align="right">1.000,00</TableCell>
-                    <TableCell align="right">
-                      18
-                    </TableCell>
-                    <TableCell align="right">
-                      Online
-                    </TableCell>
-                  </TableRow>
+                  ))}
                 </TableBody>
               </Table>
             </Box>
@@ -320,11 +295,11 @@ LoanTableRow.propTypes = {
   client: PropTypes.any,
   id: PropTypes.any,
   value: PropTypes.any,
-  // banner: PropTypes.any,
-  // valueMachine: PropTypes.any,
-  // installments: PropTypes.any,
+  dateCreated: PropTypes.any,
+  dateUpdated: PropTypes.any,
   grossProfit: PropTypes.any,
   partner: PropTypes.any,
+  cards: PropTypes.any,
   partnerProfit: PropTypes.any,
   netProfit: PropTypes.any,
   selected: PropTypes.any,

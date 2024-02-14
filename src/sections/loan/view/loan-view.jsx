@@ -255,7 +255,7 @@ export default function LoanPage() {
                   { id: 'client', label: 'Cliente' },
                   { id: 'value', label: 'Valor Solicitado' },
                   // { id: 'banner', label: 'Bandeira' },
-                  // { id: 'valueMachine', label: 'Valor Máquina' },
+                  // // { id: 'valueMachine', label: 'Valor Máquina' },
                   // { id: 'installments', label: 'Parcelas' },
                   { id: 'grossProfit', label: 'Lucro Bruto' },
                   { id: 'partner', label: 'Parceiro' },
@@ -273,15 +273,15 @@ export default function LoanPage() {
                       key={row.id}
                       id={row.id}
                       client={row.client}
-                      value={row.value}
-                      // banner={row.banner}
-                      // valueMachine={row.valueMachine}
-                      // installments={row.installments}
+                      value={row.askValue}
+                      dateCreated={row.createdAt}
+                      dateUpdated={row.updatedAt}
+                      cards={row.cards}
                       paymentStatus={row.paymentStatus}
                       grossProfit={row.grossProfit}
                       partner={row.partner}
-                      partnerProfit={row.partnerProfit}
-                      netProfit={row.netProfit}
+                      partnerProfit={row.partnerAmount}
+                      netProfit={row.profit}
                       selected={selected.some((item) => item.name === row.client.name)}
                       handleClick={(event) => handleClick(event, row.client.name, row.id)}
                       setStateLoan={setStateLoan}
