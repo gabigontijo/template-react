@@ -132,7 +132,7 @@ export default function PartnerTableRow({
           <IconButton sx={{ p: 0, '&:hover': { backgroundColor: 'transparent' } }}>
             <Iconify icon="eva:edit-fill" sx={{ mr: 2 }} />
             <Typography variant="subtitle2" noWrap>
-              Edit
+              Editar
             </Typography>
           </IconButton>
         </MenuItem>
@@ -143,7 +143,7 @@ export default function PartnerTableRow({
           >
             <Iconify icon="eva:trash-2-outline" sx={{ mr: 2 }} />
             <Typography variant="subtitle2" noWrap>
-              Delete
+              Deletar
             </Typography>
           </IconButton>
         </MenuItem>

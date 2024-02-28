@@ -199,7 +199,7 @@ export default function FormNewPartner({
             color="inherit"
             onClick={handleSubmitEdit}
           >
-            Editar
+            Editar Parceiro
           </LoadingButton>
         )}
       </Stack>
