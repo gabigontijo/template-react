@@ -20,6 +20,7 @@ export const loanInterface = {
            cardMachineName:'',
            brand: '',
            value: '',
+           valueWithTax: '',
            installments: '',
            paymentType: '',
            installmentsValue: ''
@@ -44,13 +45,4 @@ export const loanInterface = {
     clientAmount: '',
     paymentStatus: '',
 };
-
-export const cardMachineInterface = {
-    id: 1,
-    name: '',
-    brand: [],
-    presentialTax: {},
-    onlineTax: {},
-    installments: 18,
-} 
 

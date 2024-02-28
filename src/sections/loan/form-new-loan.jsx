@@ -17,9 +17,10 @@ import { allCardMachines } from 'src/apis/card-machine';
 
 import FormStepOne from './form-step-one';
 import FormStepTwo from './form-step-two';
+import { loanInterface } from './view/type';
 import FormStepThree from './form-step-three';
+import { machineInterface } from '../machine/view/type';
 import { createBodyLoan, createBodyStepTwo } from './service';
-import { loanInterface, cardMachineInterface } from './view/type';
 
 const steps = ['Selecione o cliente', 'Dados do empréstimo', 'Selecione o parceiro'];
 
@@ -43,7 +44,7 @@ export default function FormNewLoan({
   const [isNewClient, setIsNewClient] = useState(false);
   const [clientList, setClientList] = useState([]);
   const [partnerList, setPartnerList] = useState([]);
-  const [cardMachineList, setCardMachineList] = useState([cardMachineInterface]);
+  const [cardMachineList, setCardMachineList] = useState([machineInterface]);
 
   useEffect(()=>{
     console.log(stateLoan);

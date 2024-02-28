@@ -10,7 +10,6 @@ import Typography from '@mui/material/Typography';
 
 // import { allCardMachines } from 'src/apis/card-machine';
 
-// import { cardMachineInterface } from './view/type';
 import SelectMachin from '../common/input-select-machin';
 import NumberFormatField from '../common/number-format-field';
 import SelectCardFlag from '../common/input-select-card-flag';
@@ -24,12 +23,12 @@ import SelectNumberOfCardsFields from '../common/input-select-number-of-cards';
 
 export default function FormStepTwo({ loan, setLoan, cardMachineList }) {
 
-  // const [cardMachineList, setCardMachineList] = useState([cardMachineInterface]);
-
   const getDefaultCard = () => ({
-    machineId: 1,
-    banner: '',
+    cardMachineId: 1,
+    cardMachineName: '',
+    brand: '',
     value: '',
+    valueWithTax: '',
     installments: '',
     paymentType: '',
     installmentsValue: '',
@@ -53,7 +52,7 @@ export default function FormStepTwo({ loan, setLoan, cardMachineList }) {
   const handleRequestedValue = ({ target }) => {
     setLoan({
       ...loan,
-      'value': target.value,
+      value: target.value,
     });
   };
 
@@ -61,43 +60,42 @@ export default function FormStepTwo({ loan, setLoan, cardMachineList }) {
     console.log(target.value);
     setLoan({
       ...loan,
-      'type': target.value,
+      type: target.value,
     });
   };
-
 
   const handleRequestedOperationPercent = ({ target }) => {
     setLoan({
       ...loan,
-      'operationPercent': target.value,
+      operationPercent: target.value,
     });
-  }
+  };
 
   const getUpdatedCards = (newQuantity) => {
     if (loan.numberOfCards > newQuantity) {
-      return loan.cards.slice(0, newQuantity)
+      return loan.cards.slice(0, newQuantity);
     }
 
     if (loan.numberOfCards < newQuantity) {
       for (let i = 0; i < newQuantity - loan.numberOfCards; i += 1) {
-        loan.cards.push(getDefaultCard())
+        loan.cards.push(getDefaultCard());
       }
-      return loan.cards
+      return loan.cards;
     }
     return null;
-  }
+  };
 
   const handleNumberOfCards = ({ target }) => {
-    const qttCards = target.value
+    const qttCards = target.value;
     setNumberOfCards(Number(qttCards));
-    const cardsUpdated = getUpdatedCards(qttCards)
-    setCards(cardsUpdated)
+    const cardsUpdated = getUpdatedCards(qttCards);
+    setCards(cardsUpdated);
 
     console.log(typeof qttCards, Number(qttCards));
     setLoan({
       ...loan,
-      'numberOfCards': qttCards,
-      'cards': cardsUpdated,
+      numberOfCards: qttCards,
+      cards: cardsUpdated,
     });
   };
 
@@ -105,8 +103,8 @@ export default function FormStepTwo({ loan, setLoan, cardMachineList }) {
     setCards((prevCards) => {
       const updatedCards = [...prevCards];
       updatedCards[cardIndex][field] = value;
-      console.log("item",updatedCards[cardIndex][field]);
-      console.log("value", value);
+      console.log('item', updatedCards[cardIndex][field]);
+      console.log('value', value);
 
       setLoan((prevLoan) => ({
         ...prevLoan,
@@ -116,15 +114,14 @@ export default function FormStepTwo({ loan, setLoan, cardMachineList }) {
     });
   };
 
-
   return (
     <Card sx={{ marginTop: '1.5em' }}>
       <Stack p={3}>
         <Stack spacing={2}>
           <Stack direction="row" spacing={2}>
-          <Box>
-          <SelectTypeLoan handleChange={handleTypeLoan} loanType={loan.type}/>
-        </Box>
+            <Box>
+              <SelectTypeLoan handleChange={handleTypeLoan} loanType={loan.type} />
+            </Box>
             <Box width="30%">
               <NumberFormatField
                 name="value"
@@ -157,17 +154,29 @@ export default function FormStepTwo({ loan, setLoan, cardMachineList }) {
                   {`Cartão ${index + 1}`}
                 </Typography>
                 <Stack direction="row" spacing={2} marginTop={2}>
-                  <SelectMachin 
-                      cardMachineList= {cardMachineList}
-                      name={`machin-${index}`}
-                      value={card.machineId}
-                      onChange={(e) => handleCardChange(index, 'cardMachineId', Number(e.target.value))} />
-                  <SelectCardFlag 
-                      cardMachineId={card.machineId}
-                      cardMachineList= {cardMachineList}
-                      name={`flag-${index}`}
-                      value={card.banner}
-                      onChange={(e) => handleCardChange(index, 'brand', e.target.value)} />
+                  <SelectMachin
+                    cardMachineList={cardMachineList}
+                    name={`machin-${index}`}
+                    value={card.cardMachineId}
+                    onChange={(e) =>
+                      handleCardChange(index, 'cardMachineId', Number(e.target.value))
+                    }
+                  />
+                  <SelectCardFlag
+                    cardMachineId={card.cardMachineId}
+                    cardMachineList={cardMachineList}
+                    name={`flag-${index}`}
+                    value={card.brand}
+                    onChange={(e) => handleCardChange(index, 'brand', e.target.value)}
+                  />
+                  <SelectInstallments
+                    cardMachineId={card.cardMachineId}
+                    cardMachineList={cardMachineList}
+                    value={card.installments}
+                    onChange={(e) =>
+                      handleCardChange(index, 'installments', Number(e.target.value))
+                    }
+                  />
                   <Box width="33%">
                     <NumberFormatField
                       name={`valueCard-${index}`}
@@ -176,15 +185,20 @@ export default function FormStepTwo({ loan, setLoan, cardMachineList }) {
                       handleChange={(e) => handleCardChange(index, 'value', Number(e.target.value))}
                     />
                   </Box>
-                  <SelectInstallments
-                    cardMachineId={card.machineId}
-                    cardMachineList= {cardMachineList}
-                    value={card.installments}
-                    onChange={(e) => handleCardChange(index, 'installments', Number(e.target.value))}
-                  />
                   <SelectPaymentType
                     value={card.paymentType}
-                    onChange={(e) => handleCardChange(index, 'paymentType', e.target.value)} />
+                    onChange={(e) => handleCardChange(index, 'paymentType', e.target.value)}
+                  />
+                  <Box width="33%">
+                    <NumberFormatField
+                      name={`valueCardMachine-${index}`}
+                      label="Valor com taxas"
+                      value={card.value}
+                      handleChange={(e) =>
+                        handleCardChange(index, 'valueWithTax', Number(e.target.value))
+                      }
+                    />
+                  </Box>
                 </Stack>
               </div>
             ))}
@@ -198,5 +212,5 @@ export default function FormStepTwo({ loan, setLoan, cardMachineList }) {
 FormStepTwo.propTypes = {
   setLoan: PropTypes.func,
   loan: PropTypes.any,
-  cardMachineList: PropTypes.any
+  cardMachineList: PropTypes.any,
 };

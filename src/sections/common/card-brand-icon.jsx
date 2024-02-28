@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 
 import Iconify from 'src/components/iconify';
 
-function CardIcon({ brandIcon }) {
+function CardIcon({ brandIcon, size }) {
   // Mapeie a bandeira do cartão para o ícone correspondente
   const getIconForBrand = (brand) => {
     switch (brand.toLowerCase()) {
@@ -25,7 +25,7 @@ function CardIcon({ brandIcon }) {
   const icon = getIconForBrand(brandIcon);
 
   // Renderize o ícone
-  return <Iconify icon={icon} />;
+  return <Iconify icon={icon}  sx={{ width: size }} />;
 }
 
 
@@ -33,5 +33,7 @@ export default CardIcon;
 
 
 CardIcon.propTypes = {
-    brandIcon: PropTypes.string };
+    brandIcon: PropTypes.string, 
+    size: PropTypes.number 
+  };
   

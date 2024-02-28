@@ -182,7 +182,7 @@ export default function LoanTableRow({
                 Criado: {createDate}
               </Typography>
               <Typography variant="h8" gutterBottom component="div">
-              Última modifição: {updateDate}
+              Última modificação: {updateDate}
               </Typography>
               <Table size="small" aria-label="purchases">
                 <TableHead>
@@ -198,11 +198,11 @@ export default function LoanTableRow({
                 <TableBody>
                   {cards.map((card) => (
                     <TableRow key={card.id}>
-                      <TableCell component="th" scope="row">
+                      <TableCell component="th" scope="row" style={{ whiteSpace: 'nowrap' }}>
                         {card.cardMachineName}
                       </TableCell>
-                      <TableCell>
-                        <CardIcon brandIcon={card.brand}/></TableCell>
+                      <TableCell align="right">
+                        <CardIcon brandIcon={card.brand} size={20}/></TableCell>
                       <TableCell align="right">{card.value}</TableCell>
                       <TableCell align="right">
                         {card.installments}
