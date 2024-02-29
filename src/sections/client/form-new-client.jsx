@@ -224,7 +224,7 @@ export default function FormNewClient({
             color="inherit"
             onClick={handleSubmitEdit}
           >
-            Editar
+            Editar Cliente
           </LoadingButton>
         )}
       </Stack>

@@ -28,7 +28,7 @@ export const loanById = async (loanId) => {
     method: 'get',
     headers: getHeaders({ 'Content-Type': 'application/json' }),
   };
-  const res = await apiFetch(`${URlLoans}${loanId}`, apiOpts);
+  const res = await apiFetch(`${URlLoans}/${loanId}`, apiOpts);
   return res.json();
 };
 
@@ -42,12 +42,22 @@ export const updateLoan = async (loan) => {
   return res.json();
 };
 
+export const updateLoanPaymentStatus = async (loanId, paymentStatus) => {
+  const apiOpts = {
+    method: 'PATCH',
+    body: JSON.stringify(paymentStatus),
+    headers: getHeaders({ 'Content-Type': 'application/json' }),
+  };
+  const res = await apiFetch(`${URlLoans}/${loanId}/payment-status`, apiOpts);
+  return res;
+};
+
 export const deleteLoan = async (loanId) => {
   const apiOpts = {
     method: 'delete',
     headers: getHeaders({ 'Content-Type': 'application/json' }),
   };
-  const res = await apiFetch(`${URlLoans}${loanId}`, apiOpts);
+  const res = await apiFetch(`${URlLoans}/${loanId}`, apiOpts);
   return res.json();
 };
 

@@ -18,12 +18,13 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 import { formatarData } from 'src/utils/format-time';
 
-import { loanById, deleteLoan } from 'src/apis/loan';
+import { loanById, deleteLoan, updateLoanPaymentStatus } from 'src/apis/loan';
 
 import Iconify from 'src/components/iconify';
 
 import CardIcon from '../common/card-brand-icon';
 import DialogDelete from '../common/dialog-delete';
+import DialogPaymentStatus from '../common/dialog-payment-status';
 // ----------------------------------------------------------------------
 
 export default function LoanTableRow({
@@ -46,15 +47,20 @@ export default function LoanTableRow({
   setNewLoan,
   setMessageAlert,
   setMessageError,
+  paymentStatus,
   refetchLoans,
 }) {
   const [open, setOpen] = useState(null);
 
   const [openStatus, setOpenStatus] = useState(null);
 
-  const [textStatus, setTextStatus] = useState('Processando');
+  const [textStatus, setTextStatus] = useState(paymentStatus);
+
+  const [statusPayment, setStatusPayment] = useState('');
 
   const [openDialog, setOpenDialog] = useState(false);
+
+  const [openDialogStatus, setOpenDialogStatus] = useState(false);
 
   const [openCard, setOpenCard] = useState(false);
 
@@ -111,11 +117,28 @@ export default function LoanTableRow({
     setOpen(null);
   };
 
-  const handleStatus = (status) => {
-    if (status === 'Pago') {
-      setTextStatus('Pago');
-    } else {
-      setTextStatus('Pendente');
+  const handleDialogStatus = (status) => {
+    console.log("entrei aqui")
+    setOpenDialogStatus(true);
+    setOpenStatus(null);
+    setStatusPayment(status);
+  };
+
+  const handleStatus = async () => {
+    const bodyEditPaymentStatus = { paymentStatus: textStatus}
+    try {
+      const response = await updateLoanPaymentStatus(id, bodyEditPaymentStatus);
+      console.log('Resposta da API loan:', response);
+      setOpenDialogStatus(false);
+      setAlert(true);
+      setMessageAlert('Status do pagamento atualizado com sucesso')
+      setTextStatus(statusPayment === "paid"? "paid": "pending")
+      refetchLoans();
+    } catch (error) {
+      setOpenDialogStatus(false);
+      setAlertError(true);
+      setMessageError('Erro ao atualizar o status do pagamento')
+      console.log('Erro  ao atualizar o status do pagamento:', error);
     }
     setOpenStatus(null);
   };
@@ -157,7 +180,7 @@ export default function LoanTableRow({
 
         <TableCell align="center">
           <IconButton onClick={handleOpenStatus} sx={{ p: 0, '&:hover': { backgroundColor: 'transparent' } }}>
-            {textStatus === 'Pago' ? <Iconify icon="el:ok-circle" sx={{ color: '#00a76f' }} /> : 
+            {textStatus === 'paid' ? <Iconify icon="el:ok-circle" sx={{ color: '#00a76f' }} /> : 
             <Iconify icon="zondicons:timer"  sx={{ color: '#fdda00'}}/>}
             <Typography variant='caption' display='none' >
               {textStatus}
@@ -269,7 +292,7 @@ export default function LoanTableRow({
           sx: { width: 140 },
         }}
       >
-        <MenuItem onClick={() => handleStatus('Pago')} type="button">
+        <MenuItem onClick={() => handleDialogStatus('paid')} type="button">
           <IconButton sx={{ p: 0, '&:hover': { backgroundColor: 'transparent' } }}>
             <Typography variant="subtitle2" noWrap>
               Pago
@@ -277,7 +300,7 @@ export default function LoanTableRow({
           </IconButton>
         </MenuItem>
 
-        <MenuItem onClick={() => handleStatus('Processando')}>
+        <MenuItem onClick={() => handleDialogStatus('pending')}>
           <IconButton
             sx={{ p: 0, '&:hover': { backgroundColor: 'transparent' } }}
           >
@@ -287,6 +310,7 @@ export default function LoanTableRow({
           </IconButton>
         </MenuItem>
       </Popover>
+      <DialogPaymentStatus handleStatus={handleStatus} name={client.name} open={openDialogStatus} setOpen={setOpenDialogStatus} status={statusPayment}/>
     </>
   );
 }
@@ -311,5 +335,6 @@ LoanTableRow.propTypes = {
   setAlert: PropTypes.func,
   setMessageAlert: PropTypes.func,
   setMessageError: PropTypes.func,
+  paymentStatus: PropTypes.any,
   refetchLoans: PropTypes.func,
 };
