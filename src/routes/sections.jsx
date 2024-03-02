@@ -8,9 +8,9 @@ export const LoanPage = lazy(() => import('src/pages/loan'));
 export const ClientPage = lazy(() => import('src/pages/client'));
 export const LoginPage = lazy(() => import('src/pages/login'));
 export const PartnerPage = lazy(() => import('src/pages/partner'));
-export const MachinPage = lazy(() => import('src/pages/machin'));
-export const ReportPage = lazy(() => import('src/pages/machin'));
-export const SimulationsPage = lazy(() => import('src/pages/machin'));
+export const MachinePage = lazy(() => import('src/pages/machine'));
+export const ReportPage = lazy(() => import('src/pages/report'));
+export const SimulationsPage = lazy(() => import('src/pages/simulation'));
 export const Page404 = lazy(() => import('src/pages/page-not-found'));
 
 // ----------------------------------------------------------------------
@@ -30,7 +30,7 @@ export default function Router() {
         { path: 'cliente', element: <ClientPage /> },
         { path: 'parceiro', element: <PartnerPage /> },
         { path: 'emprestimo', element: <LoanPage /> },
-        { path: 'maquininha', element: <MachinPage /> },
+        { path: 'maquininha', element: <MachinePage /> },
         { path: 'relatorio', element: <ReportPage /> },
         { path: 'simulacoes', element: <SimulationsPage /> },
       ],

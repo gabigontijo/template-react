@@ -7,11 +7,11 @@ import { MachineView } from 'src/sections/machine/view';
 
 // ----------------------------------------------------------------------
 
-export default function BlogPage() {
+export default function MachinePage() {
   return (
     <>
       <Helmet>
-        <title> Relátórios | Cash By Card</title>
+        <title> Maquininhas | Cash By Card</title>
       </Helmet>
 
       {/* <BlogView /> */}

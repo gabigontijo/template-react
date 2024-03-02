@@ -229,7 +229,7 @@ export default function MachineTableRow({
         setOpen={setOpenDialog}
         handleDelete={handleDelete}
         name={name}
-        message="cliente"
+        message="Maquininha"
       />
     </>
   );
