@@ -11,11 +11,15 @@ import TableHead from '@mui/material/TableHead';
 import Typography from '@mui/material/Typography';
 import TableContainer from '@mui/material/TableContainer';
 
+import CardIcon from '../common/card-brand-icon';
+
 export default function TableSimulation({ stateMachine, mode, objectTax, value }) {
     let valorFormatado = '';
     if (!Number.isNaN(value)) {
         valorFormatado = value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
       }
+
+      const parseBrand = JSON.parse(stateMachine.brand) || [];
     return (
         <TableContainer component={Paper}>
             <Stack
@@ -58,16 +62,33 @@ export default function TableSimulation({ stateMachine, mode, objectTax, value }
                 </TableHead>
                 <TableBody>
                     {Object.keys(objectTax).map((row, index) => (
-                        <TableRow key={`row${mode}`} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                        <TableRow key={`row${mode}${row}`} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                             <TableCell component="th" scope="row">
                                 {row}
                             </TableCell>
                             <TableCell align="right">{index}</TableCell>
-                            <TableCell>{value}</TableCell>
+                            <TableCell align="right">{value}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
             </Table>
+            <Stack
+            spacing={{ xs: 1, sm: 3 }}
+            direction="row"
+            useFlexGap
+            justifyContent="center"
+            mt={3}
+            sx={{
+              flexWrap: {
+                xs: 'wrap',
+                sm: 'nowrap',
+              },
+            }}
+          >
+            {parseBrand.map((b, index) => (
+              <CardIcon key={index} brandIcon={b} size={40} />
+            ))}
+          </Stack>
         </TableContainer>
     );
 }

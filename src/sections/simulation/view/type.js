@@ -1,3 +1,4 @@
+
 export const simulationInterface = {
     client: '',
     machineId: '',
@@ -6,4 +7,5 @@ export const simulationInterface = {
     loanType: '', 
     operationPercent: '',
     value: '',
+    date: '',
 }

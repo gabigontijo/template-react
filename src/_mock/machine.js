@@ -1,7 +1,7 @@
 export const machineMock = [
     {
         "id": 14,
-        "brand": "[\"Mastercard\",\"elo\",\"visa\"]",
+        "brand": "[\"Mastercard\",\"Elo\",\"Visa\"]",
         "name": "Maquininha teste com taxa nas parcelas",
         "presentialTax": {
             "1": 3.19,
@@ -37,7 +37,7 @@ export const machineMock = [
     },
     {
         "id": 13,
-        "brand": "[\"Mastercard\",\"elo\"]",
+        "brand": "[\"Mastercard\",\"Elo\"]",
         "name": "Maquininha 24 parcelas",
         "presentialTax": {
             "1": 3.19,
@@ -73,7 +73,7 @@ export const machineMock = [
     },
     {
         "id": 12,
-        "brand": "[\"Mastercard\",\"elo\"]",
+        "brand": "[\"Mastercard\",\"Elo\"]",
         "name": "Maquininha 10 parcelas",
         "presentialTax": {
             "1": 3.19,
@@ -109,7 +109,7 @@ export const machineMock = [
     },
     {
         "id": 1,
-        "brand": "[\"Mastercard\",\"elo\"]",
+        "brand": "[\"Mastercard\",\"Elo\"]",
         "name": "Maquininha teste 0",
         "presentialTax": {
             "1": 3.19,
@@ -145,7 +145,7 @@ export const machineMock = [
     },
     {
         "id": 11,
-        "brand": "[\"Mastercard\",\"elo\"]",
+        "brand": "[\"Mastercard\",\"Elo\"]",
         "name": "Maquininha teste 2",
         "presentialTax": {
             "1": 3.19,
@@ -181,7 +181,7 @@ export const machineMock = [
     },
     {
         "id": 10,
-        "brand": "[\"Mastercard\",\"elo\"]",
+        "brand": "[\"Mastercard\",\"Elo\"]",
         "name": "Maquininha teste",
         "presentialTax": {
             "1": 3.19,
@@ -214,5 +214,148 @@ export const machineMock = [
         "installments": 18,
         "CreatedAt": "2024-02-05T18:10:39Z",
         "UpdatedAt": "2024-02-05T18:10:39Z"
-    }
+    },
+    {
+        "id": 4,
+        "brand": "[\"Visa\",\"Mastercard\"]",
+        "name": "maquina sem online",
+        "presentialTax": {
+            "1": 2,
+            "2": 2,
+            "3": 2,
+            "4": 2,
+            "5": 2
+        },
+        "onlineTax": {
+            "1": null,
+            "2": null,
+            "3": null,
+            "4": null,
+            "5": null
+        },
+        "installments": 5,
+        "CreatedAt": "2024-03-01T20:03:40Z",
+        "UpdatedAt": "2024-03-01T20:03:40Z"
+    },
 ]
+
+// const mock2  = [
+//     {
+//         "id": 4,
+//         "brand": "[\"Visa\",\"Mastercard\"]",
+//         "name": "maquina sem online",
+//         "presentialTax": {
+//             "1": 2,
+//             "2": 2,
+//             "3": 2,
+//             "4": 2,
+//             "5": 2
+//         },
+//         "onlineTax": {
+//             "1": null,
+//             "2": null,
+//             "3": null,
+//             "4": null,
+//             "5": null
+//         },
+//         "installments": 5,
+//         "CreatedAt": "2024-03-01T20:03:40Z",
+//         "UpdatedAt": "2024-03-01T20:03:40Z"
+//     },
+//     {
+//         "id": 2,
+//         "brand": "[\"Mastercard\",\"Visa\",\"Hipercard\"]",
+//         "name": "Maquininha Visa",
+//         "presentialTax": {
+//             "1": 3.29,
+//             "2": 4.29,
+//             "3": 5.29,
+//             "4": 4.2,
+//             "5": 5.2,
+//             "6": 6.2,
+//             "7": 7.2,
+//             "8": 8.2,
+//             "9": 9.2,
+//             "10": 1.2
+//         },
+//         "onlineTax": {
+//             "1": 3.59,
+//             "2": 4.59,
+//             "3": 5.59,
+//             "4": 4.2,
+//             "5": 5.2,
+//             "6": 6.2,
+//             "7": 7.2,
+//             "8": 8.2,
+//             "9": 9.2,
+//             "10": 1.2
+//         },
+//         "installments": 10,
+//         "CreatedAt": "2024-02-28T18:53:08Z",
+//         "UpdatedAt": "2024-02-28T18:53:08Z"
+//     },
+//     {
+//         "id": 3,
+//         "brand": "[\"Mastercard\",\"Visa\"]",
+//         "name": "Maquininha teste editada",
+//         "presentialTax": {
+//             "1": 3.39,
+//             "2": 4.39,
+//             "3": 5.39,
+//             "4": 4.2,
+//             "5": 5.2,
+//             "6": 6.2,
+//             "7": 7.2,
+//             "8": 8.2,
+//             "9": 9.2,
+//             "10": 1.2
+//         },
+//         "onlineTax": {
+//             "1": 3.39,
+//             "2": 4.39,
+//             "3": 5.39,
+//             "4": 4.2,
+//             "5": 5.2,
+//             "6": 6.2,
+//             "7": 7.2,
+//             "8": 8.2,
+//             "9": 9.2,
+//             "10": 1.2
+//         },
+//         "installments": 10,
+//         "CreatedAt": "2024-02-28T18:39:06Z",
+//         "UpdatedAt": "2024-02-28T18:54:44Z"
+//     },
+//     {
+//         "id": 1,
+//         "brand": "[\"Mastercard\",\"Visa\"]",
+//         "name": "Maquininha Mastercard",
+//         "presentialTax": {
+//             "1": 3.19,
+//             "2": 4.19,
+//             "3": 5.19,
+//             "4": 4.2,
+//             "5": 5.2,
+//             "6": 6.2,
+//             "7": 7.2,
+//             "8": 8.2,
+//             "9": 9.2,
+//             "10": 1.2
+//         },
+//         "onlineTax": {
+//             "1": 3.49,
+//             "2": 4.49,
+//             "3": 5.49,
+//             "4": 4.2,
+//             "5": 5.2,
+//             "6": 6.2,
+//             "7": 7.2,
+//             "8": 8.2,
+//             "9": 9.2,
+//             "10": 1.2
+//         },
+//         "installments": 10,
+//         "CreatedAt": "2024-02-28T15:36:05Z",
+//         "UpdatedAt": "2024-02-28T17:16:57Z"
+//     }
+// ]

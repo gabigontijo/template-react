@@ -10,9 +10,12 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import Autocomplete from '@mui/material/Autocomplete';
 import CircularProgress from '@mui/material/CircularProgress';
 
+import { fDate } from 'src/utils/format-time';
+
+import { machineMock } from 'src/_mock/machine';
 import { allCardMachines } from 'src/apis/card-machine';
 
-import { machineInterface } from '../machine/view/type';
+import { simulationInterface } from './view/type';
 import DialogSimulation from '../common/dialog-simulation';
 import NumberFormatField from '../common/number-format-field';
 import PercentFormatField from '../common/percent-format-field';
@@ -20,15 +23,23 @@ import MultipleSelectModeSimulation from '../common/multiple-select-mode-simulat
 
 // ----------------------------------------------------------------------
 
-export default function FormNewSimulation({setMachineSelected, stateSimulation, setStateSimulation}) {
-  const [machineList, setMachineList] = useState([machineInterface]);
+export default function FormNewSimulation({
+  setMachineSelected,
+  stateSimulation,
+  setStateSimulation,
+  setIsSimulation,
+  setParamsSimulation,
+}) {
+  const [machineList, setMachineList] = useState(machineMock);
   const [machineTaxMode, setMachineTaxMode] = useState({ Online: false, Presencial: false });
   const [messageNotification, setMessageNotification] = useState('');
   const [openDialog, setOpenDialog] = useState(false);
 
-  const {isLoading} = useQuery('allCardMachines', allCardMachines, {
+  const { isLoading } = useQuery('allCardMachines', allCardMachines, {
     onSuccess: (response) => {
-      setMachineList(response.CardMachines);
+      console.log(response.CardMachines);
+      // setMachineList(response.CardMachines);
+      setMachineList(machineMock);
     },
     onError: (error) => {
       console.error('Erro ao carregar Maquininhas:', error);
@@ -61,6 +72,7 @@ export default function FormNewSimulation({setMachineSelected, stateSimulation, 
     setStateSimulation({
       ...stateSimulation,
       loanType: value,
+      date: fDate(Date.now(), 'dd MMM yyyy')
     });
   };
 
@@ -72,6 +84,10 @@ export default function FormNewSimulation({setMachineSelected, stateSimulation, 
   };
 
   const checkForm = () => {
+    // setStateSimulation({
+    //   ...stateSimulation,
+    //   date: fDate(Date.now(), 'dd MMM yyyy'),
+    // });
     console.log(stateSimulation);
     const keys = Object.keys(stateSimulation);
     return keys.every((key) => stateSimulation[key]);
@@ -85,27 +101,32 @@ export default function FormNewSimulation({setMachineSelected, stateSimulation, 
       setOpenDialog(true);
       return;
     }
+    setParamsSimulation(stateSimulation);
     const modeLength = stateSimulation.mode.length;
     if (modeLength > 1) {
-      if (!machineTaxMode.presencial) {
+      if (!machineTaxMode.Presencial) {
         setMessageNotification('Maquininha selecionada não possui modo Presencial');
         setOpenDialog(true);
-      } else if (!machineTaxMode.online) {
+      } else if (!machineTaxMode.Online) {
         setMessageNotification('Maquininha selecionada não possui modo Online');
         setOpenDialog(true);
       } else {
         console.log('dois selecionados', stateSimulation);
+        setIsSimulation(true);
+        setStateSimulation(simulationInterface);
       }
     } else {
-      if (stateSimulation.mode[0] === 'Presencial' && !machineTaxMode.presencial) {
+      if (stateSimulation.mode[0] === 'Presencial' && !machineTaxMode.Presencial) {
         setMessageNotification('Maquininha selecionada não possui modo Presencial');
         setOpenDialog(true);
       }
-      if (stateSimulation.mode[0] === 'Online' && !machineTaxMode.online) {
+      if (stateSimulation.mode[0] === 'Online' && !machineTaxMode.Online) {
         setMessageNotification('Maquininha selecionada não possui modo online');
         setOpenDialog(true);
       } else {
         console.log('um selecioando', stateSimulation);
+        setIsSimulation(true);
+        setStateSimulation(simulationInterface);
       }
     }
     console.log(stateSimulation);
@@ -113,7 +134,7 @@ export default function FormNewSimulation({setMachineSelected, stateSimulation, 
 
   return (
     <Stack spacing={{ xs: 1, sm: 2 }}>
-         {isLoading && <CircularProgress /> }
+      {isLoading && <CircularProgress />}
       <Stack direction="column" spacing={{ xs: 1, sm: 2 }}>
         <Box width={{ xs: '100%', md: '60%' }}>
           <TextField
@@ -196,7 +217,9 @@ export default function FormNewSimulation({setMachineSelected, stateSimulation, 
 }
 
 FormNewSimulation.propTypes = {
+  setIsSimulation: PropTypes.func,
   setMachineSelected: PropTypes.func,
   setStateSimulation: PropTypes.func,
   stateSimulation: PropTypes.any,
+  setParamsSimulation: PropTypes.func,
 };
