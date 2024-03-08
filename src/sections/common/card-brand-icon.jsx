@@ -14,7 +14,7 @@ function CardIcon({ brandIcon, size }) {
         return "logos:elo";
       case "hipercard":
         return "logos:hipercard";
-      case "americanexpress":
+      case "americane xpress":
         return "logos:american-express";
       default:
         return ""; // Retorna uma string vazia se a bandeira não for reconhecida

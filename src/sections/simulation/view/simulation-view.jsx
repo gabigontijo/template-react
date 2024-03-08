@@ -1,11 +1,16 @@
-import { useState, useEffect } from 'react';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+import { useQuery } from 'react-query';
+import { useRef, useState, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
+import LoadingButton from '@mui/lab/LoadingButton';
 
-import { machineInterface } from 'src/sections/machine/view/type';
+import { machineMock } from 'src/_mock/machine';
+import { allCardMachines } from 'src/apis/card-machine';
 
 import { simulationInterface } from './type';
 import TableSimulation from '../table-simulation';
@@ -14,159 +19,161 @@ import FormNewSimulation from '../form-new-simulation';
 // ----------------------------------------------------------------------
 
 export default function SimulationPage() {
-  const [machineSelected, setMachineSelected] = useState(machineInterface);
+  // const [selectedMachines, setSelectedMachines] = useState([]);
+  const [machineList, setMachineList] = useState(machineMock);
   const [stateSimulation, setStateSimulation] = useState(simulationInterface);
-  const [isPresencial, setIsPresencial] = useState(true);
-  const [isOnline, setIsOnline] = useState(true);
   const [isSimulation, setIsSimulation] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
   const [paramsSimulation, setParamsSimulation] = useState(simulationInterface);
 
-  // useEffect(() => {
-  //   const isPresencialMode = paramsSimulation.mode.includes('Presencial');
-  //   const isOnlineMode = paramsSimulation.mode.includes('Online');
-  //   if (isPresencialMode) {
-  //     setIsPresencial(true);
-  //   } else {
-  //     setIsPresencial(false);
-  //   }
-  //   if (isOnlineMode) {
-  //     setIsOnline(true);
-  //   } else {
-  //     setIsOnline(false);
-  //   }
-  //   if (isPresencialMode && isOnlineMode) {
-  //     setIsPresencial(true);
-  //     setIsOnline(true);
-  //   } else {
-  //     setIsPresencial(false);
-  //     setIsOnline(false);
-  //   }
-  // }, [paramsSimulation]);
+  const tableSimulationRef = useRef(null);
+
+  const { isLoading } = useQuery('allCardMachines', allCardMachines, {
+    onSuccess: (response) => {
+      console.log(response.CardMachines);
+      // setMachineList(response.CardMachines);
+      setMachineList(machineMock);
+    },
+    onError: (error) => {
+      console.error('Erro ao carregar Maquininhas:', error);
+    },
+  });
 
   useEffect(() => {
-    const isPresencialMode = paramsSimulation.mode.includes('Presencial');
-    const isOnlineMode = paramsSimulation.mode.includes('Online');
+    html2canvas(tableSimulationRef.current).then((canvas) => {
+      const imgData = canvas.toDataURL('image/png');
+      //  // eslint-disable-next-line no-debugger
+      //  debugger
+      // eslint-disable-next-line new-cap
+      const pdf = new jsPDF();
+      pdf.addImage(imgData, 'PNG', 0, 0);
+      pdf.save('simulation.pdf');
 
-    // Define os estados com base nas verificações
-    setIsPresencial(isPresencialMode);
-    setIsOnline(isOnlineMode);
-
-    // Verifica se ambos 'Presencial' e 'Online' estão presentes
-    if (isPresencialMode && isOnlineMode) {
-      setIsPresencial(true);
-      setIsOnline(true);
-    }
-  }, [paramsSimulation]);
+      setIsExporting(false);
+    });
+  }, [isExporting])
+  const handleExportPDF = () => {
+    // eslint-disable-next-line no-debugger
+    // debugger
+    setIsExporting(true);
+  };
 
   return (
     <Container>
       <Stack direction={{ xs: 'column', md: 'row' }} spacing={{ xs: 1, sm: 1 }}>
-        <Stack width={{ xs: '100%', md: '50%' }}>
+        <Stack width={{ xs: '100%', md: '60%' }}>
           <Box>
-            <Typography variant="h4" mb={2}>
-              Simulação
+            <Typography variant="h4" mb={5}>
+              Simulações
             </Typography>
             <FormNewSimulation
-              setMachineSelected={setMachineSelected}
+              // setSelectedMachines={setSelectedMachines}
+              // selectedMachines={selectedMachines}
               stateSimulation={stateSimulation}
               setStateSimulation={setStateSimulation}
               setIsSimulation={setIsSimulation}
               setParamsSimulation={setParamsSimulation}
+              machineList={machineList}
+              setMachineList={setMachineList}
+              isLoading={isLoading}
+              isSimulation={isSimulation}
             />
           </Box>
         </Stack>
 
-        {isPresencial && !isOnline && isSimulation && (
+        {isSimulation && (
           <Stack>
-            <Typography variant="h6" mb={2}>
-              Cliente: {paramsSimulation.client}
-            </Typography>
-            <Typography variant="p" mb={2}>
-              Maquininha: {paramsSimulation.machineName}
-            </Typography>
+            <Box sx={{ width: '100%', display: 'flex' }}>
+              <Typography variant="h6" gutterBottom component="div" ml={2}>
+                {paramsSimulation.mode === 'Presencial' ? 'Presencial' : 'Online'}
+              </Typography>
+            </Box>
             <Stack
-              direction="row"
-              spacing={{ xs: 1, sm: 1 }}
-              width={{ xs: '100%', md: '100%' }}
-              justifyContent="center"
-            >
-              <Box width={{ xs: '100%', md: '100%' }}>
-                <TableSimulation
-                  mode="Presencial"
-                  objectTax={machineSelected.presentialTax}
-                  value={paramsSimulation.value}
-                  stateMachine={machineSelected}
-                />
-              </Box>
-            </Stack>
-            <Typography variant="p" mt={4}>
-              Data da simulação: {paramsSimulation.date}
-            </Typography>
-          </Stack>
-        )}
-        {!isPresencial && isOnline && isSimulation && (
-          <Stack>
-            <Typography variant="h6" mb={2}>
-              Cliente: {paramsSimulation.client}
-            </Typography>
-            <Typography variant="p" mb={2}>
-              Maquininha: {paramsSimulation.machineName}
-            </Typography>
-            <Stack
-              direction="row"
-              spacing={{ xs: 1, sm: 1 }}
-              width={{ xs: '100%', md: '100%' }}
-              justifyContent="center"
-            >
-              <Box width={{ xs: '100%', md: '100%' }}>
-                <TableSimulation
-                  mode="Online"
-                  objectTax={machineSelected.onlineTax}
-                  value={paramsSimulation.value}
-                  stateMachine={machineSelected}
-                />
-              </Box>
-            </Stack>
-            <Typography variant="p" mt={4}>
-              Data da simulação: {paramsSimulation.date}
-            </Typography>
-          </Stack>
-        )}
-        {isPresencial && isOnline && isSimulation && (
-          <Stack>
-            <Typography variant="h6" mb={2}>
-              Cliente: {paramsSimulation.client}
-            </Typography>
-            <Typography variant="p" mb={2}>
-              Maquininha: {paramsSimulation.machineName}
-            </Typography>
-            <Stack
-              direction={{ xs: 'column', sm: 'row' }}
+              direction={{ xs: 'column', md: 'row' }}
               spacing={{ xs: 2, sm: 4 }}
               width={{ xs: '100%', md: '100%' }}
               justifyContent="center"
             >
-              <Box width={{ xs: '100%', md: '100%' }}>
-                <TableSimulation
-                  mode="Online"
-                  objectTax={machineSelected.onlineTax}
-                  value={paramsSimulation.value}
-                  stateMachine={machineSelected}
-                />
-              </Box>
-              <Box width={{ xs: '100%', md: '100%' }}>
-                <TableSimulation
-                  mode="Presencial"
-                  objectTax={machineSelected.presentialTax}
-                  value={paramsSimulation.value}
-                  stateMachine={machineSelected}
-                />
-              </Box>
+              {paramsSimulation.selectedMachines.map((machineName) => (
+                <Box width={{ xs: '100%', md: '100%' }}>
+                  <TableSimulation
+                    mode={paramsSimulation.mode}
+                    value={paramsSimulation.value}
+                    machineName={machineName}
+                    machineList={machineList}
+                    paramsSimulation={paramsSimulation}
+                  />
+                </Box>
+              ))}
             </Stack>
             <Typography variant="p" mt={4}>
-              Data da simulação: {paramsSimulation.date}
+              Simulado em: <b>{paramsSimulation.date}</b>
             </Typography>
+            <Box
+              width={{ xs: '100%', md: '100%' }}
+              display="flex"
+              direction="row"
+              justifyContent="flex-end"
+              mt={3}
+            >
+              <div style={{ height: '30px' }} />
+              <LoadingButton
+                width="80%"
+                size="large"
+                type="submit"
+                variant="contained"
+                color="primary"
+                onClick={handleExportPDF}
+              >
+                Exportar simulação
+              </LoadingButton>
+            </Box>
           </Stack>
+        )}
+        {isExporting && (
+          <Container ref={tableSimulationRef} >
+            <Stack sx={{ width: '100%', display: 'flex', alignItems: 'center' }}>
+              <Box
+                component="img"
+                src="/assets/images/CashbycardLogo.fw.png"
+                sx={{ width: 210, height: 70, mb: 2, mt: 2, display: 'flex', alignContent: 'center', alignItems: 'center', justifyContent: 'center' }}
+              />
+            </Stack>
+            <Stack>
+              <Stack
+                direction='row'
+                spacing={{ xs: 1, sm: 1 }}
+                width={{ xs: '100%', md: '100%' }}
+                justifyContent="center"
+              >
+                {paramsSimulation.selectedMachines.map((machineName) => (
+                  <Box width={{ xs: '100%', md: '100%' }}>
+                    <TableSimulation
+                      mode={paramsSimulation.mode}
+                      value={paramsSimulation.value}
+                      machineName={machineName}
+                      machineList={machineList}
+                      paramsSimulation={paramsSimulation}
+                      pdf
+                    />
+                  </Box>
+                ))}
+              </Stack>
+              <Typography variant="p" mt={3}>
+                Simulado em: <b>{paramsSimulation.date} *</b>
+              </Typography>
+              {/* <Box sx={{ width: '100%', display: 'flex' }}> */}
+                <Typography variant="p" gutterBottom component="div" mb={5}>
+                  {paramsSimulation.mode === 'Presencial'
+                    ? 'Simulação de empréstimo Presencial'
+                    : 'Simulação de empréstimo Online'}
+                </Typography>
+              {/* </Box> */}
+              <Typography variant="p" mt={1.5}>
+                <b>* A simulação tem validade de 48 horas</b>
+              </Typography>
+            </Stack>
+          </Container>
         )}
       </Stack>
     </Container>

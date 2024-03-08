@@ -1,78 +1,69 @@
-import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useQuery } from 'react-query';
+import { useState, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import LoadingButton from '@mui/lab/LoadingButton';
-import Autocomplete from '@mui/material/Autocomplete';
 import CircularProgress from '@mui/material/CircularProgress';
 
 import { fDate } from 'src/utils/format-time';
 
 import { machineMock } from 'src/_mock/machine';
-import { allCardMachines } from 'src/apis/card-machine';
 
 import { simulationInterface } from './view/type';
 import DialogSimulation from '../common/dialog-simulation';
 import NumberFormatField from '../common/number-format-field';
 import PercentFormatField from '../common/percent-format-field';
-import MultipleSelectModeSimulation from '../common/multiple-select-mode-simulation';
+import MultipleSelectMachineSimulation from '../common/multiple-select-machine-simulation';
 
 // ----------------------------------------------------------------------
 
 export default function FormNewSimulation({
-  setMachineSelected,
   stateSimulation,
   setStateSimulation,
   setIsSimulation,
+  isSimulation,
   setParamsSimulation,
+  machineList,
+  setMachineList,
+  isLoading,
 }) {
-  const [machineList, setMachineList] = useState(machineMock);
-  const [machineTaxMode, setMachineTaxMode] = useState({ Online: false, Presencial: false });
+  const [machineFilterList, setMachineFilterList] = useState(machineMock);
   const [messageNotification, setMessageNotification] = useState('');
   const [openDialog, setOpenDialog] = useState(false);
 
-  const { isLoading } = useQuery('allCardMachines', allCardMachines, {
-    onSuccess: (response) => {
-      console.log(response.CardMachines);
-      // setMachineList(response.CardMachines);
-      setMachineList(machineMock);
-    },
-    onError: (error) => {
-      console.error('Erro ao carregar Maquininhas:', error);
-    },
-  });
+  useEffect(() => {
+    let filterMachine = [];
+    if (stateSimulation.mode === 'Presencial') {
+      filterMachine = machineList.filter((machine) =>
+        Object.values(machine.presentialTax).some((value) => value !== '' && value !== null)
+      );
+      console.log('filterMchineListPresencial', filterMachine);
+      setMachineFilterList(filterMachine);
+    }
+    if (stateSimulation.mode === 'Online') {
+      filterMachine = machineList.filter((machine) =>
+        Object.values(machine.onlineTax).some((value) => value !== '' && value !== null)
+      );
+      console.log('filterMchineListOnline', filterMachine);
+      setMachineFilterList(filterMachine);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [stateSimulation.mode]);
 
-  const witchMachineTax = (machine) => {
-    const presentialTaxIsEmpty = Object.values(machine.presentialTax).some(
-      (value) => value === '' || value === null
-    );
-    const onlineTaxIsEmpty = Object.values(machine.onlineTax).some(
-      (value) => value === '' || value === null
-    );
-    setMachineTaxMode({ Online: !onlineTaxIsEmpty, Presencial: !presentialTaxIsEmpty });
-  };
+  useEffect(() => {
 
-  const onMachineSelect = (value) => {
-    console.log('valueMachine-----------------------', value);
-    setStateSimulation({
-      ...stateSimulation,
-      machineId: value.id,
-      machineName: value.name,
-    });
-    witchMachineTax(value);
-    setMachineSelected(value);
-  };
+  },[setIsSimulation])
 
   const onChangeLoanType = (event) => {
     const { value } = event.target;
+    console.log(value);
     setStateSimulation({
       ...stateSimulation,
       loanType: value,
-      date: fDate(Date.now(), 'dd MMM yyyy')
+      date: fDate(Date.now(), 'dd MMM yyyy HH:mm'),
     });
   };
 
@@ -83,11 +74,22 @@ export default function FormNewSimulation({
     });
   };
 
+  const handleMachineChange = (event) => {
+    const { value: selectedValue } = event.target;
+    let newSelectedMachine = [];
+    if (
+      stateSimulation.selectedMachines.length === 2 &&
+      !stateSimulation.selectedMachines.includes(selectedValue)
+    ) {
+      const [, secondSelectedValue] = stateSimulation.selectedMachines;
+      newSelectedMachine = [secondSelectedValue, selectedValue.pop()];
+    } else if (stateSimulation.selectedMachines.length < 2) {
+      newSelectedMachine = selectedValue;
+    }
+    setStateSimulation({ ...stateSimulation, selectedMachines: newSelectedMachine.flat() });
+  };
+
   const checkForm = () => {
-    // setStateSimulation({
-    //   ...stateSimulation,
-    //   date: fDate(Date.now(), 'dd MMM yyyy'),
-    // });
     console.log(stateSimulation);
     const keys = Object.keys(stateSimulation);
     return keys.every((key) => stateSimulation[key]);
@@ -102,41 +104,16 @@ export default function FormNewSimulation({
       return;
     }
     setParamsSimulation(stateSimulation);
-    const modeLength = stateSimulation.mode.length;
-    if (modeLength > 1) {
-      if (!machineTaxMode.Presencial) {
-        setMessageNotification('Maquininha selecionada não possui modo Presencial');
-        setOpenDialog(true);
-      } else if (!machineTaxMode.Online) {
-        setMessageNotification('Maquininha selecionada não possui modo Online');
-        setOpenDialog(true);
-      } else {
-        console.log('dois selecionados', stateSimulation);
-        setIsSimulation(true);
-        setStateSimulation(simulationInterface);
-      }
-    } else {
-      if (stateSimulation.mode[0] === 'Presencial' && !machineTaxMode.Presencial) {
-        setMessageNotification('Maquininha selecionada não possui modo Presencial');
-        setOpenDialog(true);
-      }
-      if (stateSimulation.mode[0] === 'Online' && !machineTaxMode.Online) {
-        setMessageNotification('Maquininha selecionada não possui modo online');
-        setOpenDialog(true);
-      } else {
-        console.log('um selecioando', stateSimulation);
-        setIsSimulation(true);
-        setStateSimulation(simulationInterface);
-      }
-    }
-    console.log(stateSimulation);
+    setIsSimulation(true);
+    setStateSimulation(simulationInterface);
   };
 
   return (
     <Stack spacing={{ xs: 1, sm: 2 }}>
       {isLoading && <CircularProgress />}
+      {!isSimulation && (      
       <Stack direction="column" spacing={{ xs: 1, sm: 2 }}>
-        <Box width={{ xs: '100%', md: '60%' }}>
+        {/* <Box width={{ xs: '100%', md: '60%' }}>
           <TextField
             name="client"
             label="Nome do cliente"
@@ -145,22 +122,37 @@ export default function FormNewSimulation({
             onChange={(e) => handleChange(e.target.name, e.target.value)}
             fullWidth
           />
+        </Box> */}
+        <Box width={{ xs: '100%', md: '60%' }}>
+          <div>
+            <TextField
+              fullWidth
+              id="modeSimulation"
+              select
+              label="Modo"
+              name="mode"
+              defaultValue="Presencial"
+              helperText="Selecione o modo da simulação"
+              value={stateSimulation.mode}
+              onChange={(event) => handleChange(event.target.name, event.target.value)}
+            >
+              <MenuItem key="defined_value" value="Presencial">
+                Presencial
+              </MenuItem>
+              <MenuItem key="defined_limit" value="Online">
+                Online
+              </MenuItem>
+            </TextField>
+          </div>
         </Box>
         <Box width={{ xs: '100%', md: '60%' }}>
-          <Autocomplete
-            disablePortal
-            id="machine-autocomplete"
-            options={machineList}
-            getOptionLabel={(option) => option.name}
-            sx={{ width: '100%' }}
-            value={machineList.find((machine) => machine.id === stateSimulation.machineId) || null}
-            renderInput={(params) => <TextField {...params} label="Procurar maquininha" />}
-            onChange={(event, value) => onMachineSelect(value)}
+          <MultipleSelectMachineSimulation
+            machineList={machineFilterList}
+            selectedMachines={stateSimulation.selectedMachines}
+            onChange={handleMachineChange}
           />
         </Box>
-        <Box width={{ xs: '100%', md: '60%' }}>
-          <MultipleSelectModeSimulation mode={stateSimulation.mode} setMode={setStateSimulation} />
-        </Box>
+
         <Box width={{ xs: '100%', md: '60%' }}>
           <div>
             <TextField
@@ -211,15 +203,35 @@ export default function FormNewSimulation({
           </LoadingButton>
         </Box>
       </Stack>
+        )}
       <DialogSimulation message={messageNotification} open={openDialog} setOpen={setOpenDialog} />
+        { isSimulation && 
+        <Box width={{ xs: '100%', md: '60%' }}>
+          <div style={{height: '30px'}}/>
+        <LoadingButton
+          fullWidth
+          size="large"
+          type="submit"
+          variant="contained"
+          color="success"
+          onClick={()=> setIsSimulation(false)}
+        >
+          Nova Simulção
+        </LoadingButton>
+      </Box>
+
+        }
     </Stack>
   );
 }
 
 FormNewSimulation.propTypes = {
   setIsSimulation: PropTypes.func,
-  setMachineSelected: PropTypes.func,
   setStateSimulation: PropTypes.func,
+  isSimulation: PropTypes.any,
   stateSimulation: PropTypes.any,
   setParamsSimulation: PropTypes.func,
+  setMachineList: PropTypes.func,
+  machineList: PropTypes.any,
+  isLoading: PropTypes.any,
 };

@@ -11,91 +11,162 @@ import TableHead from '@mui/material/TableHead';
 import Typography from '@mui/material/Typography';
 import TableContainer from '@mui/material/TableContainer';
 
+import SvgBrand from '../common/brand-svg';
 import CardIcon from '../common/card-brand-icon';
+import { definedLimit, definedValue } from '../loan/service';
 
-export default function TableSimulation({ stateMachine, mode, objectTax, value }) {
-    let valorFormatado = '';
-    if (!Number.isNaN(value)) {
-        valorFormatado = value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-      }
+export default function TableSimulation({
+  machineList,
+  mode,
+  value,
+  paramsSimulation,
+  machineName,
+  pdf,
+}) {
+  let valorFormatado = '';
+  if (!Number.isNaN(value)) {
+    valorFormatado = value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  }
 
-      const parseBrand = JSON.parse(stateMachine.brand) || [];
-    return (
-        <TableContainer component={Paper}>
-            <Stack
-                spacing={{ xs: 1, sm: 2 }}
-                direction='column'
-                alignItems={{ xs: 'initial' }}
-                width="100%"
-            >
-                <Box
-                    sx={{ width: '100%', display: 'flex' }}
-                >
-                    <Typography
-                        variant="h6"
-                        gutterBottom
-                        component="div"
-                        margin={0}
-                    >
-                        {mode === 'Presencial' ? 'Presencial' : 'Online'}
-                    </Typography>
-                </Box>
-                <Box>
-                    <Typography
-                        variant="h8"
-                        gutterBottom
-                        component="div"
-                        margin={0}
-                        textAlign="right"
-                    >
-                        Valor: {valorFormatado}
-                    </Typography>
-                </Box>
-            </Stack>
-            <Table sx={{ minWidth: 350 }} aria-label="tax simulation" size="small">
-                <TableHead>
-                    <TableRow>
-                        <TableCell>Parcelas</TableCell>
-                        <TableCell>Valor por parcela</TableCell>
-                        <TableCell>Valor Final</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {Object.keys(objectTax).map((row, index) => (
-                        <TableRow key={`row${mode}${row}`} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                            <TableCell component="th" scope="row">
-                                {row}
-                            </TableCell>
-                            <TableCell align="right">{index}</TableCell>
-                            <TableCell align="right">{value}</TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-            <Stack
-            spacing={{ xs: 1, sm: 3 }}
-            direction="row"
-            useFlexGap
-            justifyContent="center"
-            mt={3}
-            sx={{
-              flexWrap: {
-                xs: 'wrap',
-                sm: 'nowrap',
-              },
-            }}
-          >
-            {parseBrand.map((b, index) => (
-              <CardIcon key={index} brandIcon={b} size={40} />
-            ))}
-          </Stack>
-        </TableContainer>
+  const findMachine = machineList.find((machine) => machine.name === machineName);
+  const parseBrand = JSON.parse(findMachine.brand) || [];
+  const objectTax = mode === 'Presencial' ? findMachine.presentialTax : findMachine.onlineTax;
+
+  const calcualteValue = (installments) => {
+    if (paramsSimulation.loanType === 1) {
+      const resultDF = definedValue(
+        value,
+        installments,
+        paramsSimulation.operationPercent,
+        objectTax
+      );
+      resultDF.clientAmount = resultDF.clientAmount.toLocaleString('pt-BR', {
+        style: 'currency',
+        currency: 'BRL',
+      });
+      resultDF.installmentsValue = resultDF.installmentsValue.toLocaleString('pt-BR', {
+        style: 'currency',
+        currency: 'BRL',
+      });
+      resultDF.machineValue = resultDF.machineValue.toLocaleString('pt-BR', {
+        style: 'currency',
+        currency: 'BRL',
+      });
+      return resultDF;
+    }
+    const resultDL = definedLimit(
+      value,
+      installments,
+      paramsSimulation.operationPercent,
+      objectTax
     );
+    resultDL.clientAmount = resultDL.clientAmount.toLocaleString('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    });
+    resultDL.installmentsValue = resultDL.installmentsValue.toLocaleString('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    });
+    resultDL.machineValue = resultDL.machineValue.toLocaleString('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    });
+    return resultDL;
+  };
+  return (
+    <TableContainer component={Paper} sx={{ border: '3px solid #F4F6F8' }}>
+      <Stack
+        spacing={{ xs: 1, sm: 2 }}
+        direction="column"
+        alignItems={{ xs: 'initial' }}
+        width="100%"
+      >
+        <Box width="100%">
+          <Stack
+            direction="row"
+            alignItems={{ xs: 'end', md: 'end' }}
+            justifyContent={{ xs: 'end', md: 'end' }}
+            width="100%"
+          >
+            <Typography
+              variant="h6"
+              gutterBottom
+              component="div"
+              // margin={0}
+              textAlign="right"
+            >
+              VALOR
+            </Typography>
+            <Typography
+              variant="h6"
+              gutterBottom
+              component="div"
+              ml={2}
+              mr={2}
+              mt={2}
+              textAlign="right"
+              color="#bb0b0b"
+            >
+              {valorFormatado}
+            </Typography>
+          </Stack>
+        </Box>
+      </Stack>
+      <Table sx={{ minWidth: 360 }} aria-label="tax simulation" size="small">
+        <TableHead>
+          <TableRow>
+            <TableCell>Parcelas</TableCell>
+            <TableCell>Valor por parcela</TableCell>
+            <TableCell color="#bb0b0b">Valor Final</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {Object.keys(objectTax).map((row, index) => (
+            <TableRow
+              key={`row${mode}${row}`}
+              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+            >
+              <TableCell component="th" scope="row">
+                {row}
+              </TableCell>
+              <TableCell>{calcualteValue(row).installmentsValue}</TableCell>
+              <TableCell>{calcualteValue(row).machineValue}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+      <Stack
+        spacing={{ xs: 1, sm: 3 }}
+        direction="row"
+        useFlexGap
+        justifyContent="center"
+        mt={3}
+        mb={3}
+        sx={{
+          flexWrap: {
+            xs: 'wrap',
+            sm: 'nowrap',
+          },
+        }}
+      >
+        {parseBrand.map((b, index) =>
+          pdf ? (
+            <SvgBrand key={index} brand={b} />
+          ) : (
+            <CardIcon key={index} brandIcon={b} size={60} />
+          )
+        )}
+      </Stack>
+    </TableContainer>
+  );
 }
 
 TableSimulation.propTypes = {
-    stateMachine: PropTypes.any,
-    mode: PropTypes.any,
-    objectTax: PropTypes.any,
-    value: PropTypes.any,
+  machineName: PropTypes.any,
+  machineList: PropTypes.any,
+  mode: PropTypes.any,
+  value: PropTypes.any,
+  paramsSimulation: PropTypes.any,
+  pdf:  PropTypes.bool,
 };

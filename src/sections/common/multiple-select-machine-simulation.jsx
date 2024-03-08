@@ -19,41 +19,25 @@ const MenuProps = {
   },
 };
 
-const modeList = [
-  'Presencial',
-  'Online',
-];
+export default function MultipleSelectMachineSimulation({selectedMachines, machineList, onChange}) {
 
-export default function MultipleSelectModeSimulation({mode, setMode}) {
-
-  const handleChange = (event) => {
-    const {
-      target: { value },
-    } = event;
-    setMode((prevMode) => ( {
-        ...prevMode,
-        'mode': typeof value === 'string' ? value.split(',') : value,
-    }
-    ));
-  };
-
-  return (
+   return (
       <FormControl fullWidth>
-        <InputLabel id="multiple-checkbox-machine">Modo</InputLabel>
+        <InputLabel id="multiple-checkbox-machine">Selecione a Maquininha</InputLabel>
         <Select
           labelId="multiple-checkbox-machine"
           id="checkbox-machine"
           multiple
-          value={mode}
-          onChange={handleChange}
-          input={<OutlinedInput label="Modo" />}
+          value={selectedMachines}
+          onChange={onChange}
+          input={<OutlinedInput label="Selecione a Maquininha" />}
           renderValue={(selected) => selected.join(', ')}
           MenuProps={MenuProps}
         >
-          {modeList.map((md) => (
-            <MenuItem key={md} value={md}>
-              <Checkbox checked={mode.indexOf(md) > -1} />
-              <ListItemText primary={md} />
+          {machineList.map((machine) => (
+            <MenuItem key={machine.id} value={machine.name}>
+              <Checkbox checked={selectedMachines.indexOf(machine.name) > -1} />
+              <ListItemText primary={machine.name} />
             </MenuItem>
           ))}
         </Select>
@@ -61,8 +45,9 @@ export default function MultipleSelectModeSimulation({mode, setMode}) {
   );
 }
 
-MultipleSelectModeSimulation.propTypes = {
-    setMode: PropTypes.func,
-    mode: PropTypes.any,
+MultipleSelectMachineSimulation.propTypes = {
+    onChange: PropTypes.func,
+    selectedMachines: PropTypes.any,
+    machineList: PropTypes.any,
   };
   
