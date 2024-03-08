@@ -53,27 +53,35 @@ export const createBodyStepTwo = (setStateLoan, stateLoan, cardMachineList) => {
     })
 }
 
-const definedLimit = (value, installments, operationPercent, jsonTax) => {
+export const definedLimit = (value, installments, operationPercent, jsonTax) => {
     const machineTax = jsonTax[installments]/100 * value;
     const machineAmount = value - machineTax;
+    const machineValue = value + machineTax;
     const installmentsValue = value/installments
     const grossProfit = machineAmount * operationPercent/100;
     const clientAmount = machineAmount - grossProfit;
 
     return {grossProfit,
-    clientAmount, installmentsValue}
+    clientAmount, installmentsValue, machineValue }
 }
 
-const definedValue = (value, installments, operationPercent, jsonTax) => {
-    const newTax = (jsonTax[installments] + operationPercent)/100 + 1
-    const MachineValue = value*newTax;
-    const installmentsValue = MachineValue/installments
+export const definedValue = (value, installments, operationPercent, jsonTax) => {
+       // eslint-disable-next-line no-debugger
+    //    debugger
+    const newTax = (jsonTax[installments]/100) + 1;
+    const ValueTaxed = value*( (operationPercent/100) + 1);
+    const machineValue = ValueTaxed*newTax;
+    const installmentsValue = machineValue/installments
     const grossProfit = value * operationPercent/100;
     const clientAmount = value;
+    console.log('newTax', newTax)
+    console.log('machineValue',machineValue)
+    console.log('installmentsValue',installmentsValue)
+    console.log('grossProfit',grossProfit)
 
     return {grossProfit,
     clientAmount, 
-installmentsValue}
+installmentsValue, machineValue}
 }
 
 const setCardInstallmentsValue = (setLoan, loan, index, installmentsValue, cardMachineName)=> {
