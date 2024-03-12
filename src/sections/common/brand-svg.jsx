@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
 
-import visaLogo from "../../../public/assets/images/visa.png"
-import mastercardLogo from "../../../public/assets/images/mastercard.png";
 import eloLogo from '../../../public/assets/images/elo.png';
-import hipercardLogo from '../../../public/assets/images/hipercard.png';
+import visaLogo from "../../../public/assets/images/visa.png"
 import amexLogo from '../../../public/assets/images/amex.png';
+import hipercardLogo from '../../../public/assets/images/hipercard.png';
+import mastercardLogo from "../../../public/assets/images/mastercard.png";
 
 function SvgBrand({brand}) {
     const getSvgForBrand = (brandCase) => {

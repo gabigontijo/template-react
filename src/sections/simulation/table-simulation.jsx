@@ -86,15 +86,14 @@ export default function TableSimulation({
           <Stack
             direction="row"
             alignItems={{ xs: 'end', md: 'end' }}
-            justifyContent={{ xs: 'end', md: 'end' }}
+            // justifyContent={{ xs: 'end', md: 'end' }}
             width="100%"
           >
             <Typography
               variant="h6"
               gutterBottom
               component="div"
-              // margin={0}
-              textAlign="right"
+              ml={2}
             >
               VALOR
             </Typography>
@@ -105,8 +104,7 @@ export default function TableSimulation({
               ml={2}
               mr={2}
               mt={2}
-              textAlign="right"
-              color="#bb0b0b"
+              color="#EB001B"
             >
               {valorFormatado}
             </Typography>
@@ -116,9 +114,30 @@ export default function TableSimulation({
       <Table sx={{ minWidth: 360 }} aria-label="tax simulation" size="small">
         <TableHead>
           <TableRow>
-            <TableCell>Parcelas</TableCell>
-            <TableCell>Valor por parcela</TableCell>
-            <TableCell color="#bb0b0b">Valor Final</TableCell>
+            <TableCell>
+              <Typography
+                variant="p"
+                style={{ textTransform: 'uppercase', fontWeight: 'bold', color: '#212B36' }}
+              >
+                Parcelas
+              </Typography>
+            </TableCell>
+            <TableCell>
+            <Typography
+                variant="p"
+                style={{ textTransform: 'uppercase', fontWeight: 'bold', color: '#212B36' }}
+              >
+                 Valor
+              </Typography>
+               </TableCell>
+            <TableCell >
+            <Typography
+                variant="p"
+                style={{ textTransform: 'uppercase', fontWeight: 'bold', color: '#EB001B' }}
+              >
+               Valor Final
+              </Typography>
+                </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -128,7 +147,12 @@ export default function TableSimulation({
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell component="th" scope="row">
-                {row}
+              <Typography
+                variant="p"
+                style={{ textTransform: 'uppercase', fontWeight: 'bold', color: '#7030B5'}}
+              >
+               {row}
+              </Typography>
               </TableCell>
               <TableCell>{calcualteValue(row).installmentsValue}</TableCell>
               <TableCell>{calcualteValue(row).machineValue}</TableCell>
@@ -168,5 +192,5 @@ TableSimulation.propTypes = {
   mode: PropTypes.any,
   value: PropTypes.any,
   paramsSimulation: PropTypes.any,
-  pdf:  PropTypes.bool,
+  pdf: PropTypes.bool,
 };
