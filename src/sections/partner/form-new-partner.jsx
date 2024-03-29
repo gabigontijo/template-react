@@ -40,7 +40,6 @@ export default function FormNewPartner({
         address: statePartner.address,
       };
       const response = await createPartner(bodyParnter);
-      console.log('Resposta da API:', response);
       setNewPartner(false);
       setAlert(true);
       setMessageAlert('Parceiro cadastrado com sucesso')
@@ -68,7 +67,6 @@ export default function FormNewPartner({
         address: nonEmptyState.address,
       };
       const response = await updatePartner(bodyPartnerEdit, partnerId);
-      console.log('Resposta da API:', response);
       setNewPartner(false);
       setPartnerId(null);
       setAlert(true);
@@ -89,7 +87,6 @@ export default function FormNewPartner({
       ...statePartner,
       [name]: value,
     });
-    console.log(value);
   };
 
   return (

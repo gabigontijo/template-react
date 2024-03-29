@@ -47,7 +47,6 @@ export default function ClientTableRow({
 
   const handleOpenMenu = (event) => {
     setOpen(event.currentTarget);
-    console.log(event.target);
   };
 
   const handleCloseMenu = () => {
@@ -71,7 +70,6 @@ export default function ClientTableRow({
   const handleDelete = async () => {
     try {
       const response = await deleteClient(id);
-      console.log('Resposta da API:', response);
       setOpenDialog(false);
       setAlert(true);
       setMessageAlert('Cliente deletado com sucesso');

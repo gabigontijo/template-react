@@ -11,7 +11,7 @@ export default function SelectNumberOfCardsFields({numberOfCards, handleNumberOf
     label: `${index + 1}`,
   }));
   return (
-    <Box component="form" noValidate autoComplete="off" width="50%">
+    <Box component="form" noValidate autoComplete="off" width={{ xs: '100%', md: '30%' }}>
       <div>
         <TextField
           fullWidth

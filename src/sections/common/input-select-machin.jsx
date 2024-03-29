@@ -6,7 +6,7 @@ import TextField from '@mui/material/TextField';
 
 export default function SelectMachin({name, value, onChange, cardMachineList}) {
   return (
-    <Box component="form" noValidate autoComplete="off" width="33%">
+    <Box component="form" noValidate autoComplete="off" width={{ xs: '100%', md: '30%' }}>
       <div>
         <TextField
           fullWidth

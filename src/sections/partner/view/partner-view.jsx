@@ -143,7 +143,6 @@ export default function PartnerPage() {
           return result;
         })
       );
-      console.log(results);
       setAlert(true);
       setMessageAlert('Parceiro deletado com sucesso');
       setOpenDialog(false);

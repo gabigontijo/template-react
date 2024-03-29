@@ -30,7 +30,6 @@ export default function SimulationPage() {
 
   const { isLoading } = useQuery('allCardMachines', allCardMachines, {
     onSuccess: (response) => {
-      console.log(response.CardMachines);
       // setMachineList(response.CardMachines);
       setMachineList(machineMock);
     },
@@ -42,8 +41,6 @@ export default function SimulationPage() {
   useEffect(() => {
     html2canvas(tableSimulationRef.current).then((canvas) => {
       const imgData = canvas.toDataURL('image/png');
-      //  // eslint-disable-next-line no-debugger
-      //  debugger
       // eslint-disable-next-line new-cap
       const pdf = new jsPDF();
       pdf.addImage(imgData, 'PNG', 0, 0);
@@ -53,8 +50,6 @@ export default function SimulationPage() {
     });
   }, [isExporting])
   const handleExportPDF = () => {
-    // eslint-disable-next-line no-debugger
-    // debugger
     setIsExporting(true);
   };
 

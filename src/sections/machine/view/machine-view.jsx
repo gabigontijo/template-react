@@ -65,7 +65,6 @@ export default function MachinePage() {
 
   const {isLoading, refetch: refetchMachines} = useQuery("allCardMachines", allCardMachines, {
     onSuccess: (response) => {
-      console.log(response)
       setMachineList(response.CardMachines);
     },
     onError: (error) => {

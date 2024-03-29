@@ -25,8 +25,6 @@ export default function InputFileUpload({ setState, uploadedDocuments }) {
     // eslint-disable-next-line no-debugger
     debugger;
     const { files } = target;
-    console.log('Files:', files);
-    console.log('uploadedDocuments:', uploadedDocuments);
     setState((prevState) => ({
       ...prevState,
       documents: Array.isArray(prevState.documents)

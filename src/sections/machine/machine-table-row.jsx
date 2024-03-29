@@ -56,7 +56,6 @@ export default function MachineTableRow({
 
   const handleOpenMenu = (event) => {
     setOpen(event.currentTarget);
-    console.log(event.target);
   };
 
   const handleCloseMenu = () => {
@@ -73,11 +72,7 @@ export default function MachineTableRow({
 
   const handleEdit = async () => {
     try {
-      // eslint-disable-next-line no-debugger
-      // debugger;
-      console.log(id);
       const { CardMachine } = await cardMachineById(id);
-      console.log('response::::::::::::::', CardMachine);
       setNewMachine(true);
       setMachineId(id);
       const bodyState = populationState(CardMachine);
@@ -91,7 +86,6 @@ export default function MachineTableRow({
   const handleDelete = async () => {
     try {
       const response = await deleteCardMachine(id);
-      console.log('Resposta da API:', response);
       setOpenDialog(false);
       setAlert(true);
       setMessageAlert('Maquininha deletada com sucesso');
@@ -138,7 +132,7 @@ export default function MachineTableRow({
             }}
           >
             {parseBrand.map((b, index) => (
-              <CardIcon key={index} brandIcon={b} size={40} />
+              <CardIcon key={`${index}${b}`} brandIcon={b} size={40} />
             ))}
           </Stack>
         </TableCell>
@@ -178,8 +172,8 @@ export default function MachineTableRow({
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {Object.keys(presentialTax).map((tax) => (
-                    <TableRow key={tax}>
+                  {Object.keys(presentialTax).map((tax, index) => (
+                    <TableRow key={`${index}${name}`}>
                       <TableCell component="th" scope="row" style={{ whiteSpace: 'nowrap' }}>
                         {tax}
                       </TableCell>

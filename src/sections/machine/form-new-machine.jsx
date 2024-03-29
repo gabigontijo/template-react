@@ -40,8 +40,6 @@ export default function FormNewMachine({
         installments: Number(stateMachine.installments),
       };
       await createCardMachine(bodyMachine);
-      // console.log(bodyMachine);
-      // console.log('stateMahine', stateMachine);
       setAlert(true);
       setMessageAlert('Maquininha cadastrada com sucesso');
       setNewMachine(false);

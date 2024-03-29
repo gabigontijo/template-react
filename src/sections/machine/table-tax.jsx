@@ -25,7 +25,6 @@ export default function TableTax({
     // debugger;
     for (let i = 1; i <= installments; i += 1) {
       installmentsTax[i] = null;
-      console.log('passei aqui');
     }
   };
 
@@ -41,7 +40,6 @@ export default function TableTax({
           delete installmentsTax[i];
         }
       } else if (installmentsTaxLength < installments) {
-        console.log('não sou maior');
         for (let i = installmentsTaxLength + 1; i <= Number(installments); i += 1) {
           installmentsTax[i] = null;
         }

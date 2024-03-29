@@ -64,7 +64,6 @@ export default function FormStepThree({
   };
 
   const handleChangePartnerValue = ({ target }) => {
-    console.log(target.value);
     const calculatedPercentPartner = (parseFloat(target.value) / (loan.value * (parseFloat(loan.operationPercent))/100)) * 100;
 
     setLoan((prevLoan) => ({
@@ -78,7 +77,6 @@ export default function FormStepThree({
   };
 
   const handleChangePartnerPercent = ({ target }) => {
-    console.log(target.value);
     const calculatedValuePartner = (parseFloat(target.value) / 100) * (loan.value * (parseFloat(loan.operationPercent))/100);
 
     setLoan((prevLoan) => ({
@@ -120,7 +118,7 @@ export default function FormStepThree({
               sm: 'nowrap',
             },
           }}>
-            <Box width={{ xs: '100%', md: '60%' }} direction= "row">
+            <Box width={{ xs: '80%', md: '60%' }} direction= "row">
               <Autocomplete
                 id="partner-autocomplete"
                 options={partnerList}

@@ -47,7 +47,6 @@ export default function FormNewLoan({
   const [cardMachineList, setCardMachineList] = useState([machineInterface]);
 
   useEffect(()=>{
-    console.log(stateLoan);
   },[stateLoan])
 
   const { isLoading: isLoadingClients, refetch: refetchClients } = useQuery("allClients", allClients, {
@@ -71,7 +70,6 @@ export default function FormNewLoan({
   useQuery("allCardMachines", allCardMachines, {
     onSuccess: (response) => {
       setCardMachineList(response.CardMachines);
-      console.log(response.CardMachines)
     },
     onError: (error) => {
       console.error('Erro ao carregar maquininhas:', error);
@@ -99,7 +97,6 @@ export default function FormNewLoan({
   const handleSubmit = async () => {
     try {
       const response = await createLoan(createBodyLoan(setStateLoan, stateLoan));
-      console.log('Resposta da API Loan:', response);
       setNewLoan(false);
       setAlert(true);
       setMessageAlert('Empréstimo cadastrado com sucesso')
@@ -108,7 +105,6 @@ export default function FormNewLoan({
     } catch (error) {
       setAlertError(true);
       setMessageError('Erro ao Cadastrar o empréstimo')
-      console.log('Erro ao Cadastrar o empréstimo:', error);
     }
   };
 
@@ -132,7 +128,6 @@ export default function FormNewLoan({
         paymentStatus: nonEmptyState.paymentStatus,
       };
       const response = await updateLoan(bodyLoanEdit, loanId);
-      console.log('Resposta da API:', response);
       setNewLoan(false);
       setLoanId(null);
       setAlert(true);

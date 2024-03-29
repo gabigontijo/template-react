@@ -40,14 +40,12 @@ export default function FormNewSimulation({
       filterMachine = machineList.filter((machine) =>
         Object.values(machine.presentialTax).some((value) => value !== '' && value !== null)
       );
-      console.log('filterMchineListPresencial', filterMachine);
       setMachineFilterList(filterMachine);
     }
     if (stateSimulation.mode === 'Online') {
       filterMachine = machineList.filter((machine) =>
         Object.values(machine.onlineTax).some((value) => value !== '' && value !== null)
       );
-      console.log('filterMchineListOnline', filterMachine);
       setMachineFilterList(filterMachine);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -59,7 +57,6 @@ export default function FormNewSimulation({
 
   const onChangeLoanType = (event) => {
     const { value } = event.target;
-    console.log(value);
     setStateSimulation({
       ...stateSimulation,
       loanType: value,
@@ -90,14 +87,12 @@ export default function FormNewSimulation({
   };
 
   const checkForm = () => {
-    console.log(stateSimulation);
     const keys = Object.keys(stateSimulation);
     return keys.every((key) => stateSimulation[key]);
   };
 
   const handleSimulation = () => {
     const teste = checkForm();
-    console.log('teste', teste);
     if (!teste) {
       setMessageNotification('Campos não preenchidos corretamente');
       setOpenDialog(true);

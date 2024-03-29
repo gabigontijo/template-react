@@ -12,7 +12,7 @@ export default function SelectCardFlag({name, value, onChange, cardMachineList, 
   };
 
   return (
-    <Box component="form" noValidate autoComplete="off" width="33%">
+    <Box component="form" noValidate autoComplete="off" width={{ xs: '100%', md: '25%' }}>
       <div>
         <TextField
           fullWidth

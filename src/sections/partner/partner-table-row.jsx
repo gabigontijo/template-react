@@ -52,14 +52,11 @@ export default function PartnerTableRow({
 
   const handleEdit = async () => {
     try {
-      console.log(id)
       const { Partner } = await partnerById(id);
       setNewPartner(true);
       setPartnerId(id);
-      console.log()
       setStatePartner(Partner);
       setOpen(null);
-      console.log(id);
     } catch (error) {
       console.log('Erro ao editar o parceiro:', error);
     }
@@ -68,7 +65,6 @@ export default function PartnerTableRow({
   const handleDelete = async () => {
     try {
       const response = await deletePartner(id);
-      console.log('Resposta da API:', response);
       setOpenDialog(false);
       setAlert(true);
       setMessageAlert('Parceiro deletado com sucesso')

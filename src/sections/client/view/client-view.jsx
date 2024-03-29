@@ -143,7 +143,6 @@ export default function ClientPage() {
           return result;
         })
       );
-      console.log(results);
       setAlert(true);
       setMessageAlert('Cliente deletado com sucesso');
       setOpenDialog(false);

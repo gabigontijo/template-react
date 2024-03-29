@@ -12,10 +12,8 @@ export default function SelectInstallments({ cardMachineList, value, onChange, c
     value: `${index + 1}`,
     label: `${index + 1}`,
   }));
-  console.log('numInstallments',numInstallments);
-  console.log('numInstallments typeof', typeof(numInstallments));
   return (
-    <Box component="form" noValidate autoComplete="off" width="33%">
+    <Box component="form" noValidate autoComplete="off" width={{ xs: '100%', md: '25%' }}>
       <div>
         <TextField
           fullWidth

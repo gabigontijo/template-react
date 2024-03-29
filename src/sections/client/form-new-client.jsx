@@ -86,7 +86,6 @@ export default function FormNewClient({
         documents: '',
       };
       const response = await updateClient(bodyClientEdit, clientId);
-      console.log('Resposta da API:', response);
       setNewUser(false);
       setClientId(null);
       setAlert(true);
@@ -103,7 +102,6 @@ export default function FormNewClient({
 
   const onPartnerSelect = (value) => {
     if (value && value.id) {
-      console.log('valuePartner-----------------------', value);
       setStateClient({
         ...stateClient,
         partner: {
@@ -120,7 +118,6 @@ export default function FormNewClient({
       ...stateClient,
       [name]: value,
     });
-    console.log(Number(value));
   };
 
   return (
