@@ -20,10 +20,12 @@ export const loanInterface = {
            cardMachineName:'',
            brand: '',
            value: '',
-           valueWithTax: '',
            installments: '',
-           paymentType: '',
-           installmentsValue: ''
+           machineValue: '',
+           installmentsValue: '',
+           clientAmount:'',
+           grossProfit: '',
+           paymentType: ''
         }
     ],
     partner:{
@@ -40,9 +42,9 @@ export const loanInterface = {
         percentPartner:'',
     },
     grossProfit: '',
-    netProfit:'',
+    profit:'',
     type: 1,
     clientAmount: '',
-    paymentStatus: '',
+    paymentStatus: 'pending',
 };
 

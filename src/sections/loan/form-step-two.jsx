@@ -1,15 +1,19 @@
-import { useState } from 'react';
 import PropTypes from 'prop-types';
+import { useState, useEffect } from 'react';
 // import { useQuery } from "react-query";
+
+import { NumericFormat } from 'react-number-format';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
-// import TextField from '@mui/material/TextField';
+import Input from '@mui/material/Input';
+import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
-// import { allCardMachines } from 'src/apis/card-machine';
+import Iconify from 'src/components/iconify';
 
+import { definedLimit, definedValue } from './service';
 import SelectMachin from '../common/input-select-machin';
 import NumberFormatField from '../common/number-format-field';
 import SelectCardFlag from '../common/input-select-card-flag';
@@ -22,32 +26,63 @@ import SelectNumberOfCardsFields from '../common/input-select-number-of-cards';
 // ----------------------------------------------------------------------
 
 export default function FormStepTwo({ loan, setLoan, cardMachineList }) {
-
   const getDefaultCard = () => ({
-    cardMachineId: 1,
-    cardMachineName: '',
+    cardMachineId: '',
+    cardMachineName:'',
     brand: '',
     value: '',
-    valueWithTax: '',
     installments: '',
-    paymentType: '',
+    machineValue: '',
     installmentsValue: '',
-  });
+    clientAmount:'',
+    grossProfit: '',
+    paymentType: ''
+ });
 
   const [numberOfCards, setNumberOfCards] = useState(1);
   const [cards, setCards] = useState(
     Array.from({ length: Number(numberOfCards) }, (_, index) => getDefaultCard())
   );
 
-  // useQuery("allCardMachines", allCardMachines, {
-  //   onSuccess: (response) => {
-  //     setCardMachineList(response.CardMachines);
-  //     console.log(response.CardMachines)
-  //   },
-  //   onError: (error) => {
-  //     console.error('Erro ao carregar maquininhas:', error);
-  //   }
-  // });
+  useEffect(() => {
+    cards.forEach((_, index) => {
+      debugger
+      calculatePreviewValue(index);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cards, setCards, loan]);
+
+  const calculatePreviewValue = (cardIndex) => {
+    const card = cards[cardIndex];
+    if (card.value && card.installments && card.paymentType && loan.operationPercent) {
+      if (card.value !== '') {
+        let finalValue;
+        const cardMachine = cardMachineList.find((cm) => cm.id === card.cardMachineId);
+        if (loan.type === 2) {
+          finalValue = definedLimit(
+            card.value,
+            card.installments,
+            loan.operationPercent,
+            cardMachine[card.paymentType]
+          );
+        } else {
+          finalValue = definedValue(
+            card.value,
+            card.installments,
+            loan.operationPercent,
+            cardMachine[card.paymentType]
+          );
+        }
+        card.machineValue = finalValue.machineValue;
+        card.clientAmount = finalValue.clientAmount;
+        card.installmentsValue = finalValue.installmentsValue;
+        card.grossProfit = finalValue.grossProfit;
+        card.cardMachineName = cardMachine.name;
+        cards[cardIndex] = card;
+        setCards(cards);
+      }
+    }
+  };
 
   const handleRequestedValue = ({ target }) => {
     setLoan({
@@ -57,7 +92,6 @@ export default function FormStepTwo({ loan, setLoan, cardMachineList }) {
   };
 
   const handleTypeLoan = ({ target }) => {
-    console.log(target.value);
     setLoan({
       ...loan,
       type: target.value,
@@ -100,29 +134,50 @@ export default function FormStepTwo({ loan, setLoan, cardMachineList }) {
   };
 
   const handleCardChange = (cardIndex, field, value) => {
+    let updatedCards = []
+    setCards((prevCards) => {
+      updatedCards = [...prevCards];
+      updatedCards[cardIndex][field] = value;
+      return updatedCards;
+    });
+
+    setLoan((prevLoan) => ({
+      ...prevLoan,
+      cards: updatedCards,
+    }));
+  };
+  const handleCardPaymentChange = (cardIndex, field, value) => {
     setCards((prevCards) => {
       const updatedCards = [...prevCards];
       updatedCards[cardIndex][field] = value;
-      console.log('item', updatedCards[cardIndex][field]);
-      console.log('value', value);
-
       setLoan((prevLoan) => ({
         ...prevLoan,
         cards: updatedCards,
       }));
       return updatedCards;
     });
+    calculatePreviewValue(cardIndex);
   };
 
   return (
     <Card sx={{ marginTop: '1.5em' }}>
       <Stack p={3}>
         <Stack spacing={2}>
-          <Stack direction="row" spacing={2}>
-            <Box>
+          <Stack
+            spacing={{ xs: 1, sm: 2 }}
+            direction="row"
+            useFlexGap
+            sx={{
+              flexWrap: {
+                xs: 'wrap',
+                sm: 'nowrap',
+              },
+            }}
+          >
+            <Box width={{ xs: '100%', md: '30%' }}>
               <SelectTypeLoan handleChange={handleTypeLoan} loanType={loan.type} />
             </Box>
-            <Box width="30%">
+            <Box width={{ xs: '100%', md: '30%' }}>
               <NumberFormatField
                 name="value"
                 label="Valor Solicitado"
@@ -130,7 +185,7 @@ export default function FormStepTwo({ loan, setLoan, cardMachineList }) {
                 handleChange={handleRequestedValue}
               />
             </Box>
-            <Box width="30%">
+            <Box width={{ xs: '100%', md: '30%' }}>
               <PercentFormatField
                 name="operationPercent"
                 label="Taxa da operação"
@@ -153,7 +208,18 @@ export default function FormStepTwo({ loan, setLoan, cardMachineList }) {
                 <Typography variant="body2" sx={{ color: 'primary.main' }}>
                   {`Cartão ${index + 1}`}
                 </Typography>
-                <Stack direction="row" spacing={2} marginTop={2}>
+                <Stack
+                  marginTop={2}
+                  spacing={1}
+                  direction="row"
+                  useFlexGap
+                  sx={{
+                    flexWrap: {
+                      xs: 'wrap',
+                      sm: 'nowrap',
+                    },
+                  }}
+                >
                   <SelectMachin
                     cardMachineList={cardMachineList}
                     name={`machin-${index}`}
@@ -177,7 +243,7 @@ export default function FormStepTwo({ loan, setLoan, cardMachineList }) {
                       handleCardChange(index, 'installments', Number(e.target.value))
                     }
                   />
-                  <Box width="33%">
+                  <Box width={{ xs: '100%', md: '30%' }}>
                     <NumberFormatField
                       name={`valueCard-${index}`}
                       label="Valor"
@@ -187,17 +253,43 @@ export default function FormStepTwo({ loan, setLoan, cardMachineList }) {
                   </Box>
                   <SelectPaymentType
                     value={card.paymentType}
-                    onChange={(e) => handleCardChange(index, 'paymentType', e.target.value)}
+                    machineSelected={cardMachineList.find((m) => m.id === card.cardMachineId)}
+                    onChange={(e) => handleCardPaymentChange(index, 'paymentType', e.target.value)}
                   />
-                  <Box width="33%">
-                    <NumberFormatField
-                      name={`valueCardMachine-${index}`}
-                      label="Valor com taxas"
-                      value={card.value}
-                      handleChange={(e) =>
-                        handleCardChange(index, 'valueWithTax', Number(e.target.value))
-                      }
+                  <Box width={{ xs: '100%', md: '25%' }}>
+                    <Typography variant="body1" sx={{ color: 'primary.main' }}>
+                      Valor Máquina
+                    </Typography>
+                    <NumericFormat
+                      fullWidth
+                      label="Valor Maquina"
+                      customInput={Input}
+                      thousandSeparator="."
+                      fixedDecimalScale
+                      decimalSeparator=","
+                      prefix="R$ "
+                      allowNegative={false}
+                      decimalScale={2}
+                      value={card.machineValue}
+                      readOnly
                     />
+                    <Box alignItems="center" width="100%" display="flex" justifyContent="end">
+                      <Button
+                        sx={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'end',
+                          pt: 1,
+                          pb: 1,
+                        }}
+                        onClick={() => calculatePreviewValue(index)}
+                      >
+                        <Typography variant="body2" sx={{ color: 'primary.main' }}>
+                          Atualizar
+                        </Typography>
+                        <Iconify icon="dashicons:update" />
+                      </Button>
+                    </Box>
                   </Box>
                 </Stack>
               </div>

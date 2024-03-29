@@ -79,7 +79,7 @@ export default function TableSimulation({
       <Stack
         spacing={{ xs: 1, sm: 2 }}
         direction="column"
-        alignItems={{ xs: 'initial' }}
+        alignItems= 'initial'
         width="100%"
       >
         <Box width="100%">
@@ -135,7 +135,7 @@ export default function TableSimulation({
                 variant="p"
                 style={{ textTransform: 'uppercase', fontWeight: 'bold', color: '#EB001B' }}
               >
-               Valor Final
+                {paramsSimulation.loanType === 1 ? 'Valor Final' : 'Você recebe' }
               </Typography>
                 </TableCell>
           </TableRow>

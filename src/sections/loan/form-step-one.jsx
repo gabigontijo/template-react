@@ -66,7 +66,7 @@ export default function FormStepOne({
         <CircularProgress />
       </Box>}
       <Stack direction="row" spacing={3} p={3} alignItems="center">
-        <Box width="50%" sx={{ height: 'fit-content' }}>
+        <Box width={{ xs: '100%', md: '50%' }} sx={{ height: 'fit-content' }}>
           <Autocomplete
             // disablePortal
             ListboxProps={{ maxHeight: '200px' }}

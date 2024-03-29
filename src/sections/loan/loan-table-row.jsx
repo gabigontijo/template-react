@@ -88,7 +88,6 @@ export default function LoanTableRow({
       setNewLoan(true);
       setStateLoan(response);
       setOpen(null);
-      console.log(id);
     } catch (error) {
       // eslint-disable-next-line
       setNewLoan(true); //somente para ver o resultado depois remover
@@ -234,7 +233,7 @@ export default function LoanTableRow({
                         {card.installmentsValue}
                       </TableCell>
                        <TableCell align="right">
-                        {card.paymentType}
+                        {card.paymentType === "presentialTax" ? 'Presencial': 'Online'}
                       </TableCell>
                     </TableRow>
                   ))}

@@ -67,7 +67,6 @@ export default function LoanPage() {
   const {isLoading, refetch: refetchLoans} = useQuery("allLoans", allLoans, {
     onSuccess: (response) => {
       setLoanList(response.Loans);
-      console.log("resposta api", response.Loans);
     },
     onError: (error) => {
       console.error('Erro ao carregar empréstimos:', error);
