@@ -1,8 +1,8 @@
 import { apiFetch, getHeaders } from "..";
 
 // const URlLoans = 'http://195.35.16.37:81/cashbycard/loans';
-// const URlLoans = 'http://localhost/cashbycard/loans';
-const URlLoans = '/cashbycard/loans';
+const URlLoans = 'http://localhost:3001/loans';
+// const URlLoans = '/cashbycard/loans';
 
 export const createLoan = async (loan) => {
   const apiOpts = {

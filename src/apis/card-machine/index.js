@@ -1,6 +1,7 @@
 import { apiFetch, getHeaders } from '..';
 
-const URlcardMachines = '/cashbycard/card-machines';
+// const URlcardMachines = '/cashbycard/card-machines';
+const URlcardMachines = 'http://localhost:3001/card-machines';
 
 export const createCardMachine = async (cardMachine) => {
   const apiOpts = {
