@@ -85,7 +85,7 @@ export default function MachineTableRow({
 
   const handleDelete = async () => {
     try {
-      const response = await deleteCardMachine(id);
+      await deleteCardMachine(id);
       setOpenDialog(false);
       setAlert(true);
       setMessageAlert('Maquininha deletada com sucesso');

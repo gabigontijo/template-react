@@ -93,12 +93,6 @@ export default function FormNewMachine({
     console.log(Number(value));
   };
 
-
-  const handleInstallmentChange = (event) => {
-    // Armazenar temporariamente o valor digitado pelo usuário
-    setTempInput(event.target.value);
-  };
-
   const handleKeyPress = (event) => {
     console.log(event.target.value);
     if (event.key === 'Enter') {
