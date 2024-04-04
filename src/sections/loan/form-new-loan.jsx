@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useQuery } from "react-query";
+import { useQuery } from 'react-query';
 import { useState, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
@@ -19,6 +19,7 @@ import FormStepOne from './form-step-one';
 import FormStepTwo from './form-step-two';
 import { loanInterface } from './view/type';
 import FormStepThree from './form-step-three';
+import DialogMessage from '../common/dialog-message';
 import { machineInterface } from '../machine/view/type';
 import { createBodyLoan, createBodyStepTwo } from './service';
 
@@ -45,35 +46,43 @@ export default function FormNewLoan({
   const [clientList, setClientList] = useState([]);
   const [partnerList, setPartnerList] = useState([]);
   const [cardMachineList, setCardMachineList] = useState([machineInterface]);
+  const [openDialog, setOpenDialog] = useState(false);
 
-  useEffect(()=>{
-  },[stateLoan])
+  useEffect(() => {}, [stateLoan]);
 
-  const { isLoading: isLoadingClients, refetch: refetchClients } = useQuery("allClients", allClients, {
-    onSuccess: (response) => {
-      setClientList(response.Clients);
-    },
-    onError: (error) => {
-      console.error('Erro ao carregar clientes:', error);
+  const { isLoading: isLoadingClients, refetch: refetchClients } = useQuery(
+    'allClients',
+    allClients,
+    {
+      onSuccess: (response) => {
+        setClientList(response.Clients);
+      },
+      onError: (error) => {
+        console.error('Erro ao carregar clientes:', error);
+      },
     }
-  });
+  );
 
-  const { isLoading: isLoandingPartners, refetch: refetchPartners } = useQuery("allPartners", allPartners, {
-    onSuccess: (response) => {
-      setPartnerList(response.Partners);
-    },
-    onError: (error) => {
-      console.error('Erro ao carregar Parceiros:', error);
+  const { isLoading: isLoandingPartners, refetch: refetchPartners } = useQuery(
+    'allPartners',
+    allPartners,
+    {
+      onSuccess: (response) => {
+        setPartnerList(response.Partners);
+      },
+      onError: (error) => {
+        console.error('Erro ao carregar Parceiros:', error);
+      },
     }
-  });
+  );
 
-  useQuery("allCardMachines", allCardMachines, {
+  useQuery('allCardMachines', allCardMachines, {
     onSuccess: (response) => {
       setCardMachineList(response.CardMachines);
     },
     onError: (error) => {
       console.error('Erro ao carregar maquininhas:', error);
-    }
+    },
   });
 
   const isStepSkipped = (step) => {
@@ -87,24 +96,32 @@ export default function FormNewLoan({
       newSkipped.delete(activeStep);
     }
 
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    setSkipped(newSkipped);
-    if(activeStep === 1) {
+    if (activeStep === 1) {
+      let totalValue = 0;
+      for (let i = 0; i < stateLoan.cards.length; i += 1) {
+        totalValue += stateLoan.cards[i].value;
+      }
+      if (totalValue !== stateLoan.askValue) {
+        setOpenDialog(true)
+        return;
+      }
       createBodyStepTwo(setStateLoan, stateLoan, cardMachineList);
     }
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    setSkipped(newSkipped);
   };
 
   const handleSubmit = async () => {
     try {
-      const response = await createLoan(createBodyLoan(setStateLoan, stateLoan));
+      await createLoan(createBodyLoan(setStateLoan, stateLoan));
       setNewLoan(false);
       setAlert(true);
-      setMessageAlert('Empréstimo cadastrado com sucesso')
+      setMessageAlert('Empréstimo cadastrado com sucesso');
       refetchLoans();
-      setStateLoan(loanInterface)
+      setStateLoan(loanInterface);
     } catch (error) {
       setAlertError(true);
-      setMessageError('Erro ao Cadastrar o empréstimo')
+      setMessageError('Erro ao Cadastrar o empréstimo');
     }
   };
 
@@ -127,7 +144,7 @@ export default function FormNewLoan({
         profit: nonEmptyState.netProfit,
         paymentStatus: nonEmptyState.paymentStatus,
       };
-      const response = await updateLoan(bodyLoanEdit, loanId);
+      await updateLoan(bodyLoanEdit, loanId);
       setNewLoan(false);
       setLoanId(null);
       setAlert(true);
@@ -135,8 +152,8 @@ export default function FormNewLoan({
       setStateLoan(loanInterface);
       refetchLoans();
     } catch (error) {
-      setAlertError(true); 
-      setMessageError('Erro ao Editar o empréstimo')
+      setAlertError(true);
+      setMessageError('Erro ao Editar o empréstimo');
       setNewLoan(true);
       console.log('Erro ao Editar o empréstimo:', error);
     }
@@ -184,7 +201,9 @@ export default function FormNewLoan({
         />
       )}
 
-      {activeStep === 1 && <FormStepTwo setLoan={setStateLoan} loan={stateLoan} cardMachineList={cardMachineList}/>}
+      {activeStep === 1 && (
+        <FormStepTwo setLoan={setStateLoan} loan={stateLoan} cardMachineList={cardMachineList} />
+      )}
       {activeStep === 2 && (
         <FormStepThree
           setAlert={setAlert}
@@ -208,9 +227,18 @@ export default function FormNewLoan({
           Voltar
         </Button>
         <Box sx={{ flex: '1 1 auto' }} />
-
-        <Button onClick={ activeStep === steps.length - 1 ? handleSubmit : handleNext}>{activeStep === steps.length - 1 ? 'Cadastrar' : 'Avançar'}</Button>
+        {loanId === null && (
+          <Button onClick={activeStep === steps.length - 1 ? handleSubmit : handleNext}>
+            {activeStep === steps.length - 1 ? 'Cadastrar' : 'Avançar'}
+          </Button>
+        )}
+        {loanId !== null && (
+          <Button onClick={activeStep === steps.length - 1 ? handleSubmitEdit : handleNext}>
+            {activeStep === steps.length - 1 ? 'Editar' : 'Avançar'}
+          </Button>
+        )}
       </Box>
+      <DialogMessage message='Somatório errado no valor dos cartões' open={openDialog} setOpen={setOpenDialog} title='Erro no valor dos Cartões'/>
     </Box>
   );
 }

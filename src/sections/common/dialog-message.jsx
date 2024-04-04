@@ -7,7 +7,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 
-export default function DialogSimulation({ setOpen, open, message}) {
+export default function DialogMessage({ setOpen, open, title, message}) {
 
   const handleClose = () => {
     setOpen(false);
@@ -21,7 +21,7 @@ export default function DialogSimulation({ setOpen, open, message}) {
       onClose={handleClose}
       aria-describedby="alert-dialog-simulation"
     >
-      <DialogTitle>Erro para simular</DialogTitle>
+      <DialogTitle>{title}</DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-status-description">
           {message}
@@ -35,8 +35,9 @@ export default function DialogSimulation({ setOpen, open, message}) {
   );
 }
 
-DialogSimulation.propTypes = {
+DialogMessage.propTypes = {
   setOpen: PropTypes.func,
   open: PropTypes.bool,
   message: PropTypes.string,
+  title: PropTypes.string,
 };

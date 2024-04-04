@@ -84,9 +84,13 @@ export default function LoanTableRow({
 
   const handleEdit = async () => {
     try {
+      console.log(id);
+      console.log("typeof", typeof id);
       const response = await loanById(id);
+      console.log('response', response);
+      setLoanId(id);
       setNewLoan(true);
-      setStateLoan(response);
+      setStateLoan(response.Loan);
       setOpen(null);
     } catch (error) {
       // eslint-disable-next-line
@@ -124,7 +128,7 @@ export default function LoanTableRow({
   };
 
   const handleStatus = async () => {
-    const bodyEditPaymentStatus = { paymentStatus: textStatus}
+    const bodyEditPaymentStatus = { paymentStatus: statusPayment}
     try {
       const response = await updateLoanPaymentStatus(id, bodyEditPaymentStatus);
       console.log('Resposta da API loan:', response);

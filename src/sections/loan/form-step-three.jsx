@@ -37,7 +37,7 @@ export default function FormStepThree({
   refetchPartners,
 }) {
   const [checked, setChecked] = useState(false);
-  const [, setSelectedPartner] = useState(null);
+  // const [, setSelectedPartner] = useState(null);
 
   const handleNewPartner = () => {
     setIsNewPartner(true);
@@ -64,7 +64,7 @@ export default function FormStepThree({
   };
 
   const handleChangePartnerValue = ({ target }) => {
-    const calculatedPercentPartner = (parseFloat(target.value) / (loan.value * (parseFloat(loan.operationPercent))/100)) * 100;
+    const calculatedPercentPartner = (parseFloat(target.value) / (loan.askValue * (parseFloat(loan.operationPercent))/100)) * 100;
 
     setLoan((prevLoan) => ({
       ...prevLoan,
@@ -77,7 +77,7 @@ export default function FormStepThree({
   };
 
   const handleChangePartnerPercent = ({ target }) => {
-    const calculatedValuePartner = (parseFloat(target.value) / 100) * (loan.value * (parseFloat(loan.operationPercent))/100);
+    const calculatedValuePartner = (parseFloat(target.value) / 100) * (loan.askValue * (parseFloat(loan.operationPercent))/100);
 
     setLoan((prevLoan) => ({
       ...prevLoan,
@@ -99,13 +99,13 @@ export default function FormStepThree({
   return (
     <Card sx={{ marginTop: '1.5em' }}>
       <Stack direction="row" spacing={1} p={3} alignItems="center">
-        <Typography>Off</Typography>
+        <Typography>Não</Typography>
         <Switch
           {...{ inputProps: { 'aria-label': 'Switch demo' } }}
           checked={checked}
           onChange={handleChecked}
         />
-        <Typography>On</Typography>
+        <Typography>Sim</Typography>
       </Stack>
       {checked && (
         <>

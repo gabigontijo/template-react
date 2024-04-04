@@ -59,10 +59,10 @@ export const createBodyLoan = (setStateLoan, stateLoan) => {
   }
   return {
     clientId: stateLoan.client.id,
-    askValue: stateLoan.value,
+    askValue: stateLoan.askValue,
     operationPercent: stateLoan.operationPercent,
     amount: stateLoan.amount,
-    numberCards: stateLoan.numberOfCards,
+    numberCards: Number(stateLoan.numberCards),
     cards: stateLoan.cards,
     partnerId: stateLoan.partner.id === '' ? null : stateLoan.partner.id,
     partnerPercent: Number(stateLoan.partnerProfit.percentPartner),

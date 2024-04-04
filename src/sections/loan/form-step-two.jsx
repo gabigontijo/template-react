@@ -1,5 +1,5 @@
+import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useState, useEffect } from 'react';
 // import { useQuery } from "react-query";
 
 import { NumericFormat } from 'react-number-format';
@@ -28,29 +28,21 @@ import SelectNumberOfCardsFields from '../common/input-select-number-of-cards';
 export default function FormStepTwo({ loan, setLoan, cardMachineList }) {
   const getDefaultCard = () => ({
     cardMachineId: '',
-    cardMachineName:'',
+    cardMachineName: '',
     brand: '',
     value: '',
     installments: '',
     machineValue: '',
     installmentsValue: '',
-    clientAmount:'',
+    clientAmount: '',
     grossProfit: '',
-    paymentType: ''
- });
+    paymentType: '',
+  });
 
-  const [numberOfCards, setNumberOfCards] = useState(1);
+  const [numberOfCards, setNumberOfCards] = useState(loan.numberCards ?? 1);
   const [cards, setCards] = useState(
-    Array.from({ length: Number(numberOfCards) }, (_, index) => getDefaultCard())
+    loan.cards ?? Array.from({ length: Number(numberOfCards) }, (_, index) => getDefaultCard())
   );
-
-  useEffect(() => {
-    cards.forEach((_, index) => {
-      debugger
-      calculatePreviewValue(index);
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cards, setCards, loan]);
 
   const calculatePreviewValue = (cardIndex) => {
     const card = cards[cardIndex];
@@ -79,7 +71,7 @@ export default function FormStepTwo({ loan, setLoan, cardMachineList }) {
         card.grossProfit = finalValue.grossProfit;
         card.cardMachineName = cardMachine.name;
         cards[cardIndex] = card;
-        setCards(cards);
+        setCards([...cards]);
       }
     }
   };
@@ -87,7 +79,7 @@ export default function FormStepTwo({ loan, setLoan, cardMachineList }) {
   const handleRequestedValue = ({ target }) => {
     setLoan({
       ...loan,
-      value: target.value,
+      askValue: target.value,
     });
   };
 
@@ -106,15 +98,19 @@ export default function FormStepTwo({ loan, setLoan, cardMachineList }) {
   };
 
   const getUpdatedCards = (newQuantity) => {
-    if (loan.numberOfCards > newQuantity) {
-      return loan.cards.slice(0, newQuantity);
-    }
-
-    if (loan.numberOfCards < newQuantity) {
-      for (let i = 0; i < newQuantity - loan.numberOfCards; i += 1) {
-        loan.cards.push(getDefaultCard());
+    // eslint-disable-next-line no-debugger
+    debugger;
+    if (numberOfCards !== 0) {
+      if (numberOfCards > newQuantity) {
+        return cards.slice(0, newQuantity);
       }
-      return loan.cards;
+
+      if (numberOfCards < newQuantity) {
+        for (let i = numberOfCards; i <= newQuantity - loan.numberCards; i += 1) {
+          cards.push(getDefaultCard());
+        }
+        return cards;
+      }
     }
     return null;
   };
@@ -134,7 +130,7 @@ export default function FormStepTwo({ loan, setLoan, cardMachineList }) {
   };
 
   const handleCardChange = (cardIndex, field, value) => {
-    let updatedCards = []
+    let updatedCards = [];
     setCards((prevCards) => {
       updatedCards = [...prevCards];
       updatedCards[cardIndex][field] = value;
@@ -181,7 +177,7 @@ export default function FormStepTwo({ loan, setLoan, cardMachineList }) {
               <NumberFormatField
                 name="value"
                 label="Valor Solicitado"
-                value={loan.value}
+                value={loan.askValue}
                 handleChange={handleRequestedValue}
               />
             </Box>

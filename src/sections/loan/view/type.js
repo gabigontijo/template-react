@@ -10,10 +10,10 @@ export const loanInterface = {
         partner: '',
         documenst: [],
     },
-    value: '',
+    askValue: '',
     operationPercent: '',
     amount: '',
-    numberOfCards: 1,
+    numberCards: 1,
     cards: [
         {
            cardMachineId: '',
