@@ -85,7 +85,7 @@ export default function FormNewClient({
         cpf: nonEmptyState.cpf,
         documents: '',
       };
-      const response = await updateClient(bodyClientEdit, clientId);
+      await updateClient(bodyClientEdit, clientId);
       setNewUser(false);
       setClientId(null);
       setAlert(true);

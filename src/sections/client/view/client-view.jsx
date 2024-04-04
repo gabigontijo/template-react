@@ -137,7 +137,7 @@ export default function ClientPage() {
 
   const handleDelete = async () => {
     try {
-      const results = await Promise.all(
+     await Promise.all(
         selected.map(async (client) => {
           const result = await deleteClient(client.id);
           return result;

@@ -69,7 +69,7 @@ export default function ClientTableRow({
 
   const handleDelete = async () => {
     try {
-      const response = await deleteClient(id);
+      await deleteClient(id);
       setOpenDialog(false);
       setAlert(true);
       setMessageAlert('Cliente deletado com sucesso');
