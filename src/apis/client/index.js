@@ -1,4 +1,4 @@
-import { apiFetch, getHeaders } from '..';
+import { apiFetch } from '..';
 
 // const URlClients = 'http://195.35.16.37:81/cashbycard/clients';
 const URlClients = 'http://localhost:3001/clients';
@@ -33,7 +33,7 @@ export const updateClient = async (client, clientId) => {
   const apiOpts = {
     method: 'put',
     body: JSON.stringify(client),
-    headers: getHeaders({ 'Content-Type': 'application/json' }),
+    headers: { 'Content-Type': 'application/json' },
   };
   const res = await apiFetch(`${URlClients}/${clientId}`, apiOpts);
   return res.json();
@@ -42,7 +42,7 @@ export const updateClient = async (client, clientId) => {
 export const deleteClient = async (clientId) => {
   const apiOpts = {
     method: 'delete',
-    headers: getHeaders({ 'Content-Type': 'application/json' }),
+    headers: { 'Content-Type': 'application/json' },
   };
   const res = await apiFetch(`${URlClients}/${clientId}`, apiOpts);
   return res.json();

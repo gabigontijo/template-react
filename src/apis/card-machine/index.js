@@ -1,4 +1,4 @@
-import { apiFetch, getHeaders } from '..';
+import { apiFetch } from '..';
 
 // const URlcardMachines = '/cashbycard/card-machines';
 const URlcardMachines = 'http://localhost:3001/card-machines';
@@ -32,7 +32,7 @@ export const updateCardMachine = async (cardMachine, cardMachineId) => {
   const apiOpts = {
     method: 'put',
     body: JSON.stringify(cardMachine),
-    headers: getHeaders({ 'Content-Type': 'application/json' }),
+    headers: { 'Content-Type': 'application/json' },
   };
   const res = await apiFetch(`${URlcardMachines}/${cardMachineId}`, apiOpts);
   return res.json();
@@ -41,7 +41,7 @@ export const updateCardMachine = async (cardMachine, cardMachineId) => {
 export const deleteCardMachine = async (cardMachineId) => {
   const apiOpts = {
     method: 'delete',
-    headers: getHeaders({ 'Content-Type': 'application/json' }),
+    headers: { 'Content-Type': 'application/json' },
   };
   const res = await apiFetch(`${URlcardMachines}/${cardMachineId}`, apiOpts);
   return res.json();
