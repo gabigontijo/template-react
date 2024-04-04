@@ -13,7 +13,7 @@ import { fDate } from 'src/utils/format-time';
 import { machineMock } from 'src/_mock/machine';
 
 import { simulationInterface } from './view/type';
-import DialogSimulation from '../common/dialog-simulation';
+import DialogMessage from '../common/dialog-message';
 import NumberFormatField from '../common/number-format-field';
 import PercentFormatField from '../common/percent-format-field';
 import MultipleSelectMachineSimulation from '../common/multiple-select-machine-simulation';
@@ -108,16 +108,6 @@ export default function FormNewSimulation({
       {isLoading && <CircularProgress />}
       {!isSimulation && (      
       <Stack direction="column" spacing={{ xs: 1, sm: 2 }}>
-        {/* <Box width={{ xs: '100%', md: '60%' }}>
-          <TextField
-            name="client"
-            label="Nome do cliente"
-            type="text"
-            value={stateSimulation.client}
-            onChange={(e) => handleChange(e.target.name, e.target.value)}
-            fullWidth
-          />
-        </Box> */}
         <Box width={{ xs: '100%', md: '60%' }}>
           <div>
             <TextField
@@ -199,7 +189,7 @@ export default function FormNewSimulation({
         </Box>
       </Stack>
         )}
-      <DialogSimulation message={messageNotification} open={openDialog} setOpen={setOpenDialog} />
+      <DialogMessage message={messageNotification} open={openDialog} setOpen={setOpenDialog} title='Erro para simular'/>
         { isSimulation && 
         <Box width={{ xs: '100%', md: '60%' }}>
           <div style={{height: '30px'}}/>

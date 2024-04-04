@@ -39,7 +39,7 @@ export default function FormNewPartner({
         cpf: statePartner.cpf,
         address: statePartner.address,
       };
-      const response = await createPartner(bodyParnter);
+      await createPartner(bodyParnter);
       setNewPartner(false);
       setAlert(true);
       setMessageAlert('Parceiro cadastrado com sucesso')
@@ -66,7 +66,7 @@ export default function FormNewPartner({
         cpf: nonEmptyState.cpf,
         address: nonEmptyState.address,
       };
-      const response = await updatePartner(bodyPartnerEdit, partnerId);
+      await updatePartner(bodyPartnerEdit, partnerId);
       setNewPartner(false);
       setPartnerId(null);
       setAlert(true);

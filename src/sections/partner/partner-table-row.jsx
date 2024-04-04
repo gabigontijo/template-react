@@ -64,7 +64,7 @@ export default function PartnerTableRow({
 
   const handleDelete = async () => {
     try {
-      const response = await deletePartner(id);
+      await deletePartner(id);
       setOpenDialog(false);
       setAlert(true);
       setMessageAlert('Parceiro deletado com sucesso')

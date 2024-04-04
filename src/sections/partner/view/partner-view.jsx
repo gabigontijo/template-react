@@ -137,7 +137,7 @@ export default function PartnerPage() {
 
   const handleDelete = async () => {
     try {
-      const results = await Promise.all(
+       await Promise.all(
         selected.map(async (partner) => {
           const result = await deletePartner(partner.id);
           return result;
