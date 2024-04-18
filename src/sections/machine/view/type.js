@@ -4,5 +4,5 @@ export const machineInterface = {
   brand: [],
   presentialTax: {},
   onlineTax: {},
-  installments: 5,
+  installments: '',
 };

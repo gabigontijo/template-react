@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
@@ -18,7 +18,6 @@ export default function FormNewMachine({
   setNewMachine,
   setAlert,
   setAlertError,
-  setNextStep,
   setMessageError,
   setMessageAlert,
   machineId,
@@ -29,7 +28,9 @@ export default function FormNewMachine({
   sxMachine,
 }) {
 
-  const [tempInput, setTempInput] = useState(stateMachine.installments);
+
+  useEffect(()=> {},[stateMachine.installments, stateMachine.onlineTax, stateMachine.presentialTax])
+
   const handleSubmit = async () => {
     try {
       const bodyMachine = {
@@ -91,16 +92,39 @@ export default function FormNewMachine({
       [name]: value,
     });
     console.log(Number(value));
-  };
+  }; 
+  
+  const handleChangeInstallments = (event) => {
+    const { name, value } = event.target;
+// TODO alterar a lista de taxa de acordo com o valor do installments
+  const listTaxLength = Object.keys(stateMachine.presentialTax).length
+   if (value !== '') {
+      const newListTax = JSON.parse(JSON.stringify(stateMachine.presentialTax))
+      if (listTaxLength > value) {
+        for (let i = Number(value) + 1; i <= listTaxLength; i += 1) {
+          delete newListTax[i];
+        }
+      } else if (listTaxLength < value) {
+        for (let i = listTaxLength + 1; i <= Number(value); i += 1) {
+          newListTax[i] = null;
+        }
+      } else {
+        return;
+      }
 
-  const handleKeyPress = (event) => {
-    console.log(event.target.value);
-    if (event.key === 'Enter') {
-    setStateMachine({
-      ...stateMachine,
-      installments: event.target.value,
-    });
+      setStateMachine({ 
+        ...stateMachine, 
+        [name]: value,
+        onlineTax: newListTax, 
+        presentialTax: newListTax 
+      });
+      return
     }
+
+    setStateMachine({ 
+      ...stateMachine, 
+      [name]: value,
+    });
   };
 
   return (
@@ -132,9 +156,9 @@ export default function FormNewMachine({
               name='installments'
               helperText="Pressione o Enter duas vezes"
               type="number"
-              value={tempInput}
-              onChange={(event) => setTempInput(event.target.value)}
-              onKeyPress={handleKeyPress} 
+              value={stateMachine.installments}
+              onChange={handleChangeInstallments}
+              // onBlur={handleChangeInstallments}
               fullWidth
               
             />
@@ -156,10 +180,10 @@ export default function FormNewMachine({
           }}
         >
           <Box width={{ xs: '100%', md: '47%' }}>
-            <TableTax installments={stateMachine.installments} setStateMachine={setStateMachine} stateMachine={stateMachine} presential listTax={stateMachine.presentialTax} />
+            <TableTax setStateMachine={setStateMachine} stateMachine={stateMachine} presential listTax={stateMachine.presentialTax} />
           </Box>
           <Box width={{ xs: '100%', md: '47%' }}>
-            <TableTax installments={stateMachine.installments} setStateMachine={setStateMachine} stateMachine={stateMachine} presential = {false} listTax={stateMachine.onlineTax} />
+            <TableTax setStateMachine={setStateMachine} stateMachine={stateMachine} presential = {false} listTax={stateMachine.onlineTax} />
           </Box>
         </Stack>
       </Stack>
@@ -197,7 +221,6 @@ FormNewMachine.propTypes = {
   setNewMachine: PropTypes.func,
   setAlert: PropTypes.func,
   setAlertError: PropTypes.func,
-  setNextStep: PropTypes.func,
   setMessageError: PropTypes.func,
   setMessageAlert: PropTypes.func,
   setMachineId: PropTypes.func,

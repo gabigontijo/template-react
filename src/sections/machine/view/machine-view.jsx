@@ -255,7 +255,7 @@ export default function MachinePage() {
                   .map((row, index) => (
                     <MachineTableRow
                       index={index}
-                      key={row.id}
+                      key={`${row.id}_${row.name}`}
                       id={row.id}
                       name={row.name}
                       brand={row.brand}

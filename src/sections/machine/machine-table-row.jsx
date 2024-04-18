@@ -55,6 +55,9 @@ export default function MachineTableRow({
   const [openCard, setOpenCard] = useState(false);
 
   const handleOpenMenu = (event) => {
+    // setMachineId(null);
+    // setStateMachine(machineInterface)
+    // setNewMachine(false);
     setOpen(event.currentTarget);
   };
 
@@ -76,6 +79,7 @@ export default function MachineTableRow({
       setNewMachine(true);
       setMachineId(id);
       const bodyState = populationState(CardMachine);
+      console.log('bodyMahine', bodyState)
       setStateMachine(bodyState);
       setOpen(null);
     } catch (error) {
@@ -108,7 +112,7 @@ export default function MachineTableRow({
   const dateUpdated = formatarData(createDate);
   return (
     <>
-      <TableRow hover tabIndex={-1} role="checkbox" selected={selected}>
+      <TableRow hover tabIndex={-1} role="checkbox" selected={selected} key={`${id}subtable-machines`}>
         <TableCell padding="checkbox">
           <Checkbox disableRipple checked={selected} onChange={handleClick} />
         </TableCell>
@@ -150,7 +154,7 @@ export default function MachineTableRow({
           </IconButton>
         </TableCell>
       </TableRow>
-      <TableRow>
+      <TableRow key={`${id}sub-table-machine`}>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={openCard} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 1 }}>
@@ -165,7 +169,7 @@ export default function MachineTableRow({
               </Typography>
               <Table size="small" aria-label="purchases">
                 <TableHead>
-                  <TableRow>
+                  <TableRow  key={`${id}sub-titles-table-machine`}>
                     <TableCell>Parcela</TableCell>
                     <TableCell align="right">Taxa Presencial(%)</TableCell>
                     <TableCell align="right">Taxa Online(%)</TableCell>
@@ -173,7 +177,7 @@ export default function MachineTableRow({
                 </TableHead>
                 <TableBody>
                   {Object.keys(presentialTax).map((tax, index) => (
-                    <TableRow key={`${index}${name}`}>
+                    <TableRow key={`${name}_${index}`}>
                       <TableCell component="th" scope="row" style={{ whiteSpace: 'nowrap' }}>
                         {tax}
                       </TableCell>
