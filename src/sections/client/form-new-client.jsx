@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useQuery } from "react-query";
+import { useQuery } from 'react-query';
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
@@ -9,7 +9,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import Autocomplete from '@mui/material/Autocomplete';
 
 import { allPartners } from 'src/apis/partner';
-import { createClient, updateClient } from 'src/apis/client';
+import { createClient, updateClient, uploadClientFiles } from 'src/apis/client';
 
 import MaskFields from '../common/mask-field';
 import { clientInterface } from './view/type';
@@ -22,29 +22,34 @@ export default function FormNewClient({
   setNewUser,
   setAlert,
   setAlertError,
-  setNextStep,
   setMessageError,
   setMessageAlert,
-  clientId,
+  clientId: resp,
   setClientId,
   refetchClients,
   stateClient,
   setStateClient,
   sxClient,
+  clientDocuments,
 }) {
   const [partnersList, setPartnersList] = useState([]);
 
-  useQuery("allPartners", allPartners, {
+  useQuery('allPartners', allPartners, {
     onSuccess: (response) => {
       setPartnersList(response.Partners);
     },
     onError: (error) => {
       console.error('Erro ao carregar Parceiros:', error);
-    }
+    },
   });
 
   const handleSubmit = async () => {
     try {
+      let respDocuments = '';
+      if (stateClient.documents.length > 0) {
+        respDocuments = await uploadClientFiles(stateClient.documents, stateClient.cpf);
+      }
+      console.log('stateCliente-----------------------------', stateClient);
       const bodyClient = {
         name: stateClient.name,
         pixType: stateClient.pixType,
@@ -52,13 +57,13 @@ export default function FormNewClient({
         partnerId: Number(stateClient.partner.id),
         phone: stateClient.phone,
         cpf: stateClient.cpf,
-        documents: 'test.img',
+        documents: respDocuments,
       };
       await createClient(bodyClient);
       setAlert(true);
       setMessageAlert('Cliente cadastrado com sucesso');
       setNewUser(false);
-      setStateClient(clientInterface)
+      setStateClient(clientInterface);
       refetchClients();
     } catch (error) {
       // eslint-disable-next-line no-debugger
@@ -69,28 +74,43 @@ export default function FormNewClient({
     }
   };
 
+  function getNewDocuments(arr) {
+    const objetos = [];
+
+    arr.forEach(elemento => {
+        if (typeof elemento === 'object' && elemento !== null) {
+            objetos.push(elemento);
+        }
+    });
+
+    return objetos;
+}
+
   const handleSubmitEdit = async () => {
     try {
       // eslint-disable-next-line no-debugger
-      debugger;
-      const nonEmptyState = Object.fromEntries(
-        Object.entries(stateClient).map(([key, value]) => [key, value || ''])
-      );
+      // debugger;
+      const newDocuments = getNewDocuments(stateClient.documents);
+      let respDocuments = stateClient.documents
+      if (newDocuments.length > 0){
+        const response = await uploadClientFiles(stateClient.documents, stateClient.cpf);
+        respDocuments = clientDocuments.concat(response)
+      }
       const bodyClientEdit = {
-        name: nonEmptyState.name,
-        pixType: nonEmptyState.pixType,
-        pixKey: nonEmptyState.pixKey,
-        partnerId: Number(nonEmptyState.partner.id),
-        phone: nonEmptyState.phone,
-        cpf: nonEmptyState.cpf,
-        documents: '',
+        name: stateClient.name,
+        pixType: stateClient.pixType,
+        pixKey: stateClient.pixKey,
+        partnerId: Number(stateClient.partner.id),
+        phone: stateClient.phone,
+        cpf: stateClient.cpf,
+        documents: respDocuments.join(','),
       };
-      await updateClient(bodyClientEdit, clientId);
+      await updateClient(bodyClientEdit, resp);
       setNewUser(false);
       setClientId(null);
       setAlert(true);
       setMessageAlert('Cliente editado com sucesso');
-      setStateClient(clientInterface)
+      setStateClient(clientInterface);
       refetchClients();
     } catch (error) {
       setAlertError(true);
@@ -122,7 +142,7 @@ export default function FormNewClient({
 
   return (
     <>
-      <Stack spacing={{ xs: 1, sm: 2}}  sx={sxClient} >
+      <Stack spacing={{ xs: 1, sm: 2 }} sx={sxClient}>
         <Stack direction="row" spacing={{ xs: 1, sm: 2 }}>
           <Box width="100%">
             <TextField
@@ -135,12 +155,17 @@ export default function FormNewClient({
             />
           </Box>
         </Stack>
-        <Stack spacing={{ xs: 1, sm: 2 }} direction="row" useFlexGap sx={{
-          flexWrap: {
-            xs: 'wrap',
-            sm: 'nowrap',
-          },
-        }}>
+        <Stack
+          spacing={{ xs: 1, sm: 2 }}
+          direction="row"
+          useFlexGap
+          sx={{
+            flexWrap: {
+              xs: 'wrap',
+              sm: 'nowrap',
+            },
+          }}
+        >
           <Box width={{ xs: '100%', md: '30%' }}>
             <MaskFields
               mask="(99) 99999-9999"
@@ -166,12 +191,17 @@ export default function FormNewClient({
           </Box>
         </Stack>
 
-        <Stack spacing={{ xs: 1, sm: 2 }} direction="row" useFlexGap sx={{
-          flexWrap: {
-            xs: 'wrap',
-            sm: 'nowrap',
-          },
-        }}>
+        <Stack
+          spacing={{ xs: 1, sm: 2 }}
+          direction="row"
+          useFlexGap
+          sx={{
+            flexWrap: {
+              xs: 'wrap',
+              sm: 'nowrap',
+            },
+          }}
+        >
           <Box width={{ xs: '100%', md: '25%' }}>
             <TextField
               name="pixKey"
@@ -200,7 +230,7 @@ export default function FormNewClient({
         </Stack>
       </Stack>
       <Stack direction="row" alignItems="center" justifyContent="flex-end" sx={{ my: 2 }}>
-        {clientId === null && (
+        {resp === null && (
           <LoadingButton
             fullWidth
             size="large"
@@ -212,7 +242,7 @@ export default function FormNewClient({
             Cadastrar Cliente
           </LoadingButton>
         )}
-        {clientId !== null && (
+        {resp !== null && (
           <LoadingButton
             fullWidth
             size="large"
@@ -233,7 +263,6 @@ FormNewClient.propTypes = {
   setNewUser: PropTypes.func,
   setAlert: PropTypes.func,
   setAlertError: PropTypes.func,
-  setNextStep: PropTypes.func,
   setMessageError: PropTypes.func,
   setMessageAlert: PropTypes.func,
   setClientId: PropTypes.func,
@@ -242,4 +271,5 @@ FormNewClient.propTypes = {
   stateClient: PropTypes.any,
   setStateClient: PropTypes.func,
   sxClient: PropTypes.object,
+  clientDocuments: PropTypes.any,
 };

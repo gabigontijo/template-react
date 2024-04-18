@@ -61,6 +61,8 @@ export default function ClientPage() {
 
   const [stateClient, setStateClient] = useState( clientInterface);
 
+  const [clientDocuments, setClientDocuments] = useState([]);
+
   const {isLoading, refetch: refetchClients} = useQuery("allClients", allClients, {
     onSuccess: (response) => {
       setClientList(response.Clients);
@@ -200,6 +202,8 @@ export default function ClientPage() {
           refetchClients={refetchClients}
           setStateClient={setStateClient}
           stateClient={stateClient}
+          setClientDocuments={setClientDocuments}
+          clientDocuments={clientDocuments}
         />
       )}
 
@@ -272,6 +276,7 @@ export default function ClientPage() {
                       setMessageError={setMessageError}
                       setMessageAlert={setMessageAlert}
                       refetchClients={refetchClients}
+                      setClientDocuments={setClientDocuments}
                     />
                   ))}
 

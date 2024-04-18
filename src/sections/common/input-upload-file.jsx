@@ -50,7 +50,7 @@ export default function InputFileUpload({ setState, uploadedDocuments }) {
         <ListItemText primary="Documentos" sx={{ mr: 2, mb: {md: 0, xs: 2, sm: 1} }} />
         <Button component="label" variant="contained" startIcon={<CloudUploadIcon />}>
           Carregar arquivos 
-          <VisuallyHiddenInput type="file" onChange={handleFileChange} />
+          <VisuallyHiddenInput id='inputDocuments' type="file" onChange={handleFileChange} />
         </Button>
       </ListItem>
       <ListItem>
@@ -58,13 +58,16 @@ export default function InputFileUpload({ setState, uploadedDocuments }) {
       {Array.isArray(uploadedDocuments) &&
         uploadedDocuments.map((file, index) => (
           <ListItem key={index} alignItems="flex-start" >
-            <ListItemText primary={file.name.length > 10 ? `${file.name.substring(0, 10)}...` : file.name} />
+            {file.name ?
+            <ListItemText primary={file.name.length > 15 ? `${file.name.substring(0, 15)}...` : file.name} /> :
+            <ListItemText primary={file.length > 15 ? `${file.substring(15, 35)}...` : file} /> 
+}
             <Button
               size="small"
               color="inherit"
               onClick={() => handleRemoveFile(index)}
-              whiteSpace='nowrap'
-              alignItems='center'
+              whitespace='nowrap'
+              alignitems='center'
             >
               <DeleteIcon sx={{ width: '20px' }} />
             </Button>

@@ -40,6 +40,7 @@ export default function ClientTableRow({
   setMessageAlert,
   setMessageError,
   refetchClients,
+  setClientDocuments,
 }) {
   const [open, setOpen] = useState(null);
 
@@ -58,9 +59,13 @@ export default function ClientTableRow({
       // eslint-disable-next-line no-debugger
       // debugger;
       const { Client } = await clientById(id);
+      const arrDocuments = Client.documents.split(",");
+      Client.documents = arrDocuments;
+      setClientDocuments(arrDocuments);
       setNewUser(true);
       setClientId(id);
       setStateClient(Client);
+      console.log(Client)
       setOpen(null);
     } catch (error) {
       console.log('Erro ao editar o cliente:', error);
@@ -190,4 +195,5 @@ ClientTableRow.propTypes = {
   setMessageAlert: PropTypes.func,
   index: PropTypes.any,
   refetchClients: PropTypes.func,
+  setClientDocuments: PropTypes.func,
 };

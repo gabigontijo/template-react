@@ -15,5 +15,5 @@ export const clientInterface = {
     CreatedAt: '',
     UpdatedAt: '',
   },
-  documenst: [],
+  documents: [],
 };
