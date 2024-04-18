@@ -221,27 +221,35 @@ export default function LoanTableRow({
                 <TableHead>
                   <TableRow>
                     <TableCell>Cartão </TableCell>
-                    <TableCell align="right">Bandeira</TableCell>
+                    <TableCell>Maquininha </TableCell>
+                    <TableCell>Bandeira</TableCell>
                     <TableCell align="right">Valor (R$)</TableCell>
                     <TableCell align="right">Parcelas</TableCell>
                     <TableCell align="right">Valor da Parcela</TableCell>
+                    <TableCell align="right">Valor da Maquininha</TableCell>
                     <TableCell align="right">Tipo do pagamento</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {cards.map((card) => (
                     <TableRow key={card.id}>
-                      <TableCell component="th" scope="row" style={{ whiteSpace: 'nowrap' }}>
+                      <TableCell scope="row" style={{ whiteSpace: 'nowrap' }}>
+                        {card.id}
+                      </TableCell>
+                       <TableCell  scope="row" style={{ whiteSpace: 'nowrap' }}>
                         {card.cardMachineName}
                       </TableCell>
-                      <TableCell align="right">
-                        <CardIcon brandIcon={card.brand} size={20}/></TableCell>
+                      <TableCell>
+                        <CardIcon brandIcon={card.brand} size={30}/></TableCell>
                       <TableCell align="right" style={{ whiteSpace: 'nowrap' }}>{formatValue(card.value)}</TableCell>
                       <TableCell align="right">
                         {card.installments}
                       </TableCell>
                       <TableCell align="right"  style={{ whiteSpace: 'nowrap' }}>
                         {formatValue(card.installmentsValue)}
+                      </TableCell>
+                      <TableCell align="right"  style={{ whiteSpace: 'nowrap' }}>
+                        {formatValue(card.machineValue)}
                       </TableCell>
                        <TableCell align="right">
                         {card.paymentType === "presentialTax" ? 'Presencial': 'Online'}

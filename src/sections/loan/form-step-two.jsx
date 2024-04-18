@@ -72,6 +72,10 @@ export default function FormStepTwo({ loan, setLoan, cardMachineList }) {
         card.cardMachineName = cardMachine.name;
         cards[cardIndex] = card;
         setCards([...cards]);
+        setLoan({
+          ...loan,
+          cards,
+        });
       }
     }
   };
