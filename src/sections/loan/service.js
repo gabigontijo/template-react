@@ -43,7 +43,7 @@ export const definedValue = (value, installments, operationPercent, jsonTax) => 
 export const createBodyLoan = (setStateLoan, stateLoan) => {
   let profit = stateLoan.grossProfit;
   if (stateLoan.partner.id !== '') {
-    profit -= Number(stateLoan.partnerProfit.valuePartner);
+    profit -= Number(stateLoan.partnerAmount);
     setStateLoan({
       ...stateLoan,
       profit,
@@ -65,8 +65,8 @@ export const createBodyLoan = (setStateLoan, stateLoan) => {
     numberCards: Number(stateLoan.numberCards),
     cards: stateLoan.cards,
     partnerId: stateLoan.partner.id === '' ? null : stateLoan.partner.id,
-    partnerPercent: Number(stateLoan.partnerProfit.percentPartner),
-    partnerAmount: Number(stateLoan.partnerProfit.valuePartner),
+    partnerPercent: Number(stateLoan.partnerPercent),
+    partnerAmount: Number(stateLoan.partnerAmount),
     grossProfit: stateLoan.grossProfit,
     profit,
     type: stateLoan.type,

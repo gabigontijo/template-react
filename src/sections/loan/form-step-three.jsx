@@ -68,11 +68,8 @@ export default function FormStepThree({
 
     setLoan((prevLoan) => ({
       ...prevLoan,
-      partnerProfit: {
-        ...prevLoan.partnerProfit,
-        valuePartner: target.value,
-        percentPartner: Number.isNaN(calculatedPercentPartner) ? '' : calculatedPercentPartner.toString(),
-      },
+        partnerAmount: target.value,
+        partnerPercent: Number.isNaN(calculatedPercentPartner) ? '' : calculatedPercentPartner.toString(),
     }));
   };
 
@@ -81,11 +78,8 @@ export default function FormStepThree({
 
     setLoan((prevLoan) => ({
       ...prevLoan,
-      partnerProfit: {
-        ...prevLoan.partnerProfit,
-        valuePartner: Number.isNaN(calculatedValuePartner) ? '' : calculatedValuePartner.toString(),
-        percentPartner: target.value,
-      },
+        partnerAmount: Number.isNaN(calculatedValuePartner) ? '' : calculatedValuePartner.toString(),
+        partnerPercent: target.value,
     }));
   };
 
@@ -147,7 +141,7 @@ export default function FormStepThree({
               <NumberFormatField
                 name="valuePartner"
                 label="Valor da comissão"
-                value={loan.partnerProfit.valuePartner}
+                value={loan.partnerAmount}
                 handleChange={handleChangePartnerValue}
               />
             </Box>
@@ -155,7 +149,7 @@ export default function FormStepThree({
               <PercentFormatField
                 name="percentPartner"
                 label="Porcentagem da comissão"
-                value={loan.partnerProfit.percentPartner}
+                value={loan.partnerPercent }
                 handleChange={handleChangePartnerPercent} />
             </Box>
           </Stack>

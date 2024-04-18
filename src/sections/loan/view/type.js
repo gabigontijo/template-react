@@ -37,10 +37,8 @@ export const loanInterface = {
         pixKey:'',
         address: '',
     },
-    partnerProfit: {
-        valuePartner:'',
-        percentPartner:'',
-    },
+    partnerPercent: '',
+    partnerAmount: '',
     grossProfit: '',
     profit:'',
     type: 1,

@@ -30,13 +30,14 @@ export const loanById = async (loanId) => {
   return result;
 };
 
-export const updateLoan = async (loan) => {
+export const updateLoan = async (loan, id) => {
+  const ENDPOINT = `${URlLoans}/${id}`;
   const apiOpts = {
     method: 'put',
     body: JSON.stringify(loan),
     headers: { 'Content-Type': 'application/json' },
   };
-  const res = await apiFetch(URlLoans, apiOpts);
+  const res = await apiFetch(ENDPOINT, apiOpts);
   return res.json();
 };
 

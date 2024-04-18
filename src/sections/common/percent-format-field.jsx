@@ -11,6 +11,7 @@ export default function PercentFormatField({ label, name, value, handleChange })
             customInput={TextField}
             suffix="%"
             allowNegative={false}
+            decimalScale={2}
             value={value}
             onValueChange={(values) => handleChange({ target: { name, value: values.floatValue } })}
         />

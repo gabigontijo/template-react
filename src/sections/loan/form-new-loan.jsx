@@ -126,22 +126,25 @@ export default function FormNewLoan({
   };
 
   const handleSubmitEdit = async () => {
+    console.log('loanId', loanId)
     try {
       const nonEmptyState = Object.fromEntries(
         Object.entries(stateLoan).map(([key, value]) => [key, value || ''])
       );
       const bodyLoanEdit = {
         clientId: nonEmptyState.client.id,
-        askValue: nonEmptyState.value,
+        askValue: nonEmptyState.askValue,
         operationPercent: nonEmptyState.operationPercent,
         amount: nonEmptyState.amount,
-        numberCards: nonEmptyState.numberOfCards,
+        numberCards: nonEmptyState.numberCards,
         cards: nonEmptyState.cards,
         partnerId: nonEmptyState.partner.id,
-        partnerPercent: nonEmptyState.partnerPercent,
-        partnerAmount: nonEmptyState.partnerAmount,
+        partnerPercent: Number(nonEmptyState.partnerPercent),
+        partnerAmount: Number(nonEmptyState.partnerAmount),
         grossProfit: nonEmptyState.grossProfit,
-        profit: nonEmptyState.netProfit,
+        profit: nonEmptyState.profit,
+        type: nonEmptyState.type,
+        clientAmount: nonEmptyState.clientAmount,
         paymentStatus: nonEmptyState.paymentStatus,
       };
       await updateLoan(bodyLoanEdit, loanId);

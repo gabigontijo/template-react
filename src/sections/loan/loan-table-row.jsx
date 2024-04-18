@@ -149,6 +149,13 @@ export default function LoanTableRow({
   const createDate = formatarData(dateCreated);
   const updateDate = formatarData(dateUpdated);
 
+  const formatValue = (vl) => {
+    if (vl === null) {
+      return null; 
+    }
+    return `R$ ${vl.toFixed(2)}`; 
+  }
+
   return (
     <>
       <TableRow hover tabIndex={-1} role="checkbox" selected={selected}>
@@ -171,15 +178,15 @@ export default function LoanTableRow({
           </Typography>
         </TableCell>
 
-        <TableCell>{value}</TableCell>
+        <TableCell>{formatValue(value)}</TableCell>
 
-        <TableCell>{grossProfit}</TableCell>
+        <TableCell>{formatValue(grossProfit)}</TableCell>
 
         <TableCell>{partner.name}</TableCell>
 
-        <TableCell>{partnerProfit}</TableCell>
+        <TableCell>{formatValue(partnerProfit)}</TableCell>
 
-        <TableCell>{netProfit}</TableCell>
+        <TableCell>{formatValue(netProfit)}</TableCell>
 
         <TableCell align="center">
           <IconButton onClick={handleOpenStatus} sx={{ p: 0, '&:hover': { backgroundColor: 'transparent' } }}>
@@ -229,12 +236,12 @@ export default function LoanTableRow({
                       </TableCell>
                       <TableCell align="right">
                         <CardIcon brandIcon={card.brand} size={20}/></TableCell>
-                      <TableCell align="right">{card.value}</TableCell>
+                      <TableCell align="right" style={{ whiteSpace: 'nowrap' }}>{formatValue(card.value)}</TableCell>
                       <TableCell align="right">
                         {card.installments}
                       </TableCell>
-                      <TableCell align="right">
-                        {card.installmentsValue}
+                      <TableCell align="right"  style={{ whiteSpace: 'nowrap' }}>
+                        {formatValue(card.installmentsValue)}
                       </TableCell>
                        <TableCell align="right">
                         {card.paymentType === "presentialTax" ? 'Presencial': 'Online'}
