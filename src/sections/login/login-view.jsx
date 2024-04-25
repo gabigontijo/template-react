@@ -13,6 +13,8 @@ import InputAdornment from '@mui/material/InputAdornment';
 
 import { useRouter } from 'src/routes/hooks';
 
+import { useAuth } from 'src/hooks/authProvider';
+
 import { bgGradient } from 'src/theme/css';
 
 import Logo from 'src/components/logo';
@@ -25,21 +27,44 @@ export default function LoginView() {
 
   const router = useRouter();
 
+  const auth= useAuth()
+
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleClick = () => {
-    router.push('/dashboard');
+  const [input, setInput] = useState({
+    username: "",
+    password: "",
+  });
+
+  const handleClick = (e) => {
+    e.preventDefault();
+    if (input.username !== "" && input.password !== "") {
+      auth.loginAction(input);
+      router.push('/dashboard');
+      return;
+    }
+    alert("Login ou senha inválidos");
+  };
+
+  const handleInput = (e) => {
+    const { name, value } = e.target;
+    setInput((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   const renderForm = (
     <>
       <Stack spacing={3}>
-        <TextField name="email" label="Email" />
+        <TextField name="email" label="Email" type='email' id='user-email' placeholder='example@gmail.com' onChange={handleInput}/>
 
         <TextField
           name="password"
           label="Senha"
           type={showPassword ? 'text' : 'password'}
+          id='password'
+          onChange={handleInput}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">

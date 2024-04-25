@@ -36,7 +36,7 @@ export default function FormStepThree({
   partnerList,
   refetchPartners,
 }) {
-  const [checked, setChecked] = useState(false);
+  const [checked, setChecked] = useState(true);
   // const [, setSelectedPartner] = useState(null);
 
   const handleNewPartner = () => {
