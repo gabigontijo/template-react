@@ -2,6 +2,8 @@ import PropTypes from 'prop-types';
 import { useNavigate } from "react-router-dom";
 import {useMemo , useState,  useContext, createContext } from "react";
 
+import { login } from 'src/apis/login';
+
 const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
@@ -9,24 +11,17 @@ const AuthProvider = ({ children }) => {
 const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem("site") || "");
   const navigate = useNavigate();
-  const loginAction = async (data) => {
+  const loginAction = async (email, password) => {
     try {
-      const response = await fetch("your-api-endpoint/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-      const res = await response.json();
-      if (res.data) {
-        setUser(res.data.user);
-        setToken(res.token);
-        localStorage.setItem("site", res.token);
+      const response = await login(email, password)
+      if (response.data) {
+        setUser(email);
+        setToken(response.token);
+        localStorage.setItem("token", response.token);
         navigate("/dashboard");
         return;
       }
-      throw new Error(res.message);
+      throw new Error(response.message);
     } catch (err) {
       console.error(err);
     }

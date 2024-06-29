@@ -30,6 +30,7 @@ export default function LoginView() {
   const auth= useAuth()
 
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const [input, setInput] = useState({
     username: "",
@@ -39,11 +40,18 @@ export default function LoginView() {
   const handleClick = (e) => {
     e.preventDefault();
     if (input.username !== "" && input.password !== "") {
-      auth.loginAction(input);
-      router.push('/dashboard');
-      return;
+      setLoading(true);
+      try{
+        auth.loginAction(input.username, input.password);
+      } catch (error) {
+        console.error('Erro ao fazer login:', error);
+        alert(error.message);
+      }finally {
+        setLoading(false);
+      }
+    } else {
+      alert("Login ou senha inválidos");
     }
-    alert("Login ou senha inválidos");
   };
 
   const handleInput = (e) => {
@@ -57,7 +65,7 @@ export default function LoginView() {
   const renderForm = (
     <>
       <Stack spacing={3}>
-        <TextField name="email" label="Email" type='email' id='user-email' placeholder='example@gmail.com' onChange={handleInput}/>
+        <TextField name="username" label="Email" type='email' id='username' placeholder='example@gmail.com' onChange={handleInput}/>
 
         <TextField
           name="password"
