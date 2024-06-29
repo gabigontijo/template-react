@@ -17,16 +17,28 @@ export const createClient = async (client) => {
 };
 
 export const allClients = async () => {
-  const response = await fetch(URlClients);
-  const result = await response.json();
-  return result;
+  const apiOpts = {
+    method: 'get',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  const res = await apiFetch(URlClients, apiOpts);
+  return res.json();
+  // const response = await fetch(URlClients);
+  // const result = await response.json();
+  // return result;
 };
 
 export const clientById = async (clientId) => {
-  const ENDPOINT = `${URlClients}/${clientId}`;
-  const response = await fetch(ENDPOINT);
-  const result = await response.json();
-  return result;
+  const apiOpts = {
+    method: 'get',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  const res = await apiFetch(`${URlClients}/${clientId}`, apiOpts);
+  return res.json();
+  // const ENDPOINT = `${URlClients}/${clientId}`;
+  // const response = await fetch(ENDPOINT);
+  // const result = await response.json();
+  // return result;
 };
 
 export const updateClient = async (client, clientId) => {

@@ -24,10 +24,16 @@ export const allLoans = async () => {
 };
 
 export const loanById = async (loanId) => {
-  const ENDPOINT = `${URlLoans}/${loanId}`;
-  const response = await fetch(ENDPOINT);
-  const result = await response.json();
-  return result;
+  const apiOpts = {
+    method: 'get',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  const res = await apiFetch( `${URlLoans}/${loanId}`, apiOpts);
+  return res.json();
+  // const ENDPOINT = `${URlLoans}/${loanId}`;
+  // const response = await fetch(ENDPOINT);
+  // const result = await response.json();
+  // return result;
 };
 
 export const updateLoan = async (loan, id) => {
