@@ -23,9 +23,6 @@ export const allClients = async () => {
   };
   const res = await apiFetch(URlClients, apiOpts);
   return res.json();
-  // const response = await fetch(URlClients);
-  // const result = await response.json();
-  // return result;
 };
 
 export const clientById = async (clientId) => {
@@ -35,10 +32,6 @@ export const clientById = async (clientId) => {
   };
   const res = await apiFetch(`${URlClients}/${clientId}`, apiOpts);
   return res.json();
-  // const ENDPOINT = `${URlClients}/${clientId}`;
-  // const response = await fetch(ENDPOINT);
-  // const result = await response.json();
-  // return result;
 };
 
 export const updateClient = async (client, clientId) => {

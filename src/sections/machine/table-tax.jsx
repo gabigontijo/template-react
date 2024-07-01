@@ -41,7 +41,7 @@ export default function TableTax({
           </TableRow>
         </TableHead>
         <TableBody>
-          {Object.keys(listTax).map((row, index) => (
+          {Object.keys(listTax)?.map((row, index) => (
             <TableRow key={presential ? `Presencial_${row}_${index}` : `Online_${row}_${index}`} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
               <TableCell component="th" scope="row">
                 {row}

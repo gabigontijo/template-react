@@ -61,7 +61,7 @@ export default function FormNewMachine({
       // debugger;
       console.log(stateMachine);
       const nonEmptyState = Object.fromEntries(
-        Object.entries(stateMachine).map(([key, value]) => [key, value || ''])
+        Object.entries(stateMachine)?.map(([key, value]) => [key, value || ''])
       );
       const  bodyMachineEdit = {
         name: nonEmptyState.name,

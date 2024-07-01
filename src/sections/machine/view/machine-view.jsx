@@ -64,10 +64,15 @@ export default function MachinePage() {
   const [stateMachine, setStateMachine] = useState( machineInterface);
 
   const {isLoading, refetch: refetchMachines} = useQuery("allCardMachines", allCardMachines, {
+    
     onSuccess: (response) => {
+        // eslint-disable-next-line no-debugger
+        debugger
       setMachineList(response.CardMachines);
     },
     onError: (error) => {
+        // eslint-disable-next-line no-debugger
+        debugger
       console.error('Erro ao carregar maquininhas:', error);
     }
   });

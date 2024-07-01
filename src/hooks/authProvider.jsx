@@ -32,7 +32,7 @@ const loginAction = async (email, password) => {
   const logOut = () => {
     setUser(null);
     setToken("");
-    localStorage.removeItem("site");
+    localStorage.removeItem("token");
     navigate("/login");
   };
 

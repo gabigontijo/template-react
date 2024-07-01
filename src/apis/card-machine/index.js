@@ -1,7 +1,7 @@
 import { apiFetch } from '..';
 
-// const URlcardMachines = '/cashbycard/card-machines';
-const URlcardMachines = 'http://localhost:3001/card-machines';
+const URlcardMachines = '/cashbycard/admin/card-machines';
+// const URlcardMachines = 'http://localhost:3001/card-machines';
 
 export const createCardMachine = async (cardMachine) => {
   const apiOpts = {
@@ -16,16 +16,21 @@ export const createCardMachine = async (cardMachine) => {
 };
 
 export const allCardMachines = async () => {
-  const response = await fetch(URlcardMachines);
-  const result = await response.json();
-  return result;
+  const apiOpts = {
+    method: 'get',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  const res = await apiFetch(URlcardMachines, apiOpts);
+  return res.json();
 };
 
 export const cardMachineById = async (cardMachineId) => {
-  const ENDPOINT = `${URlcardMachines}/${cardMachineId}`;
-  const response = await fetch(ENDPOINT);
-  const result = await response.json();
-  return result;
+  const apiOpts = {
+    method: 'get',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  const res = await apiFetch(`${URlcardMachines}/${cardMachineId}`, apiOpts);
+  return res.json();
 };
 
 export const updateCardMachine = async (cardMachine, cardMachineId) => {

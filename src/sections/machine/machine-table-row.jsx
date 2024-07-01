@@ -135,7 +135,7 @@ export default function MachineTableRow({
               },
             }}
           >
-            {parseBrand.map((b, index) => (
+            {parseBrand?.map((b, index) => (
               <CardIcon key={`${index}${b}`} brandIcon={b} size={40} />
             ))}
           </Stack>
@@ -176,7 +176,7 @@ export default function MachineTableRow({
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {Object.keys(presentialTax).map((tax, index) => (
+                  {Object.keys(presentialTax)?.map((tax, index) => (
                     <TableRow key={`${name}_${index}`}>
                       <TableCell component="th" scope="row" style={{ whiteSpace: 'nowrap' }}>
                         {tax}

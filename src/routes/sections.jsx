@@ -22,19 +22,19 @@ export default function Router() {
     {
       element: (
         <DashboardLayout>
-          <Suspense>
-            <Outlet />
+          <Suspense fallback={<div>Carregando...</div>}>
+            <PrivateRoute />
           </Suspense>
         </DashboardLayout>
       ),
       children: [
         { element: <IndexPage />, index: true },
-        { path: 'cliente', element: <PrivateRoute element={<ClientPage />} /> },
-        { path: 'parceiro', element: <PrivateRoute element={<PartnerPage />} /> },
-        { path: 'emprestimo', element: <PrivateRoute element={<LoanPage />} /> },
-        { path: 'maquininha', element: <PrivateRoute element={<MachinePage />} /> },
-        { path: 'relatorio', element: <PrivateRoute element={<ReportPage />} /> },
-        { path: 'simulacoes', element: <PrivateRoute element={<SimulationsPage />} /> },
+        { path: 'cliente', element: <ClientPage /> },
+        { path: 'parceiro', element: <PartnerPage /> },
+        { path: 'emprestimo', element: <LoanPage /> },
+        { path: 'maquininha', element: <MachinePage /> },
+        { path: 'relatorio', element: <ReportPage /> },
+        { path: 'simulacoes', element: <SimulationsPage /> },
       ],
     },
     {

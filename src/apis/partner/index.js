@@ -1,8 +1,8 @@
 import { apiFetch } from "..";
 
 // const URlPartners = 'http://195.35.16.37:81/cashbycard/partners'
-const URlPartners = 'http://localhost:3001/partners';
-// const URlPartners = '/cashbycard/partners'
+// const URlPartners = 'http://localhost:3001/partners';
+const URlPartners = '/cashbycard/public/partners'
 
 export const createPartner = async (partner) => {
   const apiOpts = {
@@ -21,9 +21,6 @@ export const allPartners = async () => {
   };
   const res = await apiFetch(URlPartners, apiOpts);
   return res.json();
-  // const response = await fetch(URlPartners);
-  // const result = await response.json();
-  // return result;
 };
 
 export const partnerById = async (partnerId) => {
