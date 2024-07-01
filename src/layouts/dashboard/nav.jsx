@@ -47,6 +47,8 @@ export default function Nav({ openNav, onCloseNav }) {
 
   const upLg = useResponsive('up', 'lg');
 
+  const getUsernameFromEmail = (email) => email ? email.split('@')[0] : "";
+
   useEffect(() => {
     if (openNav) {
       onCloseNav();
@@ -100,11 +102,11 @@ export default function Nav({ openNav, onCloseNav }) {
       </Menu>
 
       <Box sx={{ ml: 2 }}>
-        <Typography variant="subtitle2">{auth.user?.username}</Typography>
-
-        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          {auth.user?.role}
-        </Typography>
+      {auth.user ? (
+         <Typography variant="subtitle2">{getUsernameFromEmail(auth.user)}</Typography>
+      ) : (
+        <Typography variant="subtitle2">Usuário deslogado</Typography>
+      )}
       </Box>
     </Box>
   );

@@ -2,7 +2,7 @@ import { apiFetch } from '..';
 
 // const URlClients = 'http://195.35.16.37:81/cashbycard/clients';
 // const URlClients = 'http://localhost:3001/public/clients';
-const URlClients = '/cashbycard/public/clients';
+const URlClients = '/cashbycard/admin/clients';
 
 export const createClient = async (client) => {
   const apiOpts = {

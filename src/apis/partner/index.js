@@ -35,7 +35,7 @@ export const partnerById = async (partnerId) => {
   return res.json();
 };
 
-export const updatePartner = async (partner, partnerId) => {
+export const updatePartner = async (partner, partnerId, navigate) => {
   const apiOpts = {
     method: 'put',
     body: JSON.stringify(partner),
