@@ -10,6 +10,10 @@ import StepLabel from '@mui/material/StepLabel';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
+import { useAuth } from 'src/hooks/authProvider';
+
+import { handleApiError } from 'src/utils/error-handle';
+
 import { allClients } from 'src/apis/client';
 import { allPartners } from 'src/apis/partner';
 import { createLoan, updateLoan } from 'src/apis/loan';
@@ -50,6 +54,8 @@ export default function FormNewLoan({
 
   useEffect(() => {}, [stateLoan]);
 
+  const auth = useAuth();
+
   const { isLoading: isLoadingClients, refetch: refetchClients } = useQuery(
     'allClients',
     allClients,
@@ -58,6 +64,7 @@ export default function FormNewLoan({
         setClientList(response.Clients);
       },
       onError: (error) => {
+        handleApiError(error, auth);
         console.error('Erro ao carregar clientes:', error);
       },
     }
@@ -71,6 +78,7 @@ export default function FormNewLoan({
         setPartnerList(response.Partners);
       },
       onError: (error) => {
+        handleApiError(error, auth);
         console.error('Erro ao carregar Parceiros:', error);
       },
     }
@@ -81,6 +89,7 @@ export default function FormNewLoan({
       setCardMachineList(response.CardMachines);
     },
     onError: (error) => {
+      handleApiError(error, auth);
       console.error('Erro ao carregar maquininhas:', error);
     },
   });
@@ -121,6 +130,7 @@ export default function FormNewLoan({
       setStateLoan(loanInterface);
     } catch (error) {
       setAlertError(true);
+      handleApiError(error, auth);
       setMessageError('Erro ao Cadastrar o empréstimo');
     }
   };
@@ -158,6 +168,7 @@ export default function FormNewLoan({
       setAlertError(true);
       setMessageError('Erro ao Editar o empréstimo');
       setNewLoan(true);
+      handleApiError(error, auth);
       console.log('Erro ao Editar o empréstimo:', error);
     }
   };

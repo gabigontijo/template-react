@@ -87,6 +87,8 @@ export default function FormNewMachine({
 
   const handleChange = (event) => {
     const { name, value } = event.target;
+    // eslint-disable-next-line no-debugger
+    debugger
     setStateMachine({
       ...stateMachine,
       [name]: value,
@@ -96,6 +98,8 @@ export default function FormNewMachine({
   
   const handleChangeInstallments = (event) => {
     const { name, value } = event.target;
+    // eslint-disable-next-line no-debugger
+    debugger
 // TODO alterar a lista de taxa de acordo com o valor do installments
   const listTaxLength = Object.keys(stateMachine.presentialTax).length
    if (value !== '') {

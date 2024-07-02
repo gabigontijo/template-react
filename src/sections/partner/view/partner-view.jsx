@@ -13,6 +13,10 @@ import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 import CircularProgress from '@mui/material/CircularProgress';
 
+import { useAuth } from 'src/hooks/authProvider';
+
+import { handleApiError } from 'src/utils/error-handle';
+
 import { allPartners, deletePartner } from 'src/apis/partner';
 import AlertNotifications from 'src/layouts/dashboard/common/alert-notifications';
 
@@ -61,11 +65,14 @@ export default function PartnerPage() {
 
   const [openDialog, setOpenDialog] = useState(false);
 
+  const auth = useAuth();
+
   const {isLoading, refetch: refetchPartners} = useQuery("allPartners", allPartners, {
     onSuccess: (response) => {
       setPartnerList(response.Partners);
     },
     onError: (error) => {
+      handleApiError(error, auth);
       console.error('Erro ao carregar parceiros:', error);
     }
   });
@@ -154,6 +161,7 @@ export default function PartnerPage() {
       setMessageError('Erro ao Deletar o parceiro');
       setOpenDialog(false);
       setSelected([]);
+      handleApiError(error, auth);
     }
   };
 

@@ -8,6 +8,10 @@ import TextField from '@mui/material/TextField';
 import LoadingButton from '@mui/lab/LoadingButton';
 import Autocomplete from '@mui/material/Autocomplete';
 
+import { useAuth } from 'src/hooks/authProvider';
+
+import { handleApiError } from 'src/utils/error-handle';
+
 import { allPartners } from 'src/apis/partner';
 import { createClient, updateClient, uploadClientFiles } from 'src/apis/client';
 
@@ -34,11 +38,14 @@ export default function FormNewClient({
 }) {
   const [partnersList, setPartnersList] = useState([]);
 
+  const auth = useAuth();
+
   useQuery('allPartners', allPartners, {
     onSuccess: (response) => {
       setPartnersList(response.Partners);
     },
     onError: (error) => {
+    handleApiError(error, auth);
       console.error('Erro ao carregar Parceiros:', error);
     },
   });
@@ -70,6 +77,7 @@ export default function FormNewClient({
       debugger;
       setAlertError(true);
       setMessageError('Erro ao Cadastrar o cliente');
+      handleApiError(error, auth);
       console.log('Erro ao Cadastrar o cliente:', error);
     }
   };
@@ -116,6 +124,7 @@ export default function FormNewClient({
       setAlertError(true);
       setMessageError('Erro ao Editar o cliente');
       setNewUser(true);
+      handleApiError(error, auth);
       console.log('Erro ao Editar o cliente:', error);
     }
   };

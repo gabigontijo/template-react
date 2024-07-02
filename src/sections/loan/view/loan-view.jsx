@@ -14,6 +14,10 @@ import TablePagination from '@mui/material/TablePagination';
 import CircularProgress from '@mui/material/CircularProgress';
 
 // import { loans } from 'src/_mock/loan';
+import { useAuth } from 'src/hooks/authProvider';
+
+import { handleApiError } from 'src/utils/error-handle';
+
 // import { deleteLoan } from 'src/apis/loan';
 import { allLoans, deleteLoan } from 'src/apis/loan';
 import AlertNotifications from 'src/layouts/dashboard/common/alert-notifications';
@@ -63,12 +67,14 @@ export default function LoanPage() {
 
   const [loanList, setLoanList] = useState([]);
 
+const auth = useAuth(); 
 
   const {isLoading, refetch: refetchLoans} = useQuery("allLoans", allLoans, {
     onSuccess: (response) => {
       setLoanList(response.Loans);
     },
     onError: (error) => {
+      handleApiError(error, auth);
       console.error('Erro ao carregar empréstimos:', error);
     }
   });
@@ -158,8 +164,7 @@ export default function LoanPage() {
       setMessageError('Erro ao excluir empréstimos')
       setOpenDialog(false);
       setSelected([]);
-
-
+      handleApiError(error, auth);
     }
   };
 

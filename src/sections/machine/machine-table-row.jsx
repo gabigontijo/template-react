@@ -17,7 +17,10 @@ import IconButton from '@mui/material/IconButton';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
+import { useAuth } from 'src/hooks/authProvider';
+
 import { formatarData } from 'src/utils/format-time';
+import { handleApiError } from 'src/utils/error-handle';
 
 import { cardMachineById, deleteCardMachine } from 'src/apis/card-machine';
 
@@ -54,10 +57,9 @@ export default function MachineTableRow({
 
   const [openCard, setOpenCard] = useState(false);
 
+  const auth = useAuth();
+
   const handleOpenMenu = (event) => {
-    // setMachineId(null);
-    // setStateMachine(machineInterface)
-    // setNewMachine(false);
     setOpen(event.currentTarget);
   };
 
@@ -80,10 +82,13 @@ export default function MachineTableRow({
       setMachineId(id);
       const bodyState = populationState(CardMachine);
       console.log('bodyMahine', bodyState)
+      // eslint-disable-next-line no-debugger
+    debugger
       setStateMachine(bodyState);
       setOpen(null);
     } catch (error) {
       console.log('Erro ao editar o maquininha:', error);
+      handleApiError(error, auth);
     }
   };
 
@@ -99,6 +104,7 @@ export default function MachineTableRow({
       setAlertError(true);
       setMessageError('Erro ao Deletar a maquininha');
       console.log('Erro ao Deletar a maquininha:', error);
+      handleApiError(error, auth);
     }
   };
 

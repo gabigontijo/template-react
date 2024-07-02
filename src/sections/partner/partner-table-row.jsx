@@ -9,6 +9,10 @@ import TableCell from '@mui/material/TableCell';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 
+import { useAuth } from 'src/hooks/authProvider';
+
+import { handleApiError } from 'src/utils/error-handle';
+
 import { partnerById, deletePartner } from 'src/apis/partner';
 
 import Iconify from 'src/components/iconify';
@@ -38,6 +42,8 @@ export default function PartnerTableRow({
   setStatePartner,
   refetchPartners,
 }) {
+
+  const auth = useAuth();
   const [open, setOpen] = useState(null);
 
   const [openDialog, setOpenDialog] = useState(false);
@@ -59,6 +65,7 @@ export default function PartnerTableRow({
       setOpen(null);
     } catch (error) {
       console.log('Erro ao editar o parceiro:', error);
+      handleApiError(error, auth);
     }
   };
 
@@ -74,6 +81,7 @@ export default function PartnerTableRow({
       setAlertError(true);
       setMessageError('Erro ao deletar o parceiro')
       console.log('Erro ao Deletar o parceiro:', error);
+      handleApiError(error, auth);
     }
   };
 

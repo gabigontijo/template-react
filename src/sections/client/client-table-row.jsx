@@ -11,6 +11,10 @@ import TableCell from '@mui/material/TableCell';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 
+import { useAuth } from 'src/hooks/authProvider';
+
+import { handleApiError } from 'src/utils/error-handle';
+
 import { clientById, deleteClient } from 'src/apis/client';
 
 import Iconify from 'src/components/iconify';
@@ -46,6 +50,8 @@ export default function ClientTableRow({
 
   const [openDialog, setOpenDialog] = useState(false);
 
+  const auth = useAuth();
+
   const handleOpenMenu = (event) => {
     setOpen(event.currentTarget);
   };
@@ -68,6 +74,7 @@ export default function ClientTableRow({
       console.log(Client)
       setOpen(null);
     } catch (error) {
+      handleApiError(error, auth);
       console.log('Erro ao editar o cliente:', error);
     }
   };

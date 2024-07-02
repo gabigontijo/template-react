@@ -13,6 +13,10 @@ import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 import CircularProgress from '@mui/material/CircularProgress';
 
+import { useAuth } from 'src/hooks/authProvider';
+
+import { handleApiError } from 'src/utils/error-handle';
+
 import { allClients, deleteClient } from 'src/apis/client';
 import AlertNotifications from 'src/layouts/dashboard/common/alert-notifications';
 
@@ -63,13 +67,13 @@ export default function ClientPage() {
 
   const [clientDocuments, setClientDocuments] = useState([]);
 
+  const auth = useAuth()
+
   const {isLoading, refetch: refetchClients} = useQuery("allClients", allClients, {
     onSuccess: (response) => {
       setClientList(response.Clients);
     },
-    onError: (error) => {
-      console.error('Erro ao carregar clientes:', error);
-    }
+    onError: (error) => handleApiError(error, auth),
   });
 
   const handleSort = (event, id) => {
@@ -151,11 +155,11 @@ export default function ClientPage() {
       setSelected([]);
       refetchClients();
     } catch (error) {
-      console.error('Erro ao excluir clientes:', error);
       setAlertError(true);
       setMessageError('Erro ao excluir clientes');
       setOpenDialog(false);
       setSelected([]);
+      handleApiError(error, auth);
     }
   };
 

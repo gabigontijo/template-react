@@ -5,6 +5,10 @@ import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import LoadingButton from '@mui/lab/LoadingButton';
 
+import { useAuth } from 'src/hooks/authProvider';
+
+import { handleApiError } from 'src/utils/error-handle';
+
 import { createPartner, updatePartner } from 'src/apis/partner';
 
 import MaskFields from '../common/mask-field';
@@ -28,6 +32,8 @@ export default function FormNewPartner({
 
 }) {
 
+  const auth = useAuth();
+
   const handleSubmit = async () => {
     try {
       const bodyParnter = {
@@ -49,6 +55,7 @@ export default function FormNewPartner({
       setAlertError(true);
       setMessageError('Erro ao Cadastrar o parceiro')
       console.log('Erro ao Cadastrar o parceiro:', error);
+      handleApiError(error, auth);
     }
   };
 
@@ -78,6 +85,7 @@ export default function FormNewPartner({
       setMessageError('Erro ao Editar o parceiro')
       setNewPartner(true);
       console.log('Erro ao Editar o parceiro:', error);
+      handleApiError(error, auth);
     }
   };
 

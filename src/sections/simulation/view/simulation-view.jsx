@@ -9,8 +9,13 @@ import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
 
-import { machineMock } from 'src/_mock/machine';
+import { useAuth } from 'src/hooks/authProvider';
+
+import { handleApiError } from 'src/utils/error-handle';
+
 import { allCardMachines } from 'src/apis/card-machine';
+
+import { machineInterface } from 'src/sections/machine/view/type';
 
 import { simulationInterface } from './type';
 import TableSimulation from '../table-simulation';
@@ -19,8 +24,7 @@ import FormNewSimulation from '../form-new-simulation';
 // ----------------------------------------------------------------------
 
 export default function SimulationPage() {
-  // const [selectedMachines, setSelectedMachines] = useState([]);
-  const [machineList, setMachineList] = useState(machineMock);
+  const [machineList, setMachineList] = useState(machineInterface);
   const [stateSimulation, setStateSimulation] = useState(simulationInterface);
   const [isSimulation, setIsSimulation] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
@@ -28,13 +32,15 @@ export default function SimulationPage() {
 
   const tableSimulationRef = useRef(null);
 
+  const auth = useAuth();
+
   const { isLoading } = useQuery('allCardMachines', allCardMachines, {
     onSuccess: (response) => {
-      // setMachineList(response.CardMachines);
-      setMachineList(machineMock);
+      setMachineList(response.CardMachines);
     },
     onError: (error) => {
       console.error('Erro ao carregar Maquininhas:', error);
+      handleApiError(error, auth);
     },
   });
 

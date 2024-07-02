@@ -16,7 +16,10 @@ import IconButton from '@mui/material/IconButton';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
+import { useAuth } from 'src/hooks/authProvider';
+
 import { formatarData } from 'src/utils/format-time';
+import { handleApiError } from 'src/utils/error-handle';
 
 import { loanById, deleteLoan, updateLoanPaymentStatus } from 'src/apis/loan';
 
@@ -64,6 +67,7 @@ export default function LoanTableRow({
 
   const [openCard, setOpenCard] = useState(false);
 
+  const auth = useAuth();
 
   const handleOpenMenu = (event) => {
     setOpen(event.currentTarget);
@@ -97,6 +101,7 @@ export default function LoanTableRow({
       setNewLoan(true); //somente para ver o resultado depois remover
       setOpen(null);
       console.log('Erro ao editar o empréstimo:', error);
+      handleApiError(error, auth);
     }
   };
 
@@ -112,6 +117,7 @@ export default function LoanTableRow({
       setAlertError(true);
       setMessageError('Erro ao deletar o empréstimo')
       console.log('Erro ao Deletar o empréstimo:', error);
+      handleApiError(error, auth);
     }
   };
 
@@ -142,6 +148,7 @@ export default function LoanTableRow({
       setAlertError(true);
       setMessageError('Erro ao atualizar o status do pagamento')
       console.log('Erro  ao atualizar o status do pagamento:', error);
+      handleApiError(error, auth);
     }
     setOpenStatus(null);
   };

@@ -13,6 +13,10 @@ import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 import CircularProgress from '@mui/material/CircularProgress';
 
+import { useAuth } from 'src/hooks/authProvider';
+
+import { handleApiError } from 'src/utils/error-handle';
+
 import { deleteClient } from 'src/apis/client';
 import { machineMock } from 'src/_mock/machine';
 import { allCardMachines } from 'src/apis/card-machine';
@@ -63,16 +67,15 @@ export default function MachinePage() {
 
   const [stateMachine, setStateMachine] = useState( machineInterface);
 
+  const auth = useAuth();
+
   const {isLoading, refetch: refetchMachines} = useQuery("allCardMachines", allCardMachines, {
     
     onSuccess: (response) => {
-        // eslint-disable-next-line no-debugger
-        debugger
       setMachineList(response.CardMachines);
     },
     onError: (error) => {
-        // eslint-disable-next-line no-debugger
-        debugger
+        handleApiError(error, auth);
       console.error('Erro ao carregar maquininhas:', error);
     }
   });
@@ -162,6 +165,7 @@ export default function MachinePage() {
       setMessageError('Erro ao excluir clientes');
       setOpenDialog(false);
       setSelected([]);
+      handleApiError(error, auth);
     }
   };
 

@@ -5,6 +5,8 @@ import Iconify from 'src/components/iconify';
 function CardIcon({ brandIcon, size }) {
   // Mapeie a bandeira do cartão para o ícone correspondente
   const getIconForBrand = (brand) => {
+    console.log(brand);
+    console.log(brand.toLowerCase());
     switch (brand.toLowerCase()) {
       case "visa":
         return "logos:visa";
@@ -14,23 +16,20 @@ function CardIcon({ brandIcon, size }) {
         return "logos:elo";
       case "hipercard":
         return "logos:hipercard";
-      case "americane xpress":
-        return "logos:american-express";
+      case "american express":
+        return "cib:american-express";
       default:
-        return ""; // Retorna uma string vazia se a bandeira não for reconhecida
+        return "";
     }
   };
 
-  // Obtenha o ícone para a bandeira do cartão
   const icon = getIconForBrand(brandIcon);
 
-  // Renderize o ícone
-  return <Iconify icon={icon}  sx={{ width: size }} />;
+  return <Iconify icon={icon}  sx={{ width: size}} />;
 }
 
 
 export default CardIcon;
-
 
 CardIcon.propTypes = {
     brandIcon: PropTypes.string, 

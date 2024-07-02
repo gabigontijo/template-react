@@ -18,13 +18,12 @@ export default function TableTax({
   listTax,
 }) {
   const handleChange = (installment, tax) => {
-    listTax[installment] = tax;
+    const listTaxTemp = JSON.parse(JSON.stringify(listTax));
+    listTaxTemp[installment] = tax;
     if (presential) {
-      setStateMachine({ ...stateMachine, presentialTax: listTax });
-
-      
+      setStateMachine({ ...stateMachine, presentialTax: listTaxTemp });
     } else {
-      setStateMachine( ({ ...stateMachine, onlineTax: listTax }));
+      setStateMachine( ({ ...stateMachine, onlineTax: listTaxTemp }));
     }
   };
 
