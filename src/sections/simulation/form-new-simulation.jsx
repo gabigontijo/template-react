@@ -10,13 +10,12 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 import { fDate } from 'src/utils/format-time';
 
-import { machineMock } from 'src/_mock/machine';
-
 import { simulationInterface } from './view/type';
 import DialogMessage from '../common/dialog-message';
 import NumberFormatField from '../common/number-format-field';
 import PercentFormatField from '../common/percent-format-field';
 import MultipleSelectMachineSimulation from '../common/multiple-select-machine-simulation';
+import { machineInterface } from '../machine/view/type';
 
 // ----------------------------------------------------------------------
 
@@ -27,10 +26,9 @@ export default function FormNewSimulation({
   isSimulation,
   setParamsSimulation,
   machineList,
-  setMachineList,
   isLoading,
 }) {
-  const [machineFilterList, setMachineFilterList] = useState(machineMock);
+  const [machineFilterList, setMachineFilterList] = useState([machineInterface]);
   const [messageNotification, setMessageNotification] = useState('');
   const [openDialog, setOpenDialog] = useState(false);
 
@@ -216,7 +214,6 @@ FormNewSimulation.propTypes = {
   isSimulation: PropTypes.any,
   stateSimulation: PropTypes.any,
   setParamsSimulation: PropTypes.func,
-  setMachineList: PropTypes.func,
   machineList: PropTypes.any,
   isLoading: PropTypes.any,
 };

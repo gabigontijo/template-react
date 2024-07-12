@@ -18,7 +18,6 @@ import { useAuth } from 'src/hooks/authProvider';
 import { handleApiError } from 'src/utils/error-handle';
 
 import { deleteClient } from 'src/apis/client';
-import { machineMock } from 'src/_mock/machine';
 import { allCardMachines } from 'src/apis/card-machine';
 import AlertNotifications from 'src/layouts/dashboard/common/alert-notifications';
 
@@ -63,7 +62,7 @@ export default function MachinePage() {
 
   const [openDialog, setOpenDialog] = useState(false);
 
-  const [machineList, setMachineList] = useState(machineMock);
+  const [machineList, setMachineList] = useState([machineInterface]);
 
   const [stateMachine, setStateMachine] = useState( machineInterface);
 
