@@ -5,8 +5,6 @@ import Iconify from 'src/components/iconify';
 function CardIcon({ brandIcon, size }) {
   // Mapeie a bandeira do cartão para o ícone correspondente
   const getIconForBrand = (brand) => {
-    console.log(brand);
-    console.log(brand.toLowerCase());
     switch (brand.toLowerCase()) {
       case "visa":
         return "logos:visa";

@@ -24,7 +24,7 @@ import FormNewSimulation from '../form-new-simulation';
 // ----------------------------------------------------------------------
 
 export default function SimulationPage() {
-  const [machineList, setMachineList] = useState(machineInterface);
+  const [machineList, setMachineList] = useState([machineInterface]);
   const [stateSimulation, setStateSimulation] = useState(simulationInterface);
   const [isSimulation, setIsSimulation] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
@@ -36,6 +36,7 @@ export default function SimulationPage() {
 
   const { isLoading } = useQuery('allCardMachines', allCardMachines, {
     onSuccess: (response) => {
+      console.log('response-------', response);
       setMachineList(response.CardMachines);
     },
     onError: (error) => {

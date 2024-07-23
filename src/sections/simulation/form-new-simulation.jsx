@@ -28,7 +28,7 @@ export default function FormNewSimulation({
   machineList,
   isLoading,
 }) {
-  const [machineFilterList, setMachineFilterList] = useState([machineInterface]);
+  const [machineFilterList, setMachineFilterList] = useState([]);
   const [messageNotification, setMessageNotification] = useState('');
   const [openDialog, setOpenDialog] = useState(false);
 

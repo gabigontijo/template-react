@@ -73,7 +73,7 @@ export default function MachineTableRow({
     presentialTax: response.presentialTax,
     onlineTax: response.onlineTax,
     installments: response.installments,
-  });
+  })
 
   const handleEdit = async () => {
     try {
@@ -113,7 +113,24 @@ export default function MachineTableRow({
     setOpen(null);
   };
 
-  const parseBrand = JSON.parse(brand);
+  const parseBrand = (brandString) => {
+    let parsedArray = [];
+    try {
+        if (typeof brandString === "string" && brandString.trim() !== "") {
+            const parsed = JSON.parse(brandString);
+            if (Array.isArray(parsed)) {
+                parsedArray = parsed;
+            } else {
+                console.error("Parsed JSON is not an array:", parsed);
+            }
+        }
+    } catch (error) {
+        console.error("Error parsing JSON:", error, "Input:", brandString);
+    }
+    return parsedArray;
+}
+
+
   const dateCreated = formatarData(updateDate);
   const dateUpdated = formatarData(createDate);
   return (
@@ -141,7 +158,7 @@ export default function MachineTableRow({
               },
             }}
           >
-            {parseBrand?.map((b, index) => (
+            {parseBrand(brand).map((b, index) => (
               <CardIcon key={`${index}${b}`} brandIcon={b} size={40} />
             ))}
           </Stack>
