@@ -15,7 +15,6 @@ import DialogMessage from '../common/dialog-message';
 import NumberFormatField from '../common/number-format-field';
 import PercentFormatField from '../common/percent-format-field';
 import MultipleSelectMachineSimulation from '../common/multiple-select-machine-simulation';
-import { machineInterface } from '../machine/view/type';
 
 // ----------------------------------------------------------------------
 
