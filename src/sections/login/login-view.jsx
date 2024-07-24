@@ -26,7 +26,7 @@ export default function LoginView() {
   const auth= useAuth()
 
   const [showPassword, setShowPassword] = useState(false);
-  const [setLoading] = useState(false);
+  const [_, setLoading] = useState(false);
 
   const [input, setInput] = useState({
     username: "",
