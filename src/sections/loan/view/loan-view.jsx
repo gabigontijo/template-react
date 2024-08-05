@@ -73,7 +73,6 @@ const auth = useAuth();
     },
     onError: (error) => {
       handleApiError(error, auth);
-      console.error('Erro ao carregar empréstimos:', error);
     }
   });
 
@@ -156,12 +155,16 @@ const auth = useAuth();
       setSelected([]);
       refetchLoans();
     } catch (error) {
-      console.error('Erro ao excluir empréstimos:', error);
-      setAlertError(true);
-      setMessage('Erro ao excluir empréstimos')
+      const errorMessage = await handleApiError(error, auth);
+      if (errorMessage) {
+        setAlertError(true);
+        setMessage(errorMessage);
+      } else {
+        setAlertError(true);
+        setMessage("Erro ao excluir empréstimos");
+      }
       setOpenDialog(false);
       setSelected([]);
-      handleApiError(error, auth);
     }
   };
 

@@ -10,10 +10,12 @@ import IconButton from '@mui/material/IconButton';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { alpha, useTheme } from '@mui/material/styles';
 import InputAdornment from '@mui/material/InputAdornment';
+import CircularProgress from '@mui/material/CircularProgress';
 
 import { useAuth } from 'src/hooks/authProvider';
 
 import { bgGradient } from 'src/theme/css';
+import AlertNotifications from 'src/layouts/dashboard/common/alert-notifications';
 
 import Logo from 'src/components/logo';
 import Iconify from 'src/components/iconify';
@@ -26,27 +28,33 @@ export default function LoginView() {
   const auth= useAuth()
 
   const [showPassword, setShowPassword] = useState(false);
-  const [_, setLoading] = useState(false);
+  const [isLoading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
+  const [alertError, setAlertError] = useState('');
+  const [alert, setAlert] = useState('');
 
   const [input, setInput] = useState({
     username: "",
     password: "",
   });
 
-  const handleClick = (e) => {
+  const handleClick = async (e) => {
     e.preventDefault();
     if (input.username !== "" && input.password !== "") {
       setLoading(true);
       try{
-        auth.loginAction(input.username, input.password);
+        await auth.loginAction(input.username, input.password);
+        setAlert(true);
+        setMessage("Acesso autorizado")
       } catch (error) {
-        console.error('Erro ao fazer login:', error);
-        alert(error.message);
+        setAlertError(true);
+        setMessage("Login ou senha inválidos")
       }finally {
         setLoading(false);
       }
     } else {
-      alert("Login ou senha inválidos");
+      setAlertError(true);
+      setMessage("Login ou senha inválidos")
     }
   };
 
@@ -97,6 +105,7 @@ export default function LoginView() {
       >
         Entrar
       </LoadingButton>
+      {isLoading && <CircularProgress /> }
     </>
   );
 
@@ -127,6 +136,14 @@ export default function LoginView() {
           }}
         >
           <Typography variant="h4">Acesse sua conta</Typography>
+          {alert && <AlertNotifications alert={alert} setAlert={setAlert} message={message} />}
+      {alertError && (
+        <AlertNotifications
+          alertError={alertError}
+          setAlertError={setAlertError}
+          message={message}
+        />
+      )}
 
           <Typography variant="body2" sx={{ mt: 2, mb: 5 }}/>
 

@@ -14,7 +14,6 @@ const [token, setToken] = useState(localStorage.getItem("token") || "");
 const navigate = useNavigate();
 
 const loginAction = async (email, password) => {
-    try {
       const response = await login(email, password)
       if (response) {
         setUser(email);
@@ -22,12 +21,9 @@ const loginAction = async (email, password) => {
         localStorage.setItem("token", response);
         localStorage.setItem("user", email); 
         navigate("/");
-        return;
+      } else {
+        throw new Error(response.message || 'Erro ao fazer o login');
       }
-      throw new Error(response.message);
-    } catch (err) {
-      console.error(err);
-    }
   };
 
   const logOut = () => {
