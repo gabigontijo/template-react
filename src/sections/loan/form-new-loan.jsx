@@ -64,7 +64,6 @@ export default function FormNewLoan({
       },
       onError: (error) => {
         handleApiError(error, auth);
-        console.error('Erro ao carregar clientes:', error);
       },
     }
   );
@@ -78,7 +77,6 @@ export default function FormNewLoan({
       },
       onError: (error) => {
         handleApiError(error, auth);
-        console.error('Erro ao carregar Parceiros:', error);
       },
     }
   );
@@ -89,7 +87,6 @@ export default function FormNewLoan({
     },
     onError: (error) => {
       handleApiError(error, auth);
-      console.error('Erro ao carregar maquininhas:', error);
     },
   });
 
@@ -128,9 +125,14 @@ export default function FormNewLoan({
       refetchLoans();
       setStateLoan(loanInterface);
     } catch (error) {
-      setAlertError(true);
-      handleApiError(error, auth);
-      setMessage('Erro ao Cadastrar o empréstimo');
+      const errorMessage = await handleApiError(error, auth);
+      if (errorMessage) {
+        setAlertError(true);
+        setMessage(errorMessage);
+      } else {
+        setAlertError(true);
+        setMessage("Erro ao Cadastrar o empréstimo");
+      }
     }
   };
 
@@ -163,10 +165,16 @@ export default function FormNewLoan({
       setStateLoan(loanInterface);
       refetchLoans();
     } catch (error) {
-      setAlertError(true);
-      setMessage('Erro ao Editar o empréstimo');
-      setNewLoan(true);
       handleApiError(error, auth);
+      const errorMessage = await handleApiError(error, auth);
+      if (errorMessage) {
+        setAlertError(true);
+        setMessage(errorMessage);
+      } else {
+        setAlertError(true);
+        setMessage("Erro ao Editar o empréstimo");
+      }
+      setNewLoan(true);
     }
   };
 
