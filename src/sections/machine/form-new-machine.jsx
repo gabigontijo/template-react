@@ -52,9 +52,14 @@ export default function FormNewMachine({
       setStateMachine(machineInterface);
       refetchMachines();
     } catch (error) {
-      setAlertError(true);
-      setMessage('Erro ao Cadastrar a Maquininha');
-      handleApiError(error, auth);
+      const errorMessage = await handleApiError(error, auth);
+      if (errorMessage) {
+        setAlertError(true);
+        setMessage(errorMessage);
+      } else {
+        setAlertError(true);
+        setMessage("Erro ao Cadastrar a Maquininha");
+      }
     }
   };
 
@@ -78,10 +83,15 @@ export default function FormNewMachine({
       setStateMachine(machineInterface);
       refetchMachines();
     } catch (error) {
-      setAlertError(true);
-      setMessage('Erro ao Editar a maquininha');
+      const errorMessage = await handleApiError(error, auth);
+      if (errorMessage) {
+        setAlertError(true);
+        setMessage(errorMessage);
+      } else {
+        setAlertError(true);
+        setMessage("Erro ao editar maquininha");
+      }
       setNewMachine(true);
-      handleApiError(error, auth)
     }
   };
 
@@ -156,7 +166,6 @@ export default function FormNewMachine({
               type="number"
               value={stateMachine.installments}
               onChange={handleChangeInstallments}
-              // onBlur={handleChangeInstallments}
               fullWidth
               
             />

@@ -73,7 +73,6 @@ export default function MachinePage() {
     },
     onError: (error) => {
         handleApiError(error, auth);
-      console.error('Erro ao carregar maquininhas:', error);
     }
   });
 
@@ -151,16 +150,21 @@ export default function MachinePage() {
         })
       );
       setAlert(true);
-      setMessage('Cliente deletado com sucesso');
+      setMessage('<Cliente> deletado com sucesso');
       setOpenDialog(false);
       setSelected([]);
       refetchMachines();
     } catch (error) {
-      setAlertError(true);
-      setMessage('Erro ao excluir clientes');
+      const errorMessage = await handleApiError(error, auth);
+      if (errorMessage) {
+        setAlertError(true);
+        setMessage(errorMessage);
+      } else {
+        setAlertError(true);
+        setMessage("Erro ao excluir clientes");
+      }
       setOpenDialog(false);
       setSelected([]);
-      handleApiError(error, auth);
     }
   };
 
