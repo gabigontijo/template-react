@@ -39,7 +39,6 @@ export default function SimulationPage() {
       setMachineList(response.CardMachines);
     },
     onError: (error) => {
-      console.error('Erro ao carregar Maquininhas:', error);
       handleApiError(error, auth);
     },
   });
