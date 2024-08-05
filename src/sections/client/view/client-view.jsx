@@ -53,9 +53,7 @@ export default function ClientPage() {
 
   const [alertError, setAlertError] = useState(false);
 
-  const [messageError, setMessageError] = useState('');
-
-  const [messageAlert, setMessageAlert] = useState('');
+  const [message, setMessage] = useState('');
 
   const [clientId, setClientId] = useState(null);
 
@@ -150,13 +148,13 @@ export default function ClientPage() {
         })
       );
       setAlert(true);
-      setMessageAlert('Cliente deletado com sucesso');
+      setMessage('Cliente deletado com sucesso');
       setOpenDialog(false);
       setSelected([]);
       refetchClients();
     } catch (error) {
       setAlertError(true);
-      setMessageError('Erro ao excluir clientes');
+      setMessage('Erro ao excluir clientes');
       setOpenDialog(false);
       setSelected([]);
       handleApiError(error, auth);
@@ -199,8 +197,7 @@ export default function ClientPage() {
           setNewUser={setNewUser}
           setAlert={setAlert}
           setAlertError={setAlertError}
-          setMessageAlert={setMessageAlert}
-          setMessageError={setMessageError}
+          setMessage={setMessage}
           clientId={clientId}
           setClientId={setClientId}
           refetchClients={refetchClients}
@@ -211,12 +208,12 @@ export default function ClientPage() {
         />
       )}
 
-      {alert && <AlertNotifications alert={alert} setAlert={setAlert} message={messageAlert} />}
+      {alert && <AlertNotifications alert={alert} setAlert={setAlert} message={message} />}
       {alertError && (
         <AlertNotifications
           alertError={alertError}
           setAlertError={setAlertError}
-          message={messageError}
+          message={message}
         />
       )}
 
@@ -277,8 +274,7 @@ export default function ClientPage() {
                       setNewUser={setNewUser}
                       setAlert={setAlert}
                       setAlertError={setAlertError}
-                      setMessageError={setMessageError}
-                      setMessageAlert={setMessageAlert}
+                      setMessage={setMessage}
                       refetchClients={refetchClients}
                       setClientDocuments={setClientDocuments}
                     />

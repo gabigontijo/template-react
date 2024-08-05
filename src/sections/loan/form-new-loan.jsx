@@ -33,9 +33,8 @@ export default function FormNewLoan({
   filterName,
   onFilterName,
   setAlert,
-  setMessageAlert,
+  setMessage,
   setAlertError,
-  setMessageError,
   setStateLoan,
   stateLoan,
   loanId,
@@ -125,18 +124,17 @@ export default function FormNewLoan({
       await createLoan(createBodyLoan(setStateLoan, stateLoan));
       setNewLoan(false);
       setAlert(true);
-      setMessageAlert('Empréstimo cadastrado com sucesso');
+      setMessage('Empréstimo cadastrado com sucesso');
       refetchLoans();
       setStateLoan(loanInterface);
     } catch (error) {
       setAlertError(true);
       handleApiError(error, auth);
-      setMessageError('Erro ao Cadastrar o empréstimo');
+      setMessage('Erro ao Cadastrar o empréstimo');
     }
   };
 
   const handleSubmitEdit = async () => {
-    console.log('loanId', loanId)
     try {
       const nonEmptyState = Object.fromEntries(
         Object.entries(stateLoan).map(([key, value]) => [key, value || ''])
@@ -161,15 +159,14 @@ export default function FormNewLoan({
       setNewLoan(false);
       setLoanId(null);
       setAlert(true);
-      setMessageAlert('Empréstimo editado com sucesso');
+      setMessage('Empréstimo editado com sucesso');
       setStateLoan(loanInterface);
       refetchLoans();
     } catch (error) {
       setAlertError(true);
-      setMessageError('Erro ao Editar o empréstimo');
+      setMessage('Erro ao Editar o empréstimo');
       setNewLoan(true);
       handleApiError(error, auth);
-      console.log('Erro ao Editar o empréstimo:', error);
     }
   };
 
@@ -205,8 +202,7 @@ export default function FormNewLoan({
           setIsNewClient={setIsNewClient}
           setAlert={setAlert}
           setAlertError={setAlertError}
-          setMessageAlert={setMessageAlert}
-          setMessageError={setMessageError}
+          setMessage={setMessage}
           setLoan={setStateLoan}
           loan={stateLoan}
           clientList={clientList}
@@ -222,8 +218,7 @@ export default function FormNewLoan({
         <FormStepThree
           setAlert={setAlert}
           setAlertError={setAlertError}
-          setMessageAlert={setMessageAlert}
-          setMessageError={setMessageError}
+          setMessage={setMessage}
           filterName={filterName}
           onFilterName={onFilterName}
           isNewPartner={isNewPartner}
@@ -263,8 +258,7 @@ FormNewLoan.propTypes = {
   onFilterName: PropTypes.func,
   setAlert: PropTypes.func,
   setAlertError: PropTypes.func,
-  setMessageError: PropTypes.func,
-  setMessageAlert: PropTypes.func,
+  setMessage: PropTypes.func,
   setStateLoan: PropTypes.func,
   stateLoan: PropTypes.any,
   loanId: PropTypes.any,

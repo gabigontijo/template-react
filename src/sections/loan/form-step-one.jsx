@@ -23,8 +23,7 @@ export default function FormStepOne({
   setIsNewClient,
   setAlertError,
   setNextStep,
-  setMessageAlert,
-  setMessageError,
+  setMessage,
   setLoan,
   loan,
   clientList,
@@ -101,8 +100,7 @@ export default function FormStepOne({
             <FormNewClient
               setNewUser={setIsNewClient}
               setAlert={setAlert}
-              setMessageAlert={setMessageAlert}
-              setMessageError={setMessageError}
+              setMessage={setMessage}
               setAlertError={setAlertError}
               setNextStep={setNextStep}
               refetchClients={refetchClients}
@@ -120,8 +118,7 @@ export default function FormStepOne({
 
 FormStepOne.propTypes = {
   setAlert: PropTypes.func,
-  setMessageAlert: PropTypes.func,
-  setMessageError: PropTypes.func,
+  setMessage: PropTypes.func,
   isNewClient: PropTypes.bool,
   setIsNewClient: PropTypes.func,
   clientName: PropTypes.string,

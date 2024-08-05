@@ -55,9 +55,7 @@ export default function LoanPage() {
 
   const [alertError, setAlertError] = useState(false);
 
-  const [messageError, setMessageError] = useState('');
-
-  const [messageAlert, setMessageAlert] = useState('');
+  const [message, setMessage] = useState('');
 
   const [loanId, setLoanId] = useState(null);
 
@@ -146,22 +144,21 @@ const auth = useAuth();
 
   const handleDelete = async () => {
     try {
-      const results = await Promise.all(
+      await Promise.all(
         selected.map(async (l) => {
           const result = await deleteLoan(l.id);
           return result;
         })
       );
-      console.log(results);
       setAlert(true);
-      setMessageAlert('Empréstimo excluído com sucesso')
+      setMessage('Empréstimo excluído com sucesso')
       setOpenDialog(false);
       setSelected([]);
       refetchLoans();
     } catch (error) {
       console.error('Erro ao excluir empréstimos:', error);
       setAlertError(true);
-      setMessageError('Erro ao excluir empréstimos')
+      setMessage('Erro ao excluir empréstimos')
       setOpenDialog(false);
       setSelected([]);
       handleApiError(error, auth);
@@ -206,8 +203,7 @@ const auth = useAuth();
           setNewLoan={setNewLoan}
           setAlert={setAlert}
           setAlertError={setAlertError}
-          setMessageAlert={setMessageAlert}
-          setMessageError={setMessageError}
+          setMessage={setMessage}
           setStateLoan= {setStateLoan}
           stateLoan={stateLoan}
           loanId={loanId}
@@ -221,14 +217,14 @@ const auth = useAuth();
         <AlertNotifications
           alert={alert}
           setAlert={setAlert}
-          message={messageAlert}
+          message={message}
         />
       )}
       {alertError && (
         <AlertNotifications
           alertError={alertError}
           setAlertError={setAlertError}
-          message={messageError}
+          message={message}
         />
       )}
       <Card>
@@ -293,8 +289,7 @@ const auth = useAuth();
                       setAlert={setAlert}
                       setLoanId={setLoanId}
                       setAlertError={setAlertError}
-                      setMessageAlert={setMessageAlert}
-                      setMessageError={setMessageError}
+                      setMessage={setMessage}
                       refetchLoans={refetchLoans}
                     />
                   ))}

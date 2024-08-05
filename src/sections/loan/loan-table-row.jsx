@@ -48,8 +48,7 @@ export default function LoanTableRow({
   setAlertError,
   setAlert,
   setNewLoan,
-  setMessageAlert,
-  setMessageError,
+  setMessage,
   paymentStatus,
   refetchLoans,
 }) {
@@ -88,35 +87,28 @@ export default function LoanTableRow({
 
   const handleEdit = async () => {
     try {
-      console.log(id);
-      console.log("typeof", typeof id);
       const response = await loanById(id);
-      console.log('response', response);
       setLoanId(id);
       setNewLoan(true);
       setStateLoan(response.Loan);
       setOpen(null);
     } catch (error) {
-      // eslint-disable-next-line
-      setNewLoan(true); //somente para ver o resultado depois remover
+      setNewLoan(true);
       setOpen(null);
-      console.log('Erro ao editar o empréstimo:', error);
       handleApiError(error, auth);
     }
   };
 
   const handleDelete = async () => {
     try {
-      const response = await deleteLoan(id);
-      console.log('Resposta da API:', response);
+      await deleteLoan(id);
       setOpenDialog(false);
       setAlert(true);
-      setMessageAlert('Empréstimo deletado com sucesso')
+      setMessage('Empréstimo deletado com sucesso')
     } catch (error) {
       setOpenDialog(false);
       setAlertError(true);
-      setMessageError('Erro ao deletar o empréstimo')
-      console.log('Erro ao Deletar o empréstimo:', error);
+      setMessage('Erro ao deletar o empréstimo')
       handleApiError(error, auth);
     }
   };
@@ -127,7 +119,6 @@ export default function LoanTableRow({
   };
 
   const handleDialogStatus = (status) => {
-    console.log("entrei aqui")
     setOpenDialogStatus(true);
     setOpenStatus(null);
     setStatusPayment(status);
@@ -136,18 +127,16 @@ export default function LoanTableRow({
   const handleStatus = async () => {
     const bodyEditPaymentStatus = { paymentStatus: statusPayment}
     try {
-      const response = await updateLoanPaymentStatus(id, bodyEditPaymentStatus);
-      console.log('Resposta da API loan:', response);
+      await updateLoanPaymentStatus(id, bodyEditPaymentStatus);
       setOpenDialogStatus(false);
       setAlert(true);
-      setMessageAlert('Status do pagamento atualizado com sucesso')
+      setMessage('Status do pagamento atualizado com sucesso')
       setTextStatus(statusPayment === "paid"? "paid": "pending")
       refetchLoans();
     } catch (error) {
       setOpenDialogStatus(false);
       setAlertError(true);
-      setMessageError('Erro ao atualizar o status do pagamento')
-      console.log('Erro  ao atualizar o status do pagamento:', error);
+      setMessage('Erro ao atualizar o status do pagamento')
       handleApiError(error, auth);
     }
     setOpenStatus(null);
@@ -358,8 +347,7 @@ LoanTableRow.propTypes = {
   setLoanId: PropTypes.func,
   setAlertError: PropTypes.func,
   setAlert: PropTypes.func,
-  setMessageAlert: PropTypes.func,
-  setMessageError: PropTypes.func,
+  setMessage: PropTypes.func,
   paymentStatus: PropTypes.any,
   refetchLoans: PropTypes.func,
 };

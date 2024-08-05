@@ -37,8 +37,7 @@ export default function PartnerTableRow({
   setAlertError,
   setAlert,
   setNewPartner,
-  setMessageAlert,
-  setMessageError,
+  setMessage,
   setStatePartner,
   refetchPartners,
 }) {
@@ -63,8 +62,11 @@ export default function PartnerTableRow({
       setPartnerId(id);
       setStatePartner(Partner);
       setOpen(null);
+      setAlert(true);
+      setMessage('Parceiro editado com sucesso')
     } catch (error) {
-      console.log('Erro ao editar o parceiro:', error);
+      setAlertError(true);
+      setMessage('Erro ao editar o parceiro')
       handleApiError(error, auth);
     }
   };
@@ -74,13 +76,12 @@ export default function PartnerTableRow({
       await deletePartner(id);
       setOpenDialog(false);
       setAlert(true);
-      setMessageAlert('Parceiro deletado com sucesso')
+      setMessage('Parceiro deletado com sucesso')
       refetchPartners();
     } catch (error) {
       setOpenDialog(false);
       setAlertError(true);
-      setMessageError('Erro ao deletar o parceiro')
-      console.log('Erro ao Deletar o parceiro:', error);
+      setMessage('Erro ao deletar o parceiro')
       handleApiError(error, auth);
     }
   };
@@ -178,8 +179,7 @@ PartnerTableRow.propTypes = {
   setNewPartner: PropTypes.func,
   setAlertError: PropTypes.func,
   setAlert: PropTypes.func,
-  setMessageAlert: PropTypes.func,
-  setMessageError: PropTypes.func,
+  setMessage: PropTypes.func,
   setStatePartner: PropTypes.func,
   refetchPartners: PropTypes.func,
 };

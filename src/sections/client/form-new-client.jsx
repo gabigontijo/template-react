@@ -26,8 +26,7 @@ export default function FormNewClient({
   setNewUser,
   setAlert,
   setAlertError,
-  setMessageError,
-  setMessageAlert,
+  setMessage,
   clientId: resp,
   setClientId,
   refetchClients,
@@ -56,29 +55,25 @@ export default function FormNewClient({
       if (stateClient.documents.length > 0) {
         respDocuments = await uploadClientFiles(stateClient.documents, stateClient.cpf);
       }
-      console.log('stateCliente-----------------------------', stateClient);
       const bodyClient = {
         name: stateClient.name,
         pixType: stateClient.pixType,
         pixKey: stateClient.pixKey,
-        partnerId: Number(stateClient.partner.id),
+        partnerId:stateClient.partner.id !== "" ? Number(stateClient.partner.id): null,
         phone: stateClient.phone,
         cpf: stateClient.cpf,
         documents: respDocuments,
       };
       await createClient(bodyClient);
       setAlert(true);
-      setMessageAlert('Cliente cadastrado com sucesso');
+      setMessage('Cliente cadastrado com sucesso');
       setNewUser(false);
       setStateClient(clientInterface);
       refetchClients();
     } catch (error) {
-      // eslint-disable-next-line no-debugger
-      debugger;
       setAlertError(true);
-      setMessageError('Erro ao Cadastrar o cliente');
+      setMessage('Erro ao Cadastrar o cliente');
       handleApiError(error, auth);
-      console.log('Erro ao Cadastrar o cliente:', error);
     }
   };
 
@@ -96,8 +91,6 @@ export default function FormNewClient({
 
   const handleSubmitEdit = async () => {
     try {
-      // eslint-disable-next-line no-debugger
-      // debugger;
       const newDocuments = getNewDocuments(stateClient.documents);
       let respDocuments = stateClient.documents
       if (newDocuments.length > 0){
@@ -108,7 +101,7 @@ export default function FormNewClient({
         name: stateClient.name,
         pixType: stateClient.pixType,
         pixKey: stateClient.pixKey,
-        partnerId: Number(stateClient.partner.id),
+        partnerId: stateClient.partner.id !== "" ? Number(stateClient.partner.id): null,
         phone: stateClient.phone,
         cpf: stateClient.cpf,
         documents: respDocuments.join(','),
@@ -117,15 +110,14 @@ export default function FormNewClient({
       setNewUser(false);
       setClientId(null);
       setAlert(true);
-      setMessageAlert('Cliente editado com sucesso');
+      setMessage('Cliente editado com sucesso');
       setStateClient(clientInterface);
       refetchClients();
     } catch (error) {
       setAlertError(true);
-      setMessageError('Erro ao Editar o cliente');
+      setMessage('Erro ao Editar o cliente');
       setNewUser(true);
       handleApiError(error, auth);
-      console.log('Erro ao Editar o cliente:', error);
     }
   };
 
@@ -272,8 +264,7 @@ FormNewClient.propTypes = {
   setNewUser: PropTypes.func,
   setAlert: PropTypes.func,
   setAlertError: PropTypes.func,
-  setMessageError: PropTypes.func,
-  setMessageAlert: PropTypes.func,
+  setMessage: PropTypes.func,
   setClientId: PropTypes.func,
   clientId: PropTypes.any,
   refetchClients: PropTypes.func,

@@ -53,9 +53,7 @@ export default function PartnerPage() {
 
   const [alertError, setAlertError] = useState(false);
 
-  const [messageError, setMessageError] = useState('');
-
-  const [messageAlert, setMessageAlert] = useState('');
+  const [message, setMessage] = useState('');
 
   const [partnerId, setPartnerId] = useState(null);
 
@@ -151,14 +149,14 @@ export default function PartnerPage() {
         })
       );
       setAlert(true);
-      setMessageAlert('Parceiro deletado com sucesso');
+      setMessage('Parceiro deletado com sucesso');
       setOpenDialog(false);
       setSelected([]);
       refetchPartners();
     } catch (error) {
       console.error('Erro ao excluir parceiros:', error);
       setAlertError(true);
-      setMessageError('Erro ao Deletar o parceiro');
+      setMessage('Erro ao Deletar o parceiro');
       setOpenDialog(false);
       setSelected([]);
       handleApiError(error, auth);
@@ -201,8 +199,7 @@ export default function PartnerPage() {
           setNewPartner={setNewPartner}
           setAlert={setAlert}
           setAlertError={setAlertError}
-          setMessageAlert={setMessageAlert}
-          setMessageError={setMessageError}
+          setMessage={setMessage}
           partnerId={partnerId}
           setPartnerId={setPartnerId}
           refetchPartners={refetchPartners}
@@ -211,13 +208,13 @@ export default function PartnerPage() {
         />
       )}
       {alert && (
-        <AlertNotifications alert={alert} setAlert={setAlert} message={messageAlert} />
+        <AlertNotifications alert={alert} setAlert={setAlert} message={message} />
       )}
       {alertError && (
         <AlertNotifications
           alertError={alertError}
           setAlertError={setAlertError}
-          message={messageError}
+          message={message}
         />
       )}
       <Card>
@@ -275,8 +272,7 @@ export default function PartnerPage() {
                       setNewPartner={setNewPartner}
                       setAlert={setAlert}
                       setAlertError={setAlertError}
-                      setMessageAlert={setMessageAlert}
-                      setMessageError={setMessageError}
+                      setMessage={setMessage}
                       refetchPartners={refetchPartners}
                       setStatePartner={setStatePartner}
                     />

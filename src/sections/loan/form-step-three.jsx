@@ -26,8 +26,7 @@ import PercentFormatField from '../common/percent-format-field';
 export default function FormStepThree({
   setAlert,
   setAlertError,
-  setMessageAlert,
-  setMessageError,
+  setMessage,
   isNewPartner,
   setIsNewPartner,
   loan,
@@ -158,9 +157,8 @@ export default function FormStepThree({
               <FormNewPartner
                 setNewPartner={setIsNewPartner}
                 setAlert={setAlert}
-                setMessageAlert={setMessageAlert}
                 setAlertError={setAlertError}
-                setMessageError={setMessageError}
+                setMessage={setMessage}
                 partnerId={null}
                 refetchPartners={refetchPartners}
                 statePartner={loan.partner}
@@ -178,8 +176,7 @@ export default function FormStepThree({
 FormStepThree.propTypes = {
   setAlert: PropTypes.func,
   setAlertError: PropTypes.func,
-  setMessageError: PropTypes.func,
-  setMessageAlert: PropTypes.func,
+  setMessage: PropTypes.func,
   isNewPartner: PropTypes.bool,
   setIsNewPartner: PropTypes.func,
   style: PropTypes.object,

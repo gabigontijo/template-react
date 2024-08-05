@@ -102,8 +102,6 @@ export default function FormStepTwo({ loan, setLoan, cardMachineList }) {
   };
 
   const getUpdatedCards = (newQuantity) => {
-    // eslint-disable-next-line no-debugger
-    debugger;
     if (numberOfCards !== 0) {
       if (numberOfCards > newQuantity) {
         return cards.slice(0, newQuantity);
@@ -125,7 +123,6 @@ export default function FormStepTwo({ loan, setLoan, cardMachineList }) {
     const cardsUpdated = getUpdatedCards(qttCards);
     setCards(cardsUpdated);
 
-    console.log(typeof qttCards, Number(qttCards));
     setLoan({
       ...loan,
       numberOfCards: qttCards,

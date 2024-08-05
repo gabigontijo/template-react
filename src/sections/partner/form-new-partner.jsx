@@ -23,8 +23,7 @@ export default function FormNewPartner({
   setPartnerId,
   setAlert,
   setAlertError,
-  setMessageError,
-  setMessageAlert,
+  setMessage,
   refetchPartners,
   statePartner,
   setStatePartner,
@@ -48,13 +47,12 @@ export default function FormNewPartner({
       await createPartner(bodyParnter);
       setNewPartner(false);
       setAlert(true);
-      setMessageAlert('Parceiro cadastrado com sucesso')
+      setMessage('Parceiro cadastrado com sucesso')
       refetchPartners();
       setStatePartner(partnerInterface)
     } catch (error) {
       setAlertError(true);
-      setMessageError('Erro ao Cadastrar o parceiro')
-      console.log('Erro ao Cadastrar o parceiro:', error);
+      setMessage('Erro ao Cadastrar o parceiro')
       handleApiError(error, auth);
     }
   };
@@ -77,14 +75,13 @@ export default function FormNewPartner({
       setNewPartner(false);
       setPartnerId(null);
       setAlert(true);
-      setMessageAlert('Parceiro editado com sucesso');
+      setMessage('Parceiro editado com sucesso');
       setStatePartner(partnerInterface);
       refetchPartners();
     } catch (error) {
       setAlertError(true);
-      setMessageError('Erro ao Editar o parceiro')
+      setMessage('Erro ao Editar o parceiro')
       setNewPartner(true);
-      console.log('Erro ao Editar o parceiro:', error);
       handleApiError(error, auth);
     }
   };
@@ -218,8 +215,7 @@ FormNewPartner.propTypes = {
   setAlert: PropTypes.func,
   setAlertError: PropTypes.func,
   setPartnerId: PropTypes.any,
-  setMessageError: PropTypes.func,
-  setMessageAlert: PropTypes.func,
+  setMessage: PropTypes.func,
   setStatePartner: PropTypes.func,
   statePartner: PropTypes.any,
   refetchPartners: PropTypes.func,

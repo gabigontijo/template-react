@@ -45,8 +45,7 @@ export default function MachineTableRow({
   setAlert,
   setAlertError,
   setNewMachine,
-  setMessageAlert,
-  setMessageError,
+  setMessage,
   refetchMachines,
   createDate,
   updateDate,
@@ -81,13 +80,13 @@ export default function MachineTableRow({
       setNewMachine(true);
       setMachineId(id);
       const bodyState = populationState(CardMachine);
-      console.log('bodyMahine', bodyState)
-      // eslint-disable-next-line no-debugger
-    debugger
       setStateMachine(bodyState);
       setOpen(null);
+      setAlert(true);
+      setMessage('Maquininha editada com sucesso');
     } catch (error) {
-      console.log('Erro ao editar o maquininha:', error);
+      setAlertError(true);
+      setMessage('Erro ao editar a maquininha');
       handleApiError(error, auth);
     }
   };
@@ -97,13 +96,12 @@ export default function MachineTableRow({
       await deleteCardMachine(id);
       setOpenDialog(false);
       setAlert(true);
-      setMessageAlert('Maquininha deletada com sucesso');
+      setMessage('Maquininha deletada com sucesso');
       refetchMachines();
     } catch (error) {
       setOpenDialog(false);
       setAlertError(true);
-      setMessageError('Erro ao Deletar a maquininha');
-      console.log('Erro ao Deletar a maquininha:', error);
+      setMessage('Erro ao Deletar a maquininha');
       handleApiError(error, auth);
     }
   };
@@ -125,7 +123,8 @@ export default function MachineTableRow({
             }
         }
     } catch (error) {
-        console.error("Error parsing JSON:", error, "Input:", brandString);
+      setAlertError(true);
+      setMessage('Erro ao carregar dados da maquininha');
     }
     return parsedArray;
 }
@@ -272,7 +271,6 @@ MachineTableRow.propTypes = {
   setAlertError: PropTypes.func,
   setNewMachine: PropTypes.func,
   setAlert: PropTypes.func,
-  setMessageError: PropTypes.func,
-  setMessageAlert: PropTypes.func,
+  setMessage: PropTypes.func,
   refetchMachines: PropTypes.func,
 };

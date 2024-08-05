@@ -36,7 +36,6 @@ export default function SimulationPage() {
 
   const { isLoading } = useQuery('allCardMachines', allCardMachines, {
     onSuccess: (response) => {
-      console.log('response-------', response);
       setMachineList(response.CardMachines);
     },
     onError: (error) => {
@@ -69,8 +68,6 @@ export default function SimulationPage() {
               Simulações
             </Typography>
             <FormNewSimulation
-              // setSelectedMachines={setSelectedMachines}
-              // selectedMachines={selectedMachines}
               stateSimulation={stateSimulation}
               setStateSimulation={setStateSimulation}
               setIsSimulation={setIsSimulation}
@@ -164,13 +161,11 @@ export default function SimulationPage() {
               <Typography variant="p" mt={3}>
                 Simulado em: <b>{paramsSimulation.date} *</b>
               </Typography>
-              {/* <Box sx={{ width: '100%', display: 'flex' }}> */}
                 <Typography variant="p" gutterBottom component="div" mb={5}>
                   {paramsSimulation.mode === 'Presencial'
                     ? 'Simulação de empréstimo Presencial'
                     : 'Simulação de empréstimo Online'}
                 </Typography>
-              {/* </Box> */}
               <Typography variant="p" mt={1.5}>
                 <b>* A simulação tem validade de 48 horas</b>
               </Typography>

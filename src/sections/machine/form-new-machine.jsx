@@ -6,6 +6,10 @@ import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import LoadingButton from '@mui/lab/LoadingButton';
 
+import { useAuth } from 'src/hooks/authProvider';
+
+import { handleApiError } from 'src/utils/error-handle';
+
 import { createCardMachine, updateCardMachine } from 'src/apis/card-machine';
 
 import TableTax from './table-tax';
@@ -18,8 +22,7 @@ export default function FormNewMachine({
   setNewMachine,
   setAlert,
   setAlertError,
-  setMessageError,
-  setMessageAlert,
+  setMessage,
   machineId,
   setMachineId,
   refetchMachines,
@@ -30,6 +33,8 @@ export default function FormNewMachine({
 
 
   useEffect(()=> {},[stateMachine.installments, stateMachine.onlineTax, stateMachine.presentialTax])
+
+  const auth = useAuth();
 
   const handleSubmit = async () => {
     try {
@@ -42,24 +47,19 @@ export default function FormNewMachine({
       };
       await createCardMachine(bodyMachine);
       setAlert(true);
-      setMessageAlert('Maquininha cadastrada com sucesso');
+      setMessage('Maquininha cadastrada com sucesso');
       setNewMachine(false);
       setStateMachine(machineInterface);
       refetchMachines();
     } catch (error) {
-      // eslint-disable-next-line no-debugger
-      // debugger;
       setAlertError(true);
-      setMessageError('Erro ao Cadastrar a Maquininha');
-      console.log('Erro ao Cadastrar a Maquininha:', error);
+      setMessage('Erro ao Cadastrar a Maquininha');
+      handleApiError(error, auth);
     }
   };
 
   const handleSubmitEdit = async () => {
     try {
-      // eslint-disable-next-line no-debugger
-      // debugger;
-      console.log(stateMachine);
       const nonEmptyState = Object.fromEntries(
         Object.entries(stateMachine)?.map(([key, value]) => [key, value || ''])
       );
@@ -74,33 +74,27 @@ export default function FormNewMachine({
       setNewMachine(false);
       setMachineId(null);
       setAlert(true);
-      setMessageAlert('Maquininha editada com sucesso');
+      setMessage('Maquininha editada com sucesso');
       setStateMachine(machineInterface);
       refetchMachines();
     } catch (error) {
       setAlertError(true);
-      setMessageError('Erro ao Editar a maquininha');
+      setMessage('Erro ao Editar a maquininha');
       setNewMachine(true);
-      console.log('Erro ao Editar a maquininha:', error);
+      handleApiError(error, auth)
     }
   };
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    // eslint-disable-next-line no-debugger
-    debugger
     setStateMachine({
       ...stateMachine,
       [name]: value,
     });
-    console.log(Number(value));
   }; 
   
   const handleChangeInstallments = (event) => {
     const { name, value } = event.target;
-    // eslint-disable-next-line no-debugger
-    debugger
-// TODO alterar a lista de taxa de acordo com o valor do installments
   const listTaxLength = Object.keys(stateMachine.presentialTax).length
    if (value !== '') {
       const newListTax = JSON.parse(JSON.stringify(stateMachine.presentialTax))
@@ -225,8 +219,7 @@ FormNewMachine.propTypes = {
   setNewMachine: PropTypes.func,
   setAlert: PropTypes.func,
   setAlertError: PropTypes.func,
-  setMessageError: PropTypes.func,
-  setMessageAlert: PropTypes.func,
+  setMessage: PropTypes.func,
   setMachineId: PropTypes.func,
   machineId: PropTypes.any,
   refetchMachines: PropTypes.func,

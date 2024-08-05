@@ -41,8 +41,7 @@ export default function ClientTableRow({
   setAlert,
   setAlertError,
   setNewUser,
-  setMessageAlert,
-  setMessageError,
+  setMessage,
   refetchClients,
   setClientDocuments,
 }) {
@@ -62,8 +61,6 @@ export default function ClientTableRow({
 
   const handleEdit = async () => {
     try {
-      // eslint-disable-next-line no-debugger
-      // debugger;
       const { Client } = await clientById(id);
       const arrDocuments = Client.documents.split(",");
       Client.documents = arrDocuments;
@@ -71,11 +68,13 @@ export default function ClientTableRow({
       setNewUser(true);
       setClientId(id);
       setStateClient(Client);
-      console.log(Client)
       setOpen(null);
+      setAlert(true);
+      setMessage('Cliente editado com sucesso');
     } catch (error) {
       handleApiError(error, auth);
-      console.log('Erro ao editar o cliente:', error);
+      setAlertError(true);
+      setMessage('Erro ao editar o cliente');
     }
   };
 
@@ -84,13 +83,13 @@ export default function ClientTableRow({
       await deleteClient(id);
       setOpenDialog(false);
       setAlert(true);
-      setMessageAlert('Cliente deletado com sucesso');
+      setMessage('Cliente deletado com sucesso');
       refetchClients();
     } catch (error) {
+      handleApiError(error, auth);
       setOpenDialog(false);
       setAlertError(true);
-      setMessageError('Erro ao Deletar o cliente');
-      console.log('Erro ao Deletar o cliente:', error);
+      setMessage('Erro ao Deletar o cliente');
     }
   };
 
@@ -198,8 +197,7 @@ ClientTableRow.propTypes = {
   setAlertError: PropTypes.func,
   setNewUser: PropTypes.func,
   setAlert: PropTypes.func,
-  setMessageError: PropTypes.func,
-  setMessageAlert: PropTypes.func,
+  setMessage: PropTypes.func,
   index: PropTypes.any,
   refetchClients: PropTypes.func,
   setClientDocuments: PropTypes.func,

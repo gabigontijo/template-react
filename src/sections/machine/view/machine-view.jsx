@@ -54,9 +54,7 @@ export default function MachinePage() {
 
   const [alertError, setAlertError] = useState(false);
 
-  const [messageError, setMessageError] = useState('');
-
-  const [messageAlert, setMessageAlert] = useState('');
+  const [message, setMessage] = useState('');
 
   const [machineId, setMachineId] = useState(null);
 
@@ -146,22 +144,20 @@ export default function MachinePage() {
 
   const handleDelete = async () => {
     try {
-      const results = await Promise.all(
+      await Promise.all(
         selected.map(async (client) => {
           const result = await deleteClient(client.id);
           return result;
         })
       );
-      console.log(results);
       setAlert(true);
-      setMessageAlert('Cliente deletado com sucesso');
+      setMessage('Cliente deletado com sucesso');
       setOpenDialog(false);
       setSelected([]);
       refetchMachines();
     } catch (error) {
-      console.error('Erro ao excluir clientes:', error);
       setAlertError(true);
-      setMessageError('Erro ao excluir clientes');
+      setMessage('Erro ao excluir clientes');
       setOpenDialog(false);
       setSelected([]);
       handleApiError(error, auth);
@@ -204,8 +200,7 @@ export default function MachinePage() {
           setNewMachine={setNewMachine}
           setAlert={setAlert}
           setAlertError={setAlertError}
-          setMessageAlert={setMessageAlert}
-          setMessageError={setMessageError}
+          setMessage={setMessage}
           machineId={machineId}
           setMachineId={setMachineId}
           refetchMachines={refetchMachines}
@@ -214,12 +209,12 @@ export default function MachinePage() {
         />
       )}
 
-      {alert && <AlertNotifications alert={alert} setAlert={setAlert} message={messageAlert} />}
+      {alert && <AlertNotifications alert={alert} setAlert={setAlert} message={message} />}
       {alertError && (
         <AlertNotifications
           alertError={alertError}
           setAlertError={setAlertError}
-          message={messageError}
+          message={message}
         />
       )}
 
@@ -277,8 +272,7 @@ export default function MachinePage() {
                       setNewMachine={setNewMachine}
                       setAlert={setAlert}
                       setAlertError={setAlertError}
-                      setMessageError={setMessageError}
-                      setMessageAlert={setMessageAlert}
+                      setMessage={setMessage}
                       refetchMachines={refetchMachines}
                       createDate={row.CreatedAt}
                       updateDate={row.UpdatedAt}
