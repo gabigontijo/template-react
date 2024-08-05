@@ -71,7 +71,6 @@ export default function PartnerPage() {
     },
     onError: (error) => {
       handleApiError(error, auth);
-      console.error('Erro ao carregar parceiros:', error);
     }
   });
 
@@ -154,12 +153,16 @@ export default function PartnerPage() {
       setSelected([]);
       refetchPartners();
     } catch (error) {
-      console.error('Erro ao excluir parceiros:', error);
-      setAlertError(true);
-      setMessage('Erro ao Deletar o parceiro');
+      const errorMessage = await handleApiError(error, auth);
+      if (errorMessage) {
+        setAlertError(true);
+        setMessage(errorMessage);
+      } else {
+        setAlertError(true);
+        setMessage("Erro ao Deletar o parceiro");
+      }
       setOpenDialog(false);
       setSelected([]);
-      handleApiError(error, auth);
     }
   };
 

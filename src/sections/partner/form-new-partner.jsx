@@ -51,9 +51,14 @@ export default function FormNewPartner({
       refetchPartners();
       setStatePartner(partnerInterface)
     } catch (error) {
-      setAlertError(true);
-      setMessage('Erro ao Cadastrar o parceiro')
-      handleApiError(error, auth);
+      const errorMessage = await handleApiError(error, auth);
+      if (errorMessage) {
+        setAlertError(true);
+        setMessage(errorMessage);
+      } else {
+        setAlertError(true);
+        setMessage("Erro ao Cadastrar o parceiro");
+      }
     }
   };
 
@@ -79,10 +84,15 @@ export default function FormNewPartner({
       setStatePartner(partnerInterface);
       refetchPartners();
     } catch (error) {
-      setAlertError(true);
-      setMessage('Erro ao Editar o parceiro')
+      const errorMessage = await handleApiError(error, auth);
+      if (errorMessage) {
+        setAlertError(true);
+        setMessage(errorMessage);
+      } else {
+        setAlertError(true);
+        setMessage("Erro ao editar parceiro");
+      }
       setNewPartner(true);
-      handleApiError(error, auth);
     }
   };
 
