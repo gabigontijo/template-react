@@ -45,7 +45,6 @@ export default function FormNewClient({
     },
     onError: (error) => {
     handleApiError(error, auth);
-      console.error('Erro ao carregar Parceiros:', error);
     },
   });
 
@@ -71,9 +70,14 @@ export default function FormNewClient({
       setStateClient(clientInterface);
       refetchClients();
     } catch (error) {
-      setAlertError(true);
-      setMessage('Erro ao Cadastrar o cliente');
-      handleApiError(error, auth);
+      const errorMessage = await handleApiError(error, auth);
+      if (errorMessage) {
+        setAlertError(true);
+        setMessage(errorMessage);
+      } else {
+        setAlertError(true);
+        setMessage("Erro ao criar o cliente");
+      }
     }
   };
 
@@ -114,10 +118,15 @@ export default function FormNewClient({
       setStateClient(clientInterface);
       refetchClients();
     } catch (error) {
-      setAlertError(true);
-      setMessage('Erro ao Editar o cliente');
+      const errorMessage = await handleApiError(error, auth);
+      if (errorMessage) {
+        setAlertError(true);
+        setMessage(errorMessage);
+      } else {
+        setAlertError(true);
+        setMessage("Erro ao editar cliente");
+      }
       setNewUser(true);
-      handleApiError(error, auth);
     }
   };
 

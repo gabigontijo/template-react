@@ -153,11 +153,16 @@ export default function ClientPage() {
       setSelected([]);
       refetchClients();
     } catch (error) {
-      setAlertError(true);
-      setMessage('Erro ao excluir clientes');
+      const errorMessage = await handleApiError(error, auth);
+      if (errorMessage) {
+        setAlertError(true);
+        setMessage(errorMessage);
+      } else {
+        setAlertError(true);
+        setMessage("Erro ao excluir cliente");
+      }
       setOpenDialog(false);
       setSelected([]);
-      handleApiError(error, auth);
     }
   };
 
