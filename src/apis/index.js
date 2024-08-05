@@ -1,6 +1,4 @@
-
-export const apiFetch =async (url, options = {})=> {
-
+export const apiFetch = async (url, options = {}) => {
   const token = localStorage.getItem('token');
 
   const headers = {
@@ -8,25 +6,22 @@ export const apiFetch =async (url, options = {})=> {
     ...options.headers,
   };
 
-  if(token){
-    headers.Authorization  = `Bearer ${token}`;
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
   }
 
   const updatedOptions = {
     ...options,
     headers,
   };
-  try {
-    const res = await fetch(url, updatedOptions);
+  const res = await fetch(url, updatedOptions);
 
-    if (!res.ok) {
-      throw res;
-    }
-
-    return res;
-  } catch (error) {
-    console.error('API fetch error:', error);
+  if (!res.ok) {
+    const errorData = await res.json();
+    const error = new Error(errorData.message || 'API error'); 
+    error.status = res.status; 
     throw error;
   }
 
+  return res;
 };

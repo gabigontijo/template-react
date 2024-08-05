@@ -1,7 +1,12 @@
-export const handleApiError = (error, auth) => {
-    if (error.status === 401) {
+export const handleApiError = async (error, auth) => {
+  switch (error.status) {
+    case 401:
       auth.logOut();
-    } else {
-      console.error('API error:', error);
-    }
+      break;
+    case 400:
+        return error.message
+    default:
+      return 'Erro na requisição'
+  }
+   return 'Erro na requisição'
   };

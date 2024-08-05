@@ -11,7 +11,8 @@ export const createPartner = async (partner) => {
     headers:{ 'Content-Type': 'application/json' },
   };
   const res = await apiFetch(URlPartners, apiOpts);
-  return res.json();
+  const result = await res.json();
+  return result;
 };
 
 export const allPartners = async () => {
@@ -20,7 +21,8 @@ export const allPartners = async () => {
     headers: { 'Content-Type': 'application/json' },
   };
   const res = await apiFetch(URlPartners, apiOpts);
-  return res.json();
+  const result = await res.json();
+  return result;
 };
 
 export const partnerById = async (partnerId) => {
@@ -29,7 +31,8 @@ export const partnerById = async (partnerId) => {
     headers: { 'Content-Type': 'application/json' },
   };
   const res = await apiFetch(`${URlPartners}/${partnerId}`, apiOpts);
-  return res.json();
+  const result = await res.json();
+  return result;
 };
 
 export const updatePartner = async (partner, partnerId, navigate) => {
@@ -39,7 +42,8 @@ export const updatePartner = async (partner, partnerId, navigate) => {
     headers: { 'Content-Type': 'application/json' },
   };
   const res = await apiFetch(`${URlPartners}/${partnerId}`, apiOpts);
-  return res.json();
+  const result = await res.json();
+  return result;
 };
 
 export const deletePartner = async (partnerId) => {
@@ -48,7 +52,8 @@ export const deletePartner = async (partnerId) => {
     headers:{ 'Content-Type': 'application/json' },
   };
   const res = await apiFetch(`${URlPartners}/${partnerId}`, apiOpts);
-  return res.json();
+  const result = await res.json();
+  return result;
 };
 
 

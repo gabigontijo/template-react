@@ -12,8 +12,9 @@ export const createClient = async (client) => {
       'Content-Type': 'application/json',
     },
   };
-  const res = await apiFetch(URlClients, apiOpts);
-  return res.json();
+    const res = await apiFetch(URlClients, apiOpts);
+    const result = await res.json();
+  return result;
 };
 
 export const allClients = async () => {
@@ -22,7 +23,8 @@ export const allClients = async () => {
     headers: { 'Content-Type': 'application/json' },
   };
   const res = await apiFetch(URlClients, apiOpts);
-  return res.json();
+  const result = await res.json();
+  return result;
 };
 
 export const clientById = async (clientId) => {
@@ -31,7 +33,8 @@ export const clientById = async (clientId) => {
     headers: { 'Content-Type': 'application/json' },
   };
   const res = await apiFetch(`${URlClients}/${clientId}`, apiOpts);
-  return res.json();
+  const result = await res.json();
+  return result;
 };
 
 export const updateClient = async (client, clientId) => {
@@ -41,7 +44,8 @@ export const updateClient = async (client, clientId) => {
     headers: { 'Content-Type': 'application/json' },
   };
   const res = await apiFetch(`${URlClients}/${clientId}`, apiOpts);
-  return res.json();
+  const result = await res.json();
+  return result;
 };
 
 export const deleteClient = async (clientId) => {
@@ -50,7 +54,8 @@ export const deleteClient = async (clientId) => {
     headers: { 'Content-Type': 'application/json' },
   };
   const res = await apiFetch(`${URlClients}/${clientId}`, apiOpts);
-  return res.json();
+  const result = await res.json();
+  return result;
 };
 
 export const uploadClientFiles = async (files, cpf) => {
@@ -59,9 +64,10 @@ export const uploadClientFiles = async (files, cpf) => {
     formData.append(`file${index}`, file);
   });
 
-  const response = await fetch(`${URlClients}/files/${cpf}`, {
+  const res = await fetch(`${URlClients}/files/${cpf}`, {
     method: 'POST',
     body: formData,
   });
-  return response.json();
+  const result = await res.json();
+  return result;
 };
