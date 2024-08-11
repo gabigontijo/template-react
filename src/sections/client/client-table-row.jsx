@@ -69,8 +69,6 @@ export default function ClientTableRow({
       setClientId(id);
       setStateClient(Client);
       setOpen(null);
-      setAlert(true);
-      setMessage('Cliente editado com sucesso');
     } catch (error) {
       handleApiError(error, auth);
       setAlertError(true);

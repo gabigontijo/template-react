@@ -62,8 +62,6 @@ export default function PartnerTableRow({
       setPartnerId(id);
       setStatePartner(Partner);
       setOpen(null);
-      setAlert(true);
-      setMessage('Parceiro editado com sucesso')
     } catch (error) {
       setAlertError(true);
       setMessage('Erro ao editar o parceiro')
