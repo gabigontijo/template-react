@@ -1,5 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 
+import { AppView } from 'src/sections/overview/view';
+
 // ----------------------------------------------------------------------
 
 export default function ReportPage() {
@@ -8,10 +10,7 @@ export default function ReportPage() {
       <Helmet>
         <title> Relatórios | Cash By Card</title>
       </Helmet>
-
-      {/* <BlogView /> */}
-      {/* <NotFoundView/> */}
-      <div>em construção</div>
+      <AppView/>
     </>
   );
 }
