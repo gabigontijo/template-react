@@ -72,6 +72,10 @@ export default function TableSimulation({
       style: 'currency',
       currency: 'BRL',
     });
+    resultDL.clientAmount = resultDL.clientAmount.toLocaleString('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    });
     return resultDL;
   };
   return (
@@ -155,7 +159,11 @@ export default function TableSimulation({
               </Typography>
               </TableCell>
               <TableCell>{calcualteValue(row).installmentsValue}</TableCell>
-              <TableCell>{calcualteValue(row).machineValue}</TableCell>
+              {paramsSimulation.loanType === 1 ?
+               <TableCell>{calcualteValue(row).machineValue}</TableCell>
+              : 
+              <TableCell>{calcualteValue(row).clientAmount}</TableCell>
+              }
             </TableRow>
           ))}
         </TableBody>

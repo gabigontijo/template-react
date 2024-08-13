@@ -82,8 +82,6 @@ export default function MachineTableRow({
       const bodyState = populationState(CardMachine);
       setStateMachine(bodyState);
       setOpen(null);
-      setAlert(true);
-      setMessage('Maquininha editada com sucesso');
     } catch (error) {
       setAlertError(true);
       setMessage('Erro ao editar a maquininha');
