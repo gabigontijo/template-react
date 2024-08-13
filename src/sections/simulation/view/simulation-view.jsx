@@ -52,9 +52,12 @@ export default function SimulationPage() {
       pdf.save('simulation.pdf');
 
       setIsExporting(false);
+      setIsSimulation(true);
     });
   }, [isExporting])
+
   const handleExportPDF = () => {
+    setIsSimulation(false);
     setIsExporting(true);
   };
 
